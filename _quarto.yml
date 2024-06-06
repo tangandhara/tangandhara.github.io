@@ -3,14 +3,28 @@ project:
   output-dir: docs
 
 website:
-  title: "tangandhara.github.io"
+  title: "Tan Gandhara"
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
-      - projects.qmd
-      - links.qmd
+      - href: about.qmd
+        text: About
+      - href: projects.qmd
+        text: Projects
+      - href: guides.qmd
+        text: Guides
+      - href: links.qmd
+        text: Links
+    right:
+      - icon: linkedin
+        href: https://www.linkedin.com/in/tan-gandhara
+      - icon: chat-quote-fill
+        href: https://bsky.app/profile/tangandhara.bsky.social
+      - icon: github
+        href: https://github.com/tangandhara
+      - icon: envelope
+        href: mailto:tangandhara+quarto@hotmail.com
 
 format:
   html:

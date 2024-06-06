@@ -1,8 +1,8 @@
 ---
-title: "Tan Gandhara"
+title: "Hi, I'm Tan."
 ---
 
-Hi, I'm Tan. I'm data analyst with R, SQL, Power BI, and Tableau, experience.
+I'm data analyst with R, SQL, Power BI, and Tableau, experience.
 
 I'm always eager to explore new topics and challenge myself by finding creative ways to apply my knowledge and skills in various contexts.
 
