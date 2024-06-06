@@ -1,6 +1,6 @@
 ---
-title: "Projects"
-projects: 
+title: "Links"
+links: 
   contents: projects
   fields: [image, title, subtitle]
   type: grid
