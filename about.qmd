@@ -1,9 +1,21 @@
 ---
 title: "About"
+about:
+  template: cosmo
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/tan-gandhara
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/tangandhara
+    - icon: github
+      text: GitHub
+      href: https://github.com/tangandhara
+    - icon: envelope
+      text: Contact me
+      href: mailto:tangandhara+quarto@hotmail.com
 ---
 
-About this site
 
-```{r}
-1 + 1
-```
+

@@ -1,0 +1,12 @@
+---
+title: "Projects"
+listing: 
+  contents: projects
+  fields: [image, title, subtitle]
+  type: grid
+  categories: false
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: true
+---
