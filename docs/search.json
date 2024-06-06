@@ -4,7 +4,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "University of Brighton  | Brighton, East Sussex MSc Data Analytics  | Oct 2020 - Oct 2021\nUniversity of Leeds  | Leeds, West Yorkshire  BA International Development | Sept 2011 - July 2014"
   },
   {
     "objectID": "index.html",
@@ -12,5 +12,19 @@
     "title": "Hi, I’m Tan.",
     "section": "",
     "text": "I’m data analyst with R, SQL, Power BI, and Tableau, experience.\nI’m always eager to explore new topics and challenge myself by finding creative ways to apply my knowledge and skills in various contexts.\nCheck out some of my projects here."
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "About",
+    "section": "",
+    "text": "University of Brighton  | Brighton, East Sussex MSc Data Analytics  | Oct 2020 - Oct 2021\nUniversity of Leeds  | Leeds, West Yorkshire  BA International Development | Sept 2011 - July 2014"
+  },
+  {
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
+    "title": "About",
+    "section": "Experience",
+    "text": "Experience\nEnvironment Agency   Analyst  | Aug 2023 - present   Leonardo Hotels  Revenue Analyst | July 2022 - July 2023"
   }
 ]

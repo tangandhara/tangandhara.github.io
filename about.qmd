@@ -1,21 +1,32 @@
 ---
 title: "About"
 about:
-  template: jolla
+  template: solana
   links:
-    - icon: linkedin
-      text: LinkedIn
-      href: https://www.linkedin.com/in/tan-gandhara
-    - icon: twitter
-      text: Twitter
-      href: https://twitter.com/tangandhara
-    - icon: github
-      text: GitHub
-      href: https://github.com/tangandhara
-    - icon: envelope
-      text: Contact me
-      href: mailto:tangandhara+quarto@hotmail.com
+      - icon: linkedin
+        text: LinkedIn
+        href: https://www.linkedin.com/in/tan-gandhara
+      - icon: chat-quote-fill
+        text: Bluesky
+        href: https://bsky.app/profile/tangandhara.bsky.social
+      - icon: github
+        text: GitHub
+        href: https://github.com/tangandhara
+      - icon: envelope
+        text: Contact Me
+        href: mailto:tangandhara+quarto@hotmail.com
 ---
 
+## Education
 
+*University of Brighton * | Brighton, East Sussex
+<br>**MSc Data Analytics ** | Oct 2020 - Oct 2021
+
+*University of Leeds * | Leeds, West Yorkshire <br>
+**BA International Development **| Sept 2011 - July 2014
+
+## Experience
+
+*Environment Agency * <br> **Analyst ** | Aug 2023 - present <br> <br>
+*Leonardo Hotels *  <br>**Revenue Analyst **| July 2022 - July 2023
 
