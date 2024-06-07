@@ -2,6 +2,8 @@
 title: "R Shiny Dashboard"
 author: "Tan Gandhara"
 categories: [dashboards, dataviz, visualisation]
+subtitle: "A dahsboard app to explore my parkruns"
+format: html
 ---
 
 As well as my experience building corporate dashboards in Power BI and Tableau, I'm working on my R Shiny skills and have recently developed a dashboard exploring my [parkrun](https://www.parkrun.org.uk/) times.
