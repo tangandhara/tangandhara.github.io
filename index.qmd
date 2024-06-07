@@ -1,10 +1,43 @@
 ---
-title: "Hi, I'm Tan."
+title: "Bio"
+about:
+  template: solana
+  links:
+      - icon: linkedin
+        text: LinkedIn
+        href: https://www.linkedin.com/in/tan-gandhara
+      - icon: chat-quote-fill
+        text: Bluesky
+        href: https://bsky.app/profile/tangandhara.bsky.social
+      - icon: github
+        text: GitHub
+        href: https://github.com/tangandhara
+      - icon: envelope
+        text: Contact Me
+        href: mailto:tangandhara+quarto@hotmail.com
 ---
 
-I'm data analyst with R, SQL, Power BI, and Tableau, experience.
+## Hi, I'm Tan. 
+
+I'm a data analyst with experience in R, SQL, Power BI, and Tableau.
 
 I'm always eager to explore new topics and challenge myself by finding creative ways to apply my knowledge and skills in various contexts.
 
 Check out some of my projects <a href='/projects.qmd'>here</a>.
+
+
+## Education
+
+*University of Brighton * | Brighton, East Sussex
+<br>**MSc Data Analytics ** | Oct 2020 - Oct 2021
+
+*University of Leeds * | Leeds, West Yorkshire <br>
+**BA International Development **| Sept 2011 - July 2014
+
+## Experience
+
+*Environment Agency * | Worthing, West Sussex<br> 
+**Analyst ** | Aug 2023 - present <br> <br>
+*Leonardo Hotels *  | Birmingham, West Midlands<br>
+**Revenue Analyst **| July 2022 - July 2023
 

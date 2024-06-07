@@ -17,6 +17,15 @@ about:
         href: mailto:tangandhara+quarto@hotmail.com
 ---
 
+## Hi, I'm Tan. 
+
+I'm data analyst with R, SQL, Power BI, and Tableau, experience.
+
+I'm always eager to explore new topics and challenge myself by finding creative ways to apply my knowledge and skills in various contexts.
+
+Check out some of my projects <a href='/projects.qmd'>here</a>.
+
+
 ## Education
 
 *University of Brighton * | Brighton, East Sussex

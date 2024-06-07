@@ -2,11 +2,11 @@
 title: "Links"
 links: 
   contents: projects
-  fields: [image, title, subtitle]
+  fields: [title, subtitle]
   type: grid
   categories: false
   sort-ui: false
   filter-ui: false
 page-layout: full
-title-block-banner: true
+title-block-banner: false
 ---

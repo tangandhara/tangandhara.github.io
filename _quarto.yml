@@ -1,22 +1,27 @@
 project:
   type: website
   output-dir: docs
+  title: "Tan Gandhara"
 
 website:
-  title: "Tan Gandhara"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - href: about.qmd
-        text: About
-      - href: projects.qmd
-        text: Projects
-      - href: guides.qmd
-        text: Guides
-      - href: links.qmd
-        text: Links
-    right:
+  bread-crumbs: false
+  sidebar:
+    style: "floating"
+    search: false
+    contents:
+      - section: "About Me"
+        contents:        
+        - index.qmd
+      - section: "Projects"
+        contents:
+        - projects1.qmd
+        - projects2.qmd
+        - projects.qmd
+      - section: "Tutorials"
+        contents:  
+        - guides.qmd
+        - links.qmd
+    tools:
       - icon: linkedin
         href: https://www.linkedin.com/in/tan-gandhara
       - icon: chat-quote-fill
@@ -28,7 +33,7 @@ website:
 
 format:
   html:
-    theme: cosmo
+    theme: lumen
     css: styles.css
     toc: true
 
