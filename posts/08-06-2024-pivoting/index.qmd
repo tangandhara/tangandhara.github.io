@@ -3,7 +3,7 @@ title: "How to pivot datasets"
 subtitle: "A guide to using **pivot_longer()** and **pivot_wider()** in **{tidyr}**"
 author:
   - name: Tan Gandhara
-date: 08-06-2024
+date: 06-08-2024
 categories: [R, tidyr, pivoting] 
 image: logo.png
 draft: false

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Tan Gandhara">
-<meta name="dcterms.date" content="2024-08-06">
+<meta name="dcterms.date" content="2024-06-08">
 
 <title>Tan Gandhara – How to pivot datasets</title>
 <style>
@@ -252,7 +252,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 6, 2024</p>
+      <p class="date">June 8, 2024</p>
     </div>
   </div>
   
@@ -287,16 +287,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 10 × 4
    index    p1    p2    p3
    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1     1 39.0  33.9   82.3
- 2     2 16.6   9.25  86.8
- 3     3 28.3   7.09  25.8
- 4     4  6.15 31.8   78.5
- 5     5 42.6  35.4   20.5
- 6     6  2.66 20.4   54.7
- 7     7 44.4  54.5   16.7
- 8     8 27.0  11.1   11.7
- 9     9 31.4  10.0   85.5
-10    10 20.4  10.7   88.8</code></pre>
+ 1     1 44.4   66.3  60.5
+ 2     2 25.0   29.9  73.2
+ 3     3  4.50  69.8  34.7
+ 4     4 12.3   46.0  13.0
+ 5     5 32.1   20.2  78.4
+ 6     6 41.9   62.4  22.2
+ 7     7 13.1   41.9  52.8
+ 8     8 18.3   33.7  33.7
+ 9     9 16.5   52.8  37.5
+10    10 26.5   63.3  28.3</code></pre>
 </div>
 </div>
 <p>Now, let’s say we want to everything apart from the <code>index</code> column to be reshaped into a longer tibble where the <code>p</code> labels are in a column called <code>class</code> and the actual observations for each row are in a column called <code>values</code>. Using the <code>pivot_longer()</code> function we could do something like this were we select everything apart from <code>index</code> and column names are assigned using the <code>names_to</code> argument and values using <code>values_to</code>:</p>
@@ -309,16 +309,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 30 × 3
    index class value
    &lt;int&gt; &lt;chr&gt; &lt;dbl&gt;
- 1     1 p1    39.0 
- 2     1 p2    33.9 
- 3     1 p3    82.3 
- 4     2 p1    16.6 
- 5     2 p2     9.25
- 6     2 p3    86.8 
- 7     3 p1    28.3 
- 8     3 p2     7.09
- 9     3 p3    25.8 
-10     4 p1     6.15
+ 1     1 p1    44.4 
+ 2     1 p2    66.3 
+ 3     1 p3    60.5 
+ 4     2 p1    25.0 
+ 5     2 p2    29.9 
+ 6     2 p3    73.2 
+ 7     3 p1     4.50
+ 8     3 p2    69.8 
+ 9     3 p3    34.7 
+10     4 p1    12.3 
 # ℹ 20 more rows</code></pre>
 </div>
 </div>
@@ -356,11 +356,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 5 × 3
   index class values
   &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;
-1     1 p1     39.0 
-2     1 p2     33.9 
-3     1 p3     82.3 
-4     2 p1     16.6 
-5     2 p2      9.25</code></pre>
+1     1 p1      44.4
+2     1 p2      66.3
+3     1 p3      60.5
+4     2 p1      25.0
+5     2 p2      29.9</code></pre>
 </div>
 </div>
 <p>In this case, we use <code>pivot_wider()</code> and the <code>names_from</code> argument to specify which column will be used for the column names, and <code>values_from</code> for the values.</p>
@@ -372,16 +372,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code># A tibble: 10 × 4
    index    p1    p2    p3
    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1     1 39.0  33.9   82.3
- 2     2 16.6   9.25  86.8
- 3     3 28.3   7.09  25.8
- 4     4  6.15 31.8   78.5
- 5     5 42.6  35.4   20.5
- 6     6  2.66 20.4   54.7
- 7     7 44.4  54.5   16.7
- 8     8 27.0  11.1   11.7
- 9     9 31.4  10.0   85.5
-10    10 20.4  10.7   88.8</code></pre>
+ 1     1 44.4   66.3  60.5
+ 2     2 25.0   29.9  73.2
+ 3     3  4.50  69.8  34.7
+ 4     4 12.3   46.0  13.0
+ 5     5 32.1   20.2  78.4
+ 6     6 41.9   62.4  22.2
+ 7     7 13.1   41.9  52.8
+ 8     8 18.3   33.7  33.7
+ 9     9 16.5   52.8  37.5
+10    10 26.5   63.3  28.3</code></pre>
 </div>
 </div>
 </section>
