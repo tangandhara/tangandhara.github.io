@@ -1,0 +1,110 @@
+---
+title: "How to pivot datasets"
+subtitle: "A guide to using **pivot_longer()** and **pivot_wider()** in **{tidyr}**"
+author:
+  - name: Tan Gandhara
+date: 08-06-2024
+categories: [R, tidyr, pivoting] 
+image: logo.png
+draft: false
+format: html
+---
+
+### Why, oh why?
+
+I've spent quite a few years working with data in R but was reminded of the brain fog that overcomes me each time I want to pivot any data when I saw Jörn's [post on Bluesky](https://bsky.app/profile/jaquent.bsky.social/post/3kuafvfcswm2h):
+
+```{=html5}
+<blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:mkrvmb5nkkarnvlgzqavbpim/app.bsky.feed.post/3kuafvfcswm2h" data-bluesky-cid="bafyreiftxnacrhkgluezfyskyrdrhfsst7ax7zuhah6mtlbzz77yw3wyfy"><p lang="en">Will ever I be able to convert data between wide and long format in #rstats without googling?</p>&mdash; Jörn Alexander Quent (<a href="https://bsky.app/profile/did:plc:mkrvmb5nkkarnvlgzqavbpim?ref_src=embed">@jaquent.bsky.social</a>) <a href="https://bsky.app/profile/did:plc:mkrvmb5nkkarnvlgzqavbpim/post/3kuafvfcswm2h?ref_src=embed">Jun 6, 2024 at 7:40</a></blockquote><script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
+```
+I regularly use Excel and Power BI at work and pivoting can be pretty simple in Power Query ([here's the answer](https://support.microsoft.com/en-gb/office/pivot-columns-power-query-abc9c8da-3be9-44c4-886e-0be331ab387a) in case you're wondering) but this site is a Microsoft-free zone so I'll show you how to do in RStudio.
+
+### Enter the Tidyverse
+
+For this guide we're using the **{tidyr}** package from **{tidyverse}** so let's get them loaded up and set up a dataset for use in this guide:
+
+```{r}
+#| echo: true
+#| output: false
+library(tidyverse)
+```
+
+```{r}
+#| echo: true
+#| output: true
+
+index <- seq(1:10)
+p1 <- runif(10,1,50)
+p2 <- runif(10,5,70)
+p3 <- runif(10,7,90)
+df <- tibble(index,p1,p2,p3)
+print(df)
+```
+
+Now, let's say we want to everything apart from the `index` column to be reshaped into a longer tibble where the `p` labels are in a column called `class` and the actual observations for each row are in a column called `values`. Using the `pivot_longer()` function we could do something like this were we select everything apart from `index` and column names are assigned using the `names_to` argument and values using `values_to`:
+
+```{r}
+#| echo: true
+#| output: true
+
+df |> 
+  pivot_longer(!index, 
+               names_to = "class", 
+               values_to = "value")
+```
+
+Other ways of achieving this same result are by selecting specific columns from their column index; **{tidyselect}**'s [selection helpers](https://tidyselect.r-lib.org/reference/starts_with.html); or a regexp using the `names_pattern` argument:
+
+```{r}
+#| echo: true
+#| output: false
+
+# Use column index to select columns
+df |> 
+  pivot_longer(cols = c(2:4),
+               names_to = "class",
+               values_to = "values")
+
+
+# Use starts_with to select columns
+df |> 
+  pivot_longer(cols = starts_with("p"),
+               names_to = "class",
+               values_to = "values")
+
+# Use a regexp to select columns
+df |> 
+  pivot_longer(cols = c(2:4),
+               names_to = "class",
+               names_pattern = "^p(.*)",
+               values_to = "values")
+```
+
+Now let's say that we have the same data in a long format, using `df2,` but want to use it in a wide format.
+
+```{r}
+#| echo: true
+#| output: true
+
+df2 <- df |> 
+  pivot_longer(cols = starts_with("p"),
+               names_to = "class",
+               values_to = "values")
+
+head(df2,5)
+```
+
+In this case, we use `pivot_wider()` and the `names_from` argument to specify which column will be used for the column names, and `values_from` for the values.
+
+```{r}
+#| echo: true
+#| output: true
+
+df2 |> 
+  pivot_wider(names_from = class, 
+              values_from = values)
+```
+
+### Next steps
+
+The code above returns the simple tibble we started with but reshaping more complicated datasets might require the use of `names_repair`, `names_sep`, or `names_expand` arguments in `pivot_wider`. To learn about these and other arguments for both of the pivoting functions mentioned above then take a look at the detailed guide [here](https://tidyr.tidyverse.org/articles/pivot.html). Happy pivoting!

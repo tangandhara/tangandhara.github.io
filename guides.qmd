@@ -1,8 +1,9 @@
 ---
 title: "Guides"
-guides: 
-  contents: projects
-  fields: [title, subtitle]
+subtitle: "A place to keep notes on how to do things in R"
+listing: 
+  contents: posts
+  fields: [image, title, subtitle]
   type: grid
   categories: false
   sort-ui: false

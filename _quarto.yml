@@ -17,7 +17,7 @@ website:
         - projects1.qmd
         - projects2.qmd
         - projects.qmd
-      - section: "Tutorials"
+      - section: "Reference"
         contents:  
         - guides.qmd
         - links.qmd

@@ -5,6 +5,8 @@ categories: [dataviz, visualisation]
 subtitle: "Choropleth maps visualising pay gaps in the UK"
 ---
 
+![](/images/Paygap_plot.jpg){fig-alt="Two plots showing regional pay gap differences in the UK" fig-align="center" width="1000"}
+
 ### Introduction
 
 I used data from the UK Gender Pay Gap Service to highlight the gendered disparity in pay between men and women in the UK.
@@ -22,5 +24,3 @@ This approach does have limitations, specifically by using mean values per local
 ### R Code
 
 The full code is available on GitHub by clicking [here](https://github.com/tangandhara/Portfolio/tree/main/UK%20Pay%20Gap).
-
-![UK Paygap Data](/images/Paygap_plot.jpg){fig-alt="Two plots showing regional pay gap differences in the UK" fig-align="center" width="1000"}

@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Tan Gandhara">
+<meta name="dcterms.date" content="2024-08-06">
 
-<title>Tan Gandhara – Gender Pay Gap Map</title>
+<title>Tan Gandhara – How to pivot datasets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,25 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -69,7 +104,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-sidebar floating">
@@ -82,7 +117,7 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-          <h1 class="quarto-secondary-nav-title">Gender Pay Gap Map</h1>
+          <h1 class="quarto-secondary-nav-title">How to pivot datasets</h1>
         </a>     
     </div>
   </nav>
@@ -93,7 +128,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Tan Gandhara</a> 
+      <a href="../../">Tan Gandhara</a> 
         <div class="sidebar-tools-main tools-wide">
     <a href="https://www.linkedin.com/in/tan-gandhara" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
     <a href="https://bsky.app/profile/tangandhara.bsky.social" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-chat-quote-fill"></i></a>
@@ -115,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Bio</span></a>
   </div>
 </li>
@@ -132,19 +167,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./projects1.html" class="sidebar-item-text sidebar-link">
+  <a href="../../projects1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">R Shiny Dashboard</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./projects2.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../projects2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Gender Pay Gap Map</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./projects.html" class="sidebar-item-text sidebar-link">
+  <a href="../../projects.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Time Series Analysis</span></a>
   </div>
 </li>
@@ -161,13 +196,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./guides.html" class="sidebar-item-text sidebar-link">
+  <a href="../../guides.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Guides</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./links.html" class="sidebar-item-text sidebar-link">
+  <a href="../../links.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Links</span></a>
   </div>
 </li>
@@ -183,10 +218,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a></li>
-  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
-  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code">R Code</a></li>
+  <li><a href="#why-oh-why" id="toc-why-oh-why" class="nav-link active" data-scroll-target="#why-oh-why">Why, oh why?</a></li>
+  <li><a href="#enter-the-tidyverse" id="toc-enter-the-tidyverse" class="nav-link" data-scroll-target="#enter-the-tidyverse">Enter the Tidyverse</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
   </ul>
 </nav>
     </div>
@@ -195,11 +229,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Gender Pay Gap Map</h1>
-<p class="subtitle lead">Choropleth maps visualising pay gaps in the UK</p>
+<h1 class="title d-none d-lg-block">How to pivot datasets</h1>
+<p class="subtitle lead">A guide to using <strong>pivot_longer()</strong> and <strong>pivot_wider()</strong> in <strong>{tidyr}</strong></p>
   <div class="quarto-categories">
-    <div class="quarto-category">dataviz</div>
-    <div class="quarto-category">visualisation</div>
+    <div class="quarto-category">R</div>
+    <div class="quarto-category">tidyr</div>
+    <div class="quarto-category">pivoting</div>
   </div>
   </div>
 
@@ -214,6 +249,12 @@ ul.task-list li input[type="checkbox"] {
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 6, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -223,27 +264,130 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="./images/Paygap_plot.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Two plots showing regional pay gap differences in the UK" width="1000"></p>
-</figure>
+<section id="why-oh-why" class="level3">
+<h3 class="anchored" data-anchor-id="why-oh-why">Why, oh why?</h3>
+<p>I’ve spent quite a few years working with data in R but was reminded of the brain fog that overcomes me each time I want to pivot any data when I saw Jörn’s <a href="https://bsky.app/profile/jaquent.bsky.social/post/3kuafvfcswm2h">post on Bluesky</a>:</p>
+<blockquote class="bluesky-embed blockquote" data-bluesky-uri="at://did:plc:mkrvmb5nkkarnvlgzqavbpim/app.bsky.feed.post/3kuafvfcswm2h" data-bluesky-cid="bafyreiftxnacrhkgluezfyskyrdrhfsst7ax7zuhah6mtlbzz77yw3wyfy"><p lang="en">Will ever I be able to convert data between wide and long format in #rstats without googling?</p>— Jörn Alexander Quent (<a href="https://bsky.app/profile/did:plc:mkrvmb5nkkarnvlgzqavbpim?ref_src=embed">@jaquent.bsky.social</a>) <a href="https://bsky.app/profile/did:plc:mkrvmb5nkkarnvlgzqavbpim/post/3kuafvfcswm2h?ref_src=embed">Jun 6, 2024 at 7:40</a></blockquote><script async="" src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
+<p>I regularly use Excel and Power BI at work and pivoting can be pretty simple in Power Query (<a href="https://support.microsoft.com/en-gb/office/pivot-columns-power-query-abc9c8da-3be9-44c4-886e-0be331ab387a">here’s the answer</a> in case you’re wondering) but this site is a Microsoft-free zone so I’ll show you how to do in RStudio.</p>
+</section>
+<section id="enter-the-tidyverse" class="level3">
+<h3 class="anchored" data-anchor-id="enter-the-tidyverse">Enter the Tidyverse</h3>
+<p>For this guide we’re using the <strong>{tidyr}</strong> package from <strong>{tidyverse}</strong> so let’s get them loaded up and set up a dataset for use in this guide:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="introduction" class="level3">
-<h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
-<p>I used data from the UK Gender Pay Gap Service to highlight the gendered disparity in pay between men and women in the UK.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10</span>,<span class="dv">1</span>,<span class="dv">50</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10</span>,<span class="dv">5</span>,<span class="dv">70</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">10</span>,<span class="dv">7</span>,<span class="dv">90</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(index,p1,p2,p3)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   index    p1    p2    p3
+   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 39.0  33.9   82.3
+ 2     2 16.6   9.25  86.8
+ 3     3 28.3   7.09  25.8
+ 4     4  6.15 31.8   78.5
+ 5     5 42.6  35.4   20.5
+ 6     6  2.66 20.4   54.7
+ 7     7 44.4  54.5   16.7
+ 8     8 27.0  11.1   11.7
+ 9     9 31.4  10.0   85.5
+10    10 20.4  10.7   88.8</code></pre>
+</div>
+</div>
+<p>Now, let’s say we want to everything apart from the <code>index</code> column to be reshaped into a longer tibble where the <code>p</code> labels are in a column called <code>class</code> and the actual observations for each row are in a column called <code>values</code>. Using the <code>pivot_longer()</code> function we could do something like this were we select everything apart from <code>index</code> and column names are assigned using the <code>names_to</code> argument and values using <code>values_to</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">!</span>index, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"class"</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"value"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 3
+   index class value
+   &lt;int&gt; &lt;chr&gt; &lt;dbl&gt;
+ 1     1 p1    39.0 
+ 2     1 p2    33.9 
+ 3     1 p3    82.3 
+ 4     2 p1    16.6 
+ 5     2 p2     9.25
+ 6     2 p3    86.8 
+ 7     3 p1    28.3 
+ 8     3 p2     7.09
+ 9     3 p3    25.8 
+10     4 p1     6.15
+# ℹ 20 more rows</code></pre>
+</div>
+</div>
+<p>Other ways of achieving this same result are by selecting specific columns from their column index; <strong>{tidyselect}</strong>’s <a href="https://tidyselect.r-lib.org/reference/starts_with.html">selection helpers</a>; or a regexp using the <code>names_pattern</code> argument:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use column index to select columns</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"class"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"values"</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Use starts_with to select columns</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"p"</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"class"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"values"</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Use a regexp to select columns</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>),</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"class"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_pattern =</span> <span class="st">"^p(.*)"</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now let’s say that we have the same data in a long format, using <code>df2,</code> but want to use it in a wide format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"p"</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"class"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"values"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df2,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  index class values
+  &lt;int&gt; &lt;chr&gt;  &lt;dbl&gt;
+1     1 p1     39.0 
+2     1 p2     33.9 
+3     1 p3     82.3 
+4     2 p1     16.6 
+5     2 p2      9.25</code></pre>
+</div>
+</div>
+<p>In this case, we use <code>pivot_wider()</code> and the <code>names_from</code> argument to specify which column will be used for the column names, and <code>values_from</code> for the values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> class, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   index    p1    p2    p3
+   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 39.0  33.9   82.3
+ 2     2 16.6   9.25  86.8
+ 3     3 28.3   7.09  25.8
+ 4     4  6.15 31.8   78.5
+ 5     5 42.6  35.4   20.5
+ 6     6  2.66 20.4   54.7
+ 7     7 44.4  54.5   16.7
+ 8     8 27.0  11.1   11.7
+ 9     9 31.4  10.0   85.5
+10    10 20.4  10.7   88.8</code></pre>
+</div>
+</div>
 </section>
-<section id="methodology" class="level3">
-<h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
-<p>The dataset has almost 49,000 entries across 27 variables for each of the companies that made a submission. I chose to focus on the mean values in difference between hourly and bonus pay across genders for each entry.</p>
-<p>To do this, I took the relevant mean values and post codes and essentially performed a lookup with a separate dataset of UK postcodes to obtain the local authority names. This dataframe was combined with a shapefile of UK local authorities. I was then able to summarise the data using the mean value in the differences per local authority.</p>
-</section>
-<section id="limitations" class="level3">
-<h3 class="anchored" data-anchor-id="limitations">Limitations</h3>
-<p>This approach does have limitations, specifically by using mean values per local authority results in data that is not standardised. Neverthless, the intention of this small project was to put together a visualisation rather than conduct an in-depth analysis of the data.</p>
-</section>
-<section id="r-code" class="level3">
-<h3 class="anchored" data-anchor-id="r-code">R Code</h3>
-<p>The full code is available on GitHub by clicking <a href="https://github.com/tangandhara/Portfolio/tree/main/UK%20Pay%20Gap">here</a>.</p>
+<section id="next-steps" class="level3">
+<h3 class="anchored" data-anchor-id="next-steps">Next steps</h3>
+<p>The code above returns the simple tibble we started with but reshaping more complicated datasets might require the use of <code>names_repair</code>, <code>names_sep</code>, or <code>names_expand</code> arguments in <code>pivot_wider</code>. To learn about these and other arguments for both of the pivoting functions mentioned above then take a look at the detailed guide <a href="https://tidyr.tidyverse.org/articles/pivot.html">here</a>. Happy pivoting!</p>
 
 
 </section>
