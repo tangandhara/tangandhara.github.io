@@ -1,0 +1,599 @@
+---
+title: "Election voter registration"
+subtitle: "Who has registered to vote in the 2024 general election?"
+author:
+  - name: Tan Gandhara
+date: 06-30-2024
+categories: [R, ggplot2] 
+image: logo.jpeg
+execute:
+  eval: true
+  echo: false
+---
+
+### General election 2024
+
+This general election seems like it will be the most significant result since 1997 with Labour gaining a sizeable majority after fourteen years of Conservative rule. Rather than look at polls, I thought it would be interesting to explore who has registered to vote over the past four weeks since the election was called.
+
+The Department for Levelling Up, Housing, and Communities (DLUHC) has a [performance dashboard](https://www.registertovote.service.gov.uk/performance) with all the relevant data available for this brief analysis.
+
+### The last 24 hours
+
+Let's start with the last 24 hours before registration closed. The DLUHC dashboard records the number of voter registration applications submitted in a 5-minute period for its live service usage report. I downloaded the data shortly after midnight to get a view of the full day's applications and the plot looks something like this:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#| echo: false
+#| fig-show: asis
+
+library(tidyverse)
+library(readr)
+library(ggthemes)
+library(ggtext)
+library(glue)
+
+tt <- str_glue("Data: Department for Levelling Up, Housing, and Communities<br>")  
+title_text   <- str_glue("Voter registration - June 18 2024") 
+
+subtitle_text <- glue("Fluctuations in applications over 5-minute intervals on the final day of registration")
+
+bs <- str_glue("<span style='font-family:\"Font Awesome 6 Brands\"'>&#xe671;</span>")  
+gh <- str_glue("<span style='font-family:\"Font Awesome 6 Brands\"'>&#xf09b;</span>")
+tw <- str_glue("<span style='font-family:\"Font Awesome 6 Brands\"'>&#xe61a;</span>")
+
+caption_text <- glue("{tt} {bs} tangandhara.bsky.social &bull; {gh} tangandhara &bull; {tw} tangandhara")
+
+bkg_col      <- colorspace::lighten('#343a40', 0.2)    
+title_col    <- "#000000"            
+subtitle_col <- "#000000"     
+caption_col  <- "#000000"   
+text_col     <- colorspace::darken("#eeeeee" , 0.15)  
+
+vote_june18 <- read_csv("Register_To_Vote_live_usage_18_Jun_2024.csv", show_col_types = FALSE)
+
+new1 <- vote_june18 |> 
+  mutate(date = if_else(`Online Applications`== "879", "19/06/2024", "18/06/2024"))
+
+new1 <- new1 %>%
+  mutate(dtm = dmy_hms(str_c(date, " ", Time)))
+
+new1 <- new1 |> arrange(dtm)
+
+new1 |> ggplot()+
+  geom_line(lineend = "round",mapping = aes(x = dtm, y = `Online Applications`), colour = "#3F88C5")+
+  scale_x_datetime(breaks = "2 hours", date_labels = "%H:%M")+
+  theme_fivethirtyeight()+
+  labs(x = "Time",
+       y = "Number of applications submitted",
+       title = title_text,
+       subtitle = subtitle_text,
+       caption = caption_text)+
+  theme(plot.background = element_rect("white"),
+    legend.background = element_rect("white"),
+    panel.background = element_rect("white"),
+        legend.position = "off",
+        axis.title.x.top = element_markdown(
+          margin = margin(10, 2, 10, 2), 
+          size   = rel(.9),
+          color  = text_col, 
+          family        = "Futura",
+          face   = "bold"
+        ),
+        legend.title = element_markdown(
+          size   = rel(.9), 
+          hjust  = 0.5,
+          family        = "Futura",
+          face   = "bold",
+          color  = text_col
+        ),
+        legend.text = element_text(
+          size   = rel(.7),
+          family        = "Futura",
+          face   = "bold",
+          color  = text_col
+        ),
+        legend.key.height  = unit(.8, "cm"),
+        #legend.margin    = margin(t = 5, b = -5, unit = "pt"), #size of the box
+        plot.title      = element_text(
+          size          = rel(1),
+          family        = "Futura",
+          face          = "bold",
+          color         = title_col,
+          lineheight    = 1.1,
+          margin        = margin(t = 5, b = 3)
+        ),
+        plot.subtitle   = element_textbox_simple(
+          size          = rel(0.8), 
+          family        = "Futura",
+          color         = subtitle_col,
+          lineheight    = -0.4, 
+          margin        = margin(t = 2, b = 8)
+        ),
+        plot.caption    = element_textbox_simple(family = "Futura",size = 7,margin = margin(2, 0, 0, 0, "lines")),
+        axis.text  = element_text(size = rel(.5),family        = "Futura"),
+        axis.title.x  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = -5),
+        axis.title.y  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = 2),
+        panel.grid.major = element_blank(),
+        panel.grid.minor.x = element_line(colour = "#ced4da", linewidth = 0.5))
+```
+
+I wanted to understand what caused some of those spikes and used my own experience and did some investigation to come up with some answers.
+
+#### 6-8am
+
+It's difficult to see on the chart above, but the underlying data shows these occurred in the 5-10 minutes after 6am, 6:30am, 7am, etc. There's no details on the dashboard suggesting that there is a lag so my assumption here is that this two-hour window is typically when people have just woken up and, after either browsing online media or switching on the TV, have been reminded that June 18th was the last day to register to vote in the general election and did so before getting on with the rest of their day.
+
+#### 9-10am
+
+There's a bit of a dip before two further prominent spikes that happen just after 9am and again just after 10am. I couldn't find details of anything that might have prompted these. So my assumption here is that between the last spike just after 8am and the one at 9am, people are getting ready for work, dropping kids off at school, commuting, etc. So it is only at 9am when when they either start work or, if not working, see a reminder on one of the daytime TV shows to register to vote. This latter point may especially be true for the 10:15am spike in registrations since it occurs just after *This Morning* starts at 10am.
+
+#### Lunchtime
+
+At around 12 noon, *TikTok* sends out a push notification to its users reminding them to register and has been attributed as contributing to the increae in registrations.
+
+#### 5pm
+
+As many people were probably finishing their workday, Jeremy Corbyn, the now expelled Labour MP and former party leader at the 2019 general election, posted this tweet just after 5pm:
+
+```{=html5}
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Unfortunately, a tabloid newspaper has got hold of a music video I recorded in Islington North with an iconic grime artist I&#39;ve admired for years.<br><br>They are planning to publish a heavily edited clip, so I&#39;m releasing the full version myself. Watch here: <a href="https://t.co/vwNGQN2wqU">https://t.co/vwNGQN2wqU</a></p>&mdash; Jeremy Corbyn (@jeremycorbyn) <a href="https://twitter.com/jeremycorbyn/status/1803096781502185878?ref_src=twsrc%5Etfw">June 18, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+Of course, it was a spurious claim and the link took people to the voter registration site. It was one of a number of similar tweets in the the run up to June 18th and Corbyn received 4 million views, 59K likes, and 15K retweets but hardly registers as a spike in registrations. That said, it occurs just as there is a significant upward trend in numbers.
+
+#### 6-8pm
+
+The evening is pretty chaotic with evening TV news from 6pm reporting on the election latest and reminding viewers that the day was the last day to register to vote in time for the election. *Sky News* also published an article about the deadline and, I understand may have sent a notification to users of its app about it:
+
+```{=html5}
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">The deadline to register to vote in the general election is today.<br><br>Here&#39;s everything you need to know about how to do it 👇 <a href="https://t.co/s98MGwEMw2">https://t.co/s98MGwEMw2</a></p>&mdash; Sky News (@SkyNews) <a href="https://twitter.com/SkyNews/status/1803121493636788528?ref_src=twsrc%5Etfw">June 18, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+Channel 4 News also hosted a debate with leaders of some of the main parties from 6.30pm - 8pm. At around 7.30pm, the Apple News app on iPhones sent out a notification to users linking to an article about the deadline to register to vote.
+
+#### 10.30pm
+
+Registrations remain fairly consistent from around 8pm through till 10:30pm when we see a final peak before registrations drop-off by midnight. I've not been able to establish what might have caused registration to rise so much other than social media reminders that created a sense of urgency about the imminent deadline. Perhaps, this combined with a captive audience on their phone at bedtime was the right combination to give registrations one final push.
+
+### Total deadline day registrations
+
+The final number of registrations was 629,878 and as you can see from the chart of cumulative registrations, between 7am and midnight, there was a consistent and steady upward trend.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#| echo: false
+#| fig-show: asis
+
+title_text1   <- str_glue("Cumulative voter registration - June 18 2024") 
+
+subtitle_text1 <- glue("There were approximately 630K applications to register to vote on the final day of registration")
+
+
+new1 <- new1 |> 
+  mutate(cumulative = cumsum(`Online Applications`))
+
+options(scipen = 999)
+new1 |> ggplot()+
+  geom_line(lineend = "round",mapping = aes(x = dtm, y = cumulative), colour = "#3F88C5")+
+  scale_x_datetime(breaks = "2 hours", date_labels = "%H:%M")+
+  scale_y_continuous(labels = scales::comma)+
+  theme_fivethirtyeight()+
+  labs(x = "Time",
+       y = "Number of applications submitted",
+       title = title_text1,
+       subtitle = subtitle_text1,
+       caption = caption_text)+
+  theme(plot.background = element_rect("white"),
+    legend.background = element_rect("white"),
+    panel.background = element_rect("white"),
+        legend.position = "off",
+        axis.title.x.top = element_markdown(
+          margin = margin(10, 2, 10, 2), 
+          size   = rel(.9),
+          color  = text_col, 
+          family        = "Futura",
+          face   = "bold"
+        ),
+        legend.title = element_markdown(
+          size   = rel(.9), 
+          hjust  = 0.5,
+          family        = "Futura",
+          face   = "bold",
+          color  = text_col
+        ),
+        legend.text = element_text(
+          size   = rel(.7),
+          family        = "Futura",
+          face   = "bold",
+          color  = text_col
+        ),
+        legend.key.height  = unit(.8, "cm"),
+        #legend.margin    = margin(t = 5, b = -5, unit = "pt"), #size of the box
+        plot.title      = element_text(
+          size          = rel(1),
+          family        = "Futura",
+          face          = "bold",
+          color         = title_col,
+          lineheight    = 1.1,
+          margin        = margin(t = 5, b = 3)
+        ),
+        plot.subtitle   = element_textbox_simple(
+          size          = rel(0.8), 
+          family        = "Futura",
+          color         = subtitle_col,
+          lineheight    = -0.4, 
+          margin        = margin(t = 2, b = 8)
+        ),
+        plot.caption    = element_textbox_simple(family = "Futura",size = 7,margin = margin(2, 0, 0, 0, "lines")),
+        axis.text  = element_text(size = rel(.5),family        = "Futura"),
+        axis.title.x  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = -5),
+        axis.title.y  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = 2),
+        panel.grid.major = element_blank())
+        #panel.grid.minor.x = element_line(colour = "#ced4da", linewidth = 0.5))
+```
+
+My reading of this is that there was no single event that necessarily caused the registrations to spike, but the effect of regular reminders drove momentum. I take this view on the basis that there is no plateau at any point in the day in the cumulative numbers apart from the early hours of the morning.
+
+How does this compare to the last election in 2019? Well, I can't perform a similar analysis of the final day since the data is not available but, according to DLUHC, the total number of applications received on November 26 2019 was 640,815, the equivalent of 1.7% more registrations when compared to 2024.
+
+### 2024 vs 2019 voter registrations
+
+Although a comparison of the two deadline days is not possible, we can compare the number of registrations over the period between the election being announced and the last day voters can register to vote. In 2024 this period lasted 28 days while in 2019 it was 29 days long so I've dropped the first day in 2019 ot make the periods line up.
+
+Nevertheless, we see a remarkably similar trend over the four weeks:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#| echo: false
+#| fig-show: asis
+
+library(zoo)
+
+title_text2   <- str_glue("Voter registration for <span style = 'color: #3F88C5;'>2024</span> & <span style = 'color: #D00000;'>2019</span> elections") 
+
+subtitle_text2 <- glue("The difference in number of registrations for the last 28 days of the voter registration period for both general elections has remained largely similar")
+
+
+daily_2024 <- read_csv("Register_To_Vote_applications_breakdown_01_04_2024_to_18_06_2024.csv", 
+                       col_types = cols(`Paper forms` = col_skip()), show_col_types = FALSE)
+daily_2024$Date <- dmy(daily_2024$Date)
+
+daily_2024 <- daily_2024 |> filter(Date>="2024-05-22") |> arrange(Date)
+daily_2024$index <- 1:nrow(daily_2024)
+daily_2024 <- daily_2024 |> 
+  mutate(moving_avg = rollmean(Online, k=3, fill = NA, align = "right"))
+
+daily_2019 <- read_csv("Register_To_Vote_applications_breakdown_04_09_2019_to_12_12_2019.csv",show_col_types = FALSE)
+
+daily_2019$Date <- dmy(daily_2019$Date)
+
+
+daily_2019 <- daily_2019 |> filter(Date>="2019-10-29" & Date<="2019-11-26") |> arrange(Date)
+daily_2019$index <- 1:nrow(daily_2019)
+daily_2019 <- daily_2019 |> 
+  mutate(moving_avg = rollmean(Online, k=3, fill = NA, align = "right"))
+
+daily_2019_a <- daily_2019[-1, ]
+
+daily_2019_a$index <- 1:nrow(daily_2019_a)
+
+options(scipen = 999)
+daily_2019_a |> ggplot()+
+  geom_segment( aes(y = index, x = Online, yend = daily_2024$index, xend = daily_2024$Online))+
+  geom_point(aes(y = index, x = Online), color = "#D00000")+
+  geom_point(aes(y = daily_2024$index, x = daily_2024$Online ), color = "#3F88C5")+
+  scale_y_continuous(breaks = seq(1,28, by =1))+
+  scale_x_continuous(labels = scales::comma)+
+  annotate("curve", x = 345000, y = 19.5, yend = 22.8, xend = 335000,curvature = -0.5, arrow = arrow(length = unit(0.5, "cm")))+
+  annotate("text", x = 270000, y = 17, label = "2024: Labour\nmanifesto\nlaunch and\nTV debate", vjust = 0, hjust = 0.3, family = "Futura",size = rel(3), color = "#3F88C5")+
+  annotate("curve", x = 545000, y = 20, yend = 24, xend = 309500,curvature = -0.5, arrow = arrow(length = unit(0.5, "cm")))+
+ annotate("text", x = 545000, y = 18, label = "2019: Question Time\ndebate", vjust = 0, hjust = 0.3, family = "Futura",size = rel(3), color = "#D00000")+
+  annotate("curve", x = 249718, y = 12, yend = 14, xend = 149000,curvature = -0.5, arrow = arrow(length = unit(0.5, "cm")))+
+  annotate("text", x = 199718, y = 8, label = "2019: Brexit Party\nwithdraws candidates\nin some seats", vjust = 0, hjust = 0.3, family = "Futura",size = rel(3), color = "#D00000")+
+  coord_flip()+
+  theme_fivethirtyeight()+
+  labs(y = "Day of voter registration period",
+       x = "Number of applications submitted",
+       title = title_text2,
+       subtitle = subtitle_text2,
+       caption = caption_text)+
+  theme(plot.background = element_rect("white"),
+    legend.background = element_rect("white"),
+    panel.background = element_rect("white"),
+    legend.position = "off",
+    axis.title.x.top = element_markdown(
+      margin = margin(10, 2, 10, 2), 
+      size   = rel(.9),
+      color  = text_col, 
+      family        = "Futura",
+      face   = "bold"
+    ),
+    legend.title = element_markdown(
+      size   = rel(.9), 
+      hjust  = 0.5,
+      family        = "Futura",
+      face   = "bold",
+      color  = text_col
+    ),
+    legend.text = element_text(
+      size   = rel(.7),
+      family        = "Futura",
+      face   = "bold",
+      color  = text_col
+    ),
+    legend.key.height  = unit(.8, "cm"),
+    #legend.margin    = margin(t = 5, b = -5, unit = "pt"), #size of the box
+    plot.title      = element_textbox(
+      size          = rel(1),
+      family        = "Futura",
+      face          = "bold",
+      color         = title_col,
+      lineheight    = 1.1,
+      margin        = margin(t = 5, b = 3)
+    ),
+    plot.subtitle   = element_textbox_simple(
+      size          = rel(0.8), 
+      family        = "Futura",
+      color         = subtitle_col,
+      lineheight    = -0.4, 
+      margin        = margin(t = 2, b = 8)
+    ),
+    plot.caption    = element_textbox_simple(family = "Futura",size = 7,margin = margin(2, 0, 0, 0, "lines")),
+    axis.text  = element_text(size = rel(.5),family        = "Futura"),
+    axis.title.x  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = -5),
+    axis.title.y  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = 2),
+    panel.grid.major = element_blank(),
+    panel.grid.major.y = element_line(colour = "#ced4da", linewidth = 0.5))
+```
+
+For both elections, we see an inital flurry of registrations over the first few days before numbers stabilise with similar numbers for each year until final days of the registration period. Apart from this, we see a significant spikes in the fourth week - what could have caused them? There's not just one reason that can be attributed to these jumps in registrations but here are some of the events that occurred around those dates:
+
+-   In 2024, the spike is on day 23 which was June 13, the day when Labour launched its manifesto and ITV held the first debate with representatives of seven parties.
+
+-   In 2019, this spike occurred on day 24 which was November 22, and was the day of a debate on BBC Question Time between the main party leaders and the day after Labour's manifesto launch. We also see a smaller spike on day 14 - November 12 - of the 2019 election. A number of things happened on that day, including a cyber attack on the Labour party's IT systems and major flooding in northern England. However, the key political event likely to have caused the increase was the decision by Nigel Farage's Brexit Party to withdraw candidates in constituencies where the Conservatives had won seats in the 2017 election.
+
+### 2024 vs 2019 voter registration demographics
+
+Finally, let's take a look at how 2024 has compared to 2019's voter registration demographics.
+
+::: panel-tabset
+## 2024
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#| echo: false
+#| fig-show: asis
+library(patchwork)
+library(scales)
+
+col_palette  <- c("Under 25" = "#3F88C5", "25 to 34" = "#D00000", "35 to 44" = "#FFBA08", "45 to 54" = "#136F63", 
+                  "55 to 64" = "#032b43", "65 to 74" = "#49dcb1", "Over 75" = "#ff8a5b")
+
+vote_age_groups <- read_csv("Register_To_Vote_applications_by_age_group_01_04_2024_to_18_06_2024.csv")
+
+vote_age_groups$Date <- dmy(vote_age_groups$Date)
+vote_age_groups <- vote_age_groups |> pivot_longer(
+  cols = (2:8),
+  names_to = "age_group",
+  values_to = "total"
+)
+
+df <- vote_age_groups |> filter(Date >= "2024-05-22") |> group_by(age_group) |>  arrange(Date) |> mutate(cs = cumsum(total))
+
+df_2024 <- vote_age_groups |> filter(Date >= "2024-05-22") |> group_by(age_group) |> summarise(total = sum(total))
+
+df_2024$age_group <- factor(df_2024$age_group, levels = c("Under 25", "25 to 34", "35 to 44", "45 to 54", "55 to 64", "65 to 74", "Over 75"))
+
+# Total by age group
+p2 <- ggplot(data = (df_2024 |> arrange(age_group)), aes(x = age_group, y = total, fill = age_group))+
+  geom_col()+
+  geom_text(aes(label = label_number(scale_cut = cut_si(""))(total)), vjust = -0.5, size = 3)+
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_manual(values = col_palette)+
+  theme_fivethirtyeight() +
+  theme(
+    legend.position = "right",
+    plot.background = element_rect("white"),
+    legend.background = element_rect("white"),
+    panel.background = element_rect("white"),
+    #axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()) +
+  guides(
+    fill = guide_legend(
+      direction = "horizontal",   # Set legend direction to horizontal
+      nrow = 7,                   # Adjust the number of rows for better layout
+      title = "Age groups",        # Set legend title text
+      title.position = "top" 
+    )
+  )
+
+
+
+# Cumulative over time by age group
+p1 <- ggplot(data = df, aes(y = cs, x = Date, group = age_group, colour = age_group))+
+  geom_line()+
+  scale_y_continuous(labels = scales::comma)+
+  scale_color_manual(values = col_palette)+
+  theme_fivethirtyeight()+
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major = element_blank(),
+    panel.grid.major.y = element_line(colour = "#ced4da", linewidth = 0.5))
+
+p1 + p2 +  plot_layout(ncol = 2, widths = c(1, 2)) + plot_annotation(
+       title = "2024 voter registration demographics",
+       subtitle = "The chart on the left shows the cumulative totals over the 28 day period between the election being called and registration closing, while the other shows the overall totals",
+       caption = caption_text,
+       #fill = "Age groups",
+      theme = 
+  theme(
+    #plot.background = element_rect(text_col),
+    legend.position = "off",
+    axis.title.x.top = element_markdown(
+      margin = margin(10, 2, 10, 2), 
+      size   = rel(.9),
+      color  = text_col, 
+      family        = "Futura",
+      face   = "bold"
+    ),
+    legend.title = element_markdown(
+      size   = rel(.9), 
+      hjust  = 0.5,
+      family        = "Futura",
+      face   = "bold",
+      color  = text_col
+    ),
+    legend.text = element_text(
+      size   = rel(.6),
+      family        = "Futura",
+      face   = "bold",
+      color  = text_col
+    ),
+    legend.key.height  = unit(.2, "cm"),
+    #legend.margin    = margin(t = 5, b = -5, unit = "pt"), #size of the box
+    plot.title      = element_textbox(
+      size          = rel(1),
+      family        = "Futura",
+      face          = "bold",
+      color         = title_col,
+      lineheight    = 1.1,
+      margin        = margin(t = 5, b = 3)
+    ),
+    plot.subtitle   = element_textbox_simple(
+      size          = rel(0.8), 
+      family        = "Futura",
+      #color         = subtitle_col,
+      lineheight    = -0.4, 
+      margin        = margin(t = 2, b = 8)
+    ),
+    plot.caption    = element_textbox_simple(family = "Futura",size = 7,margin = margin(2, 0, 0, 0, "lines")),
+    axis.text  = element_text(size = rel(.5),family        = "Futura"),
+    axis.title.x  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = -5),
+    axis.title.y  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = 2)))
+
+```
+
+## 2019
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#| echo: false
+#| fig-show: asis
+
+library(patchwork)
+
+
+reg_Vote_2019 <- read_csv("Register_To_Vote_applications_by_age_group_04_09_2019_to_12_12_2019.csv")
+
+reg_Vote_2019$Date <- dmy(reg_Vote_2019$Date)
+reg_Vote_2019 <- reg_Vote_2019 |> pivot_longer(
+  cols = (2:8),
+  names_to = "age_group",
+  values_to = "total"
+)
+
+
+reg_Vote_2019 <- reg_Vote_2019 |> arrange(Date) |> filter(Date>= "2019-10-30" & Date<= "2019-11-26") |>  group_by(age_group) |>  arrange(Date)|> mutate(cs = cumsum(total)) |> ungroup()
+options(scipen = 999)
+library(scales)
+
+df_2019 <- reg_Vote_2019|> group_by(age_group) |> summarise(total = sum(total))
+df_2019$age_group <- factor(df_2019$age_group, levels = c("Under 25", "25 to 34", "35 to 44", "45 to 54", "55 to 64", "65 to 74", "Over 75"))
+
+p3 <- df_2019 |> arrange(age_group) |> ggplot(aes(x = age_group, y = total, fill = age_group))+
+  geom_col()+
+  geom_text(aes(label = label_number(scale_cut = cut_si(""))(total)), vjust = -0.5, size = 3)+
+  scale_y_continuous(labels = scales::comma) +
+  scale_fill_manual(values = col_palette)+
+  theme_fivethirtyeight() +
+  theme(
+    legend.position = "right",
+    plot.background = element_rect("white"),
+    legend.background = element_rect("white"),
+    panel.background = element_rect("white"),
+    #axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()) +
+  guides(
+    fill = guide_legend(
+      direction = "horizontal",   # Set legend direction to horizontal
+      nrow = 7,                   # Adjust the number of rows for better layout
+      title = "Age groups",        # Set legend title text
+      title.position = "top" 
+    )
+  )
+
+
+
+p4 <- reg_Vote_2019 |> ggplot(aes(y = cs, x = Date, group = age_group, colour = age_group))+
+  geom_line()+
+  scale_y_continuous(labels = scales::comma)+
+  scale_color_manual(values = col_palette)+
+  theme_fivethirtyeight()+
+  theme(legend.position = "none",
+        plot.background = element_rect("white"),
+        panel.background = element_rect("white"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+p4 + p3 + plot_layout(ncol = 2, widths = c(1, 2)) + plot_annotation(
+  title = "2019 voter demographics",
+  subtitle = "The chart on the left shows the cumulative totals over the 28 day period between the election being called and registration closing, while the other shows the overall totals",
+  caption = caption_text,
+  #fill = "Age groups",
+  theme = 
+    theme(
+      #plot.background = element_rect(text_col),
+      legend.position = "off",
+      axis.title.x.top = element_markdown(
+        margin = margin(10, 2, 10, 2), 
+        size   = rel(.9),
+        color  = text_col, 
+        family        = "Futura",
+        face   = "bold"
+      ),
+      legend.title = element_markdown(
+        size   = rel(.9), 
+        hjust  = 0.5,
+        family        = "Futura",
+        face   = "bold",
+        color  = text_col
+      ),
+      legend.text = element_text(
+        size   = rel(.7),
+        family        = "Futura",
+        face   = "bold",
+        color  = text_col
+      ),
+      legend.key.height  = unit(.8, "cm"),
+      #legend.margin    = margin(t = 5, b = -5, unit = "pt"), #size of the box
+      plot.title      = element_textbox(
+        size          = rel(1),
+        family        = "Futura",
+        face          = "bold",
+        color         = title_col,
+        lineheight    = 1.1,
+        margin        = margin(t = 5, b = 3)
+      ),
+      plot.subtitle   = element_textbox_simple(
+        size          = rel(0.8), 
+        family        = "Futura",
+        #color         = subtitle_col,
+        lineheight    = -0.4, 
+        margin        = margin(t = 2, b = 8)
+      ),
+      plot.caption    = element_textbox_simple(family = "Futura",size = 7,margin = margin(2, 0, 0, 0, "lines")),
+      axis.text  = element_text(size = rel(.5),family        = "Futura"),
+      axis.title.x  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = -5),
+      axis.title.y  = element_text(size = rel(0.5),family        = "Futura",face="bold", hjust = 0.5, vjust = 2),
+      panel.grid.major = element_blank(),
+      panel.grid.major.y = element_line(colour = "#ced4da", linewidth = 0.5)))
+```
+:::
+
+There's a significant decline - by approximately 850K - in 2024 voter registrations by those aged under 35 years old when compared to 2019. In contrast, the number of registrations by those aged over 55 years old has risen by more than 120K. What might we attribute these changes to? I can think of three possible reasons.
+
+First, is the so-called ['youfquake'](https://www.theguardian.com/politics/2019/dec/11/young-people-on-the-election-ive-only-ever-lived-under-prime-ministers-that-lied) that was associated with Jeremy Corbyn's leadership of the Labour party which could have inflated the 2019 numbers for under 35 year olds.
+
+Second, it seems obvious but as people have aged they have likely shifted into older age groups. Without looking into demographic changes amongst the wider population over the same period its difficult to quantify how much of an impact this has on registrations.
+
+Finally, I wonder how much [disaffection with politics](https://www.theguardian.com/society/article/2024/jun/16/apathy-and-economic-insecurity-among-young-uk-voters-fuelling-growth-of-smaller-parties) exists in younger voters and how this has impacted registrations. Also, related to this, I question how much apathy there is given the widespread expectation that Labour will form the next government.
+
+With less than a week left until the election, I will be fascinated to see how registrations, especially amongst the youth, lead to actual votes.

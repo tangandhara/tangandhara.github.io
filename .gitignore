@@ -5,3 +5,6 @@
 .httr-oauth
 .DS_Store
 .quarto
+.voter_reg.R
+.voter_reg2.R
+serpent_trail.R

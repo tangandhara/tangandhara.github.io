@@ -1,0 +1,15 @@
+---
+title: "How to run an ultramarathon"
+subtitle: "Or how I tried to overcome failure at the Serpent Trail 100K"
+author:
+  - name: Tan Gandhara
+date: 10-07-2024
+categories: [R, ggplot2] 
+image: logo.png
+draft: true
+format: html
+---
+
+### Running very far
+
+I ran my first ultramarathon in 2017 and my second was the Serpent Trail 100K in 2019.

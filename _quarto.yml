@@ -12,11 +12,12 @@ website:
       - section: "About Me"
         contents:        
         - index.qmd
-      - section: "Projects"
-        contents:
-        - projects1.qmd
-        - projects2.qmd
-        - projects.qmd
+      - section: "Portfolio"
+        contents: 
+        - projects/voter_reg/index.qmd
+        - projects/projects1.qmd
+        - projects/projects2.qmd
+        - projects/projects.qmd
       - section: "Reference"
         contents:  
         - guides.qmd

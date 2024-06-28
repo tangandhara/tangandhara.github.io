@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tan Gandhara">
+
+<title>Tan Gandhara – Time Series Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../site_libs/jquery-1.11.1/jquery.min.js"></script>
+<link href="../site_libs/dygraphs-1.1.1/dygraph.css" rel="stylesheet">
+<script src="../site_libs/dygraphs-1.1.1/dygraph-combined.js"></script>
+<script src="../site_libs/dygraphs-1.1.1/shapes.js"></script>
+<script src="../site_libs/moment-2.8.4/moment.js"></script>
+<script src="../site_libs/moment-timezone-0.2.5/moment-timezone-with-data.js"></script>
+<script src="../site_libs/moment-fquarter-1.0.0/moment-fquarter.min.js"></script>
+<script src="../site_libs/dygraphs-binding-1.1.1.6/dygraphs.js"></script>
+<script src="../site_libs/Dygraph.Plugins.Unzoom-1.0/unzoom.js"></script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Time Series Analysis</h1>
+        </a>     
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Tan Gandhara</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://www.linkedin.com/in/tan-gandhara" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="https://bsky.app/profile/tangandhara.bsky.social" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-chat-quote-fill"></i></a>
+    <a href="https://github.com/tangandhara" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="mailto:tangandhara+quarto@hotmail.com" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-envelope"></i></a>
+</div>
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">About Me</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bio</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../projects/voter_reg/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Election voter registration</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../projects/projects1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">R Shiny Dashboard</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../projects/projects2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gender Pay Gap Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../projects/projects.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Time Series Analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Reference</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../guides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Guides</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../links.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Links</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#revolut-spending-data" id="toc-revolut-spending-data" class="nav-link active" data-scroll-target="#revolut-spending-data">Revolut Spending Data</a></li>
+  <li><a href="#time-series-analysis" id="toc-time-series-analysis" class="nav-link" data-scroll-target="#time-series-analysis">Time Series Analysis</a>
+  <ul class="collapse">
+  <li><a href="#exponential-smoothing" id="toc-exponential-smoothing" class="nav-link" data-scroll-target="#exponential-smoothing">Exponential Smoothing</a></li>
+  <li><a href="#holt-winters-method-with-seasonality" id="toc-holt-winters-method-with-seasonality" class="nav-link" data-scroll-target="#holt-winters-method-with-seasonality">Holt-Winters’ method with seasonality</a></li>
+  <li><a href="#arima-modelling" id="toc-arima-modelling" class="nav-link" data-scroll-target="#arima-modelling">ARIMA modelling</a></li>
+  <li><a href="#prophet" id="toc-prophet" class="nav-link" data-scroll-target="#prophet">Prophet</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Time Series Analysis</h1>
+<p class="subtitle lead">A time series analysis of Revolut spending data</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">time series</div>
+    <div class="quarto-category">forecasting</div>
+    <div class="quarto-category">analysis</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tan Gandhara </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="revolut-spending-data" class="level2">
+<h2 class="anchored" data-anchor-id="revolut-spending-data">Revolut Spending Data</h2>
+<p>This time series analysis focuses on <a href="https://www.ons.gov.uk/economy/economicoutputandproductivity/output/datasets/revolutspendingondebitcards" title="Revolut spending on debit cards">weekly data</a> available from the Office for National Statistics (ONS). Revolut is one of a number of digital banks that have emerged in recent years and it has around 4.8 million users within the UK financial payment ecosystem. The bank has been providing data to the ONS since the start of the COVID-19 pandemic and the ONS indexes data at the average February 2020 spending level as a pre-pandemic baseline. They also apply a 7-day rolling average to the data to take into account any intra-week spending cyclicality.</p>
+<p>While this data is useful for analysing spending changes since 2020 it is important to note a number of limitations:</p>
+<ul>
+<li><p>Revolut customers tend to be younger and more metropolitan than the average UK consumer, so spending may not be representative of the overall UK macroeconomic picture.</p></li>
+<li><p>The indices in the dataset do not take into account inflation and are presented on a nominal basis and are not adjusted for price increases over time. According to the ONS the CPI rate was at 1.8% in January 2020 but by January 2023 was at 10.1%.</p></li>
+<li><p>Within the UK financial transaction ecosystem there has been a shift away from cash as a payment medium in favour of card spending. This results in indices being uplifted over time in areas where consumers replace low value cash transactions with low value card transactions instead. This is more likely to be true in this dataset given the demographic profile of Revolut customers.</p></li>
+</ul>
+<p>The full background on methodology and limitations is available from the ONS <a href="https://www.ons.gov.uk/economy/economicoutputandproductivity/output/methodologies/usingrevolutcardholderdatatoderiverealtimeindicatorsofconsumerspendingqmi" title="Using Revolut cardholder data to derive real-time indicators of consumer spending QMI">here</a>.</p>
+</section>
+<section id="time-series-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="time-series-analysis">Time Series Analysis</h2>
+<p>This project utilizes the indexed rolling 7-day average total spend value from the spending by sector data to identify trends and forecast 28 days ahead. For the analysis, I will use the following methods: exponential smoothing, ARIMA, and forecasting using Prophet.</p>
+<p>After some initial cleaning of dataset to ensure it is in the correct format to conduct time series analysis in R, figure 1 shows plot of the spending over time shows how these levels changed over the course of the pandemic.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In general, what we can see is a clear upward trend across the three years and some seasonality exhibited around August and December-January. While the initial lockdown might be easily identifiable by the sharp dip during Q1 2020, it may be helpful to provide a reminder of all the restrictions implemented during the pandemic, and the plot below adds further context.</p>
+<p>The red lines are indicative of the main lockdowns and the restrictions imposed due to the emergence of the Omicron variant in late 2021. Although there were many stages of ‘unlocking’ of restrictions, I have chosen to highlight two key moments with green lines.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The first of these easing periods is the Eat Out To Help Out programme during August 2020 which offered discounted meals in pubs, restaurants, and other hospitality outlets to support the sector. The second is in February 2022 when official COVID-19 restrictions were ended under the Living With Covid Plan. As a result of these two interventions, we can clearly identify periods of sustained spending as people had greater freedom of movement in their daily lives.</p>
+<p>In spite of this, plotting the years against each reveals patterns in the second half of the year, particularly through Q4, that are broadly similar.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="exponential-smoothing" class="level3">
+<h3 class="anchored" data-anchor-id="exponential-smoothing">Exponential Smoothing</h3>
+<section id="holts-method-with-trend" class="level4">
+<h4 class="anchored" data-anchor-id="holts-method-with-trend">Holt’s method with trend</h4>
+<p>For this dataset I have chosen to experiment with the exponential smoothing method with trend and then later add in the seasonality component to determine if this improves the forecast.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> rs3 <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">model</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Holt's method</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ETS</span>(Total <span class="sc">~</span> <span class="fu">error</span>(<span class="st">"A"</span>) <span class="sc">+</span> <span class="fu">trend</span>(<span class="st">"A"</span>) <span class="sc">+</span> <span class="fu">season</span>(<span class="st">"N"</span>))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>fabletools<span class="sc">::</span><span class="fu">report</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: Total 
+Model: ETS(A,A,N) 
+  Smoothing parameters:
+    alpha = 0.9998998 
+    beta  = 0.7845457 
+
+  Initial states:
+     l[0]    b[0]
+ 111.1182 2.71086
+
+  sigma^2:  1.4885
+
+     AIC     AICc      BIC 
+8771.040 8771.092 8796.381 </code></pre>
+</div>
+</div>
+<p>This trended exponential smoothing model has a very high alpha value indicating that values in the past are given less weight than more recent values due to the exponential decaying built into the model. In addition, the beta value is high and this takes into changes in the data.</p>
+<p>Plotting the forecast of the next 28 days sees quite a steady decline in the mean value and quite a wide distribution across both the 80% and 95% intervals, with the lower and upper bounds of the 95% interval ranging below 0 and close to 300.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Given the macroeconomic conditions in the British economy are have not been particularly positive, this decline might not seem unreasonable and the model may benefit from the introduction of some level of dampening so as not to over-forecast.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> rs3 <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">model</span>(<span class="st">`</span><span class="at">Damped Holt's method</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ETS</span>(Total <span class="sc">~</span> <span class="fu">error</span>(<span class="st">"A"</span>) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">trend</span>(<span class="st">"Ad"</span>) <span class="sc">+</span> <span class="fu">season</span>(<span class="st">"N"</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>fabletools<span class="sc">::</span><span class="fu">report</span>(fit2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: Total 
+Model: ETS(A,Ad,N) 
+  Smoothing parameters:
+    alpha = 0.9998987 
+    beta  = 0.8161713 
+    phi   = 0.8000001 
+
+  Initial states:
+     l[0]      b[0]
+ 121.2629 -1.124004
+
+  sigma^2:  1.394
+
+     AIC     AICc      BIC 
+8694.973 8695.045 8725.382 </code></pre>
+</div>
+</div>
+<p>The model estimates phi, the dampening coefficient, to be 0.80 and we see a slight decrease in the alpha and increase beta values. This dampened model also performs better compared top the previous model when we compare AIC, AICc, and BIC values. The table below compares the two models and we can see that the damped Holt’s method has a lower RMSE so makes it a better choice.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rs3 <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">model</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Holt's method</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ETS</span>(Total <span class="sc">~</span> <span class="fu">error</span>(<span class="st">"A"</span>) <span class="sc">+</span> <span class="fu">trend</span>(<span class="st">"A"</span>) <span class="sc">+</span> <span class="fu">season</span>(<span class="st">"N"</span>)),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">Damped Holt's method</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ETS</span>(Total <span class="sc">~</span> <span class="fu">error</span>(<span class="st">"A"</span>) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">trend</span>(<span class="st">"Ad"</span>) <span class="sc">+</span> <span class="fu">season</span>(<span class="st">"N"</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        ) <span class="sc">|&gt;</span> <span class="fu">accuracy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 10
+  .model              .type       ME  RMSE   MAE    MPE  MAPE  MASE RMSSE   ACF1
+  &lt;chr&gt;               &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1 Holt's method       Trai… -0.00310  1.22 0.728 0.0164 0.742 0.144 0.175 0.0516
+2 Damped Holt's meth… Trai…  0.00414  1.18 0.689 0.0141 0.702 0.136 0.169 0.0136</code></pre>
+</div>
+</div>
+<p>The forecasts from the damped model also exhibit less variability in the 80% and 95% intervals than the earlier model.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When comparing the two forecasts, the dampened forecast, unsurprisingly, decreases less rapidly or as extreme at the median value.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="holt-winters-method-with-seasonality" class="level3">
+<h3 class="anchored" data-anchor-id="holt-winters-method-with-seasonality">Holt-Winters’ method with seasonality</h3>
+<p>To add in a seasonality component to the model we can use the Holt-Winters’ method either with an additive seasonality component, which assumes the seasonal variations within the time series to be approximately constant, or multiplicative seasonality component, where the assumption is that the variations are proportional to the level of the series.</p>
+<p>With the initial modelling, we can see that the additive model performs better with its lower AIC, AICc, and BIC values, in addition to lower MSE and AMSE values.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 9
+  .model           sigma2 log_lik   AIC  AICc   BIC   MSE  AMSE    MAE
+  &lt;chr&gt;             &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1 Additive       1.78      -4483. 8990. 8990. 9051.  1.77  7.62 0.811 
+2 Multiplicative 0.000265  -4674. 9371. 9371. 9432.  2.83  9.74 0.0104</code></pre>
+</div>
+</div>
+<p>The difference between the two models is evident when forecasting the next 28 days, with the mean values for additive model increasing while the multiplicative model shows a decline.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Similarly, the RMSE for the additive model is better than multiplicative one, although it does not perform as well as the RMSE for the damped Holt’s method above.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 10
+  .model         .type           ME  RMSE   MAE    MPE  MAPE  MASE RMSSE  ACF1
+  &lt;chr&gt;          &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 Additive       Training  0.000715  1.33 0.811 0.0304 0.827 0.161 0.191 0.323
+2 Multiplicative Training -0.00684   1.68 1.03  0.0278 1.04  0.203 0.242 0.374</code></pre>
+</div>
+</div>
+<p>However, it is possible to combine the dampened trend method with both additive and multiplicative seasonality. Both models see a drop in MSE and the AIC, AICc, and BIC values fall significantly, with the dampened multiplicative Holt Winter’s method having very similar values to the dampened Holt’s method. The RMSE value improves but not to the extent that either model match the model using damped Holt’s method.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 9
+  .model           sigma2 log_lik   AIC  AICc   BIC   MSE  AMSE     MAE
+  &lt;chr&gt;             &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 Additive       1.57      -4406. 8839. 8839. 8905.  1.55  6.04 0.749  
+2 Multiplicative 0.000157  -4368. 8762. 8762. 8827.  1.66  6.78 0.00786</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 10
+  .model         .type          ME  RMSE   MAE    MPE  MAPE  MASE RMSSE  ACF1
+  &lt;chr&gt;          &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 Additive       Training 0.00681   1.25 0.749 0.0165 0.761 0.148 0.179 0.327
+2 Multiplicative Training 0.000218  1.29 0.778 0.0210 0.788 0.154 0.185 0.324</code></pre>
+</div>
+</div>
+<p>The plot here of the 28 day ahead forecast exhibits shallower increases for both models and a narrower set of intervals at 80% and 95%.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="model-selection" class="level4">
+<h4 class="anchored" data-anchor-id="model-selection">Model selection</h4>
+<p>Having previously worked through a number of combinations of exponential smoothing models, both with and without dampening or seasonality, it seems that the damped Holt’s method without seasonality performed best when comparing AICc and RMSE values. However, it’s possible to employ the ETS() function in R to generate a model that minimises the AICc value.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Series: Total 
+Model: ETS(M,Ad,N) 
+  Smoothing parameters:
+    alpha = 0.9999 
+    beta  = 0.7938542 
+    phi   = 0.8000637 
+
+  Initial states:
+     l[0]      b[0]
+ 116.3569 -5.895034
+
+  sigma^2:  1e-04
+
+     AIC     AICc      BIC 
+8529.853 8529.925 8560.262 </code></pre>
+</div>
+</div>
+<p>Comparisons between this preferred model and the damped Holt’s model from earlier are below:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 9
+  .model                 sigma2 log_lik   AIC  AICc   BIC   MSE  AMSE     MAE
+  &lt;chr&gt;                   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 R Preferred          0.000130  -4259. 8530. 8530. 8560.  1.33  6.13 0.00697
+2 Damped Holt's method 1.39      -4341. 8695. 8695. 8725.  1.39  6.17 0.689  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 10
+  .model               .type      ME  RMSE   MAE    MPE  MAPE  MASE RMSSE   ACF1
+  &lt;chr&gt;                &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1 R Preferred          Trai… 0.00912  1.15 0.684 0.0186 0.698 0.135 0.166 0.0745
+2 Damped Holt's method Trai… 0.00414  1.18 0.689 0.0141 0.702 0.136 0.169 0.0136</code></pre>
+</div>
+</div>
+<p>The output above tells us the model preferred by R uses Holt’s method where the error is multiplicative (rather than additive as has been used in the examples above), with an additive trend that is dampened. The value for alpha is very high, reflecting how the weight of the past observations decays quite rapidly. The AICc value is the lowest of all the models we have tested above.</p>
+<p>The forecast of the next 28 days reflects the marginal decline exhibited in some of the other dampened models above. Given that the alpha value is relatively high it is not unsurprising that this model forecasts the mean value to be close to the total 7-day average spend in 2023.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can use cross-validation based on a rolling forecasting origin, starting at the end of 2022 (chosen due to the impact of the pandemic prior to that) and increasing by one step each time. The result of this process is that the model preferred by R performs the best both when comparing AICc and RMSE.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 9
+  .model                 sigma2 log_lik   AIC  AICc   BIC   MSE  AMSE     MAE
+  &lt;chr&gt;                   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 R Preferred          0.000130  -4259. 8530. 8530. 8560.  1.33  6.13 0.00697
+2 Damped Holt's method 1.39      -4341. 8695. 8695. 8725.  1.39  6.17 0.689  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 10
+  .model               .type    ME  RMSE   MAE   MPE  MAPE  MASE RMSSE  ACF1
+  &lt;chr&gt;                &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 Damped Holt's method Test  0.841  9.92  7.73 0.492  5.58  1.53  1.43 0.979
+2 R Preferred          Test  0.912  9.77  7.66 0.544  5.53  1.52  1.40 0.979</code></pre>
+</div>
+</div>
+<p>Checking the residuals of R’s preferred model, we can see that the innovation residuals appear to have a constant variance and mean of zero. The histogram exhibits some degree of normality although the peak is a little high. The ACF plot have a number of significant that decay exponentially.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In contrast to the damped Holt’s method model, while the residuals have a mean of zero, the variance does appear to increase as we reach the end of 2022 and start 2023. The histogram is slightly left-skewed and peaks so may also fail the normality test. The ACF plot bears some similarity to R’s preferred model with a number of significant lags and before decaying. Given this, R’s preferred model seems to be the better model.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="arima-modelling" class="level3">
+<h3 class="anchored" data-anchor-id="arima-modelling">ARIMA modelling</h3>
+<p>Looking at the initial plot of data above, it is clear that the data is not stationary and the ACF plot below shows the same data when it is not differenced up to lag 100. The lags remain significant are taking a long time to decay because each is correlated to the previous one. This makes sense when we consider that each daily value in the dataset relates to rolling 7-day average spend so we would expect correlation between the current and previous values.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To make the data stationary, I have had to apply a log transformation to stabilise the variance and first order differencing to stabilise the mean. The resulting plot has a number of significant spikes around the time of lockdown restrictions being introduced, but overall resembles white noise.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The differenced ACF plot exhibits significant lags up to lag 6 before decaying away.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It is also possible to confirm stationarity of this differenced data with a KPSS unit root test, which gives a small test statistic and a p-value of 0.1 and allows us to assume the data is stationary:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  kpss_stat kpss_pvalue
+      &lt;dbl&gt;       &lt;dbl&gt;
+1     0.139         0.1</code></pre>
+</div>
+</div>
+<p>The time plot and ACF &amp; PACF plots of the stationary data are show below.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Given the data is a 7-day rolling average and that the ACF plot appears to show a sinusodial and seasonal pattern of aproximately 7 days, a seasonal ARIMA model would be appropriate. In order to achieve this, I will let R try to find the best model order. The first is the default stepwise procedure and the second one works harder to search for a better model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ar_fit <span class="ot">&lt;-</span> rs3 <span class="sc">|&gt;</span> <span class="fu">model</span>(<span class="at">stepwise =</span> <span class="fu">ARIMA</span>(Total),</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">search =</span> <span class="fu">ARIMA</span>(Total, <span class="at">stepwise=</span><span class="cn">FALSE</span>, <span class="at">approx =</span> <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As we can from the output here, R has ARIMA(3,1,0)(1,0,1)<sub>7</sub> for both models</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A mable: 2 x 2
+# Key:     Model name [2]
+  `Model name`                   Orders
+  &lt;chr&gt;                         &lt;model&gt;
+1 stepwise     &lt;ARIMA(3,1,0)(1,0,1)[7]&gt;
+2 search       &lt;ARIMA(3,1,0)(1,0,1)[7]&gt;</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 6
+  .model   sigma2 log_lik   AIC  AICc   BIC
+  &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 stepwise  0.955  -1640. 3292. 3292. 3322.
+2 search    0.955  -1640. 3292. 3292. 3322.</code></pre>
+</div>
+</div>
+<p>The residuals, as shown below, appear to have a constant mean and variance in the time plot and the ACF, whilst show some spikes appears consistent with white noise. However, the model fails the Ljung-Box text for white noise. This model is still left-skewed and peaks a little too high in the histogram, thus failing the normality test.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .model lb_stat lb_pvalue
+  &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1 search    133.   0.00420</code></pre>
+</div>
+</div>
+<p>Although this model does not pass all of the residual tests we can still use it to forecast, bearing in mind the limitations concerning the accuracy of prediction intervals. Forecasts for the next 28 days are shown below.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="prophet" class="level3">
+<h3 class="anchored" data-anchor-id="prophet">Prophet</h3>
+<p>For an alternative approach, I have chosen to use <a href="https://facebook.github.io/prophet/">Meta’s Prophet tool</a> for forecasting time series data based on an additive model where non-linear trends are fit with yearly, weekly, and daily seasonality, plus holiday effects.</p>
+<p>In order to use package, the dataset had to be modified so the date variable was renamed ‘ds’ and the total variable as ‘y’. In addition, Prophet allows for custom holidays to be added to the model to take into account national holidays that occur. The holidays function can also be used to deal with systemic shocks that would impact a time series so as to prevent the trend component capturing any peaks or troughs in the data. As such, I have created an additional tibble that holds the dates for the three UK lockdowns and the period of restrictions in place following the emergence of the omicron variant of COVID-19.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tsibble: 5 x 2 [1D]
+  ds             y
+  &lt;date&gt;     &lt;dbl&gt;
+1 2020-01-01  114.
+2 2020-01-02  118.
+3 2020-01-03  118.
+4 2020-01-04  116.
+5 2020-01-05  114.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  holiday    ds         lower_window ds_upper   upper_window
+  &lt;chr&gt;      &lt;date&gt;            &lt;dbl&gt; &lt;date&gt;            &lt;dbl&gt;
+1 lockdown_1 2020-03-26            0 2020-05-11            0
+2 lockdown_2 2020-11-05            0 2020-12-02            0
+3 lockdown_3 2021-01-05            0 2021-05-17            0
+4 omicron    2021-12-08            0 2022-02-24            0</code></pre>
+</div>
+</div>
+<p>With the data set up to, I started by modelling the time series with limited changes to the available parameters. However, the <em>changepoint_prior_scale</em> parameter was increased to make the trend more flexible and the seasonality mode changed from additive to multiplicative.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">prophet</span>(df, <span class="at">changepoint.prior.scale =</span> <span class="fl">0.3</span>, <span class="at">holidays =</span> lockdowns, <span class="at">seasonality.mode =</span> <span class="st">"multiplicative"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(m, <span class="at">periods =</span> <span class="dv">28</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>forecast <span class="ot">&lt;-</span> <span class="fu">predict</span>(m, future)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m, forecast)<span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Prophet multiplicative model"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">y=</span><span class="st">"Spend (£)"</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">x=</span><span class="st">"Date"</span>)<span class="sc">+</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This interactive plot allows for the model to be viewed in more detail:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="dygraphs html-widget html-fill-item" id="htmlwidget-4908124e904750face3a" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-4908124e904750face3a">{"x":{"attrs":{"labels":["day","Actual","Predicted"],"legend":"auto","retainDateWindow":false,"axes":{"x":{"pixelsPerLabel":60}},"colors":["black","blue"],"series":{"Actual":{"axis":"y","drawPoints":true,"strokeWidth":0},"Predicted":{"axis":"y"}},"customBars":true,"showRangeSelector":true,"rangeSelectorHeight":40,"rangeSelectorPlotFillColor":" #A7B1C4","rangeSelectorPlotStrokeColor":"#808FAB","interactionModel":"Dygraph.Interaction.defaultModel"},"scale":"daily","annotations":[{"x":"2020-03-26T00:00:00.000Z","shortText":"lockdown_1","text":"lockdown_1","attachAtBottom":true,"series":"Predicted"},{"x":"2020-11-05T00:00:00.000Z","shortText":"lockdown_2","text":"lockdown_2","attachAtBottom":true,"series":"Predicted"},{"x":"2021-01-05T00:00:00.000Z","shortText":"lockdown_3","text":"lockdown_3","attachAtBottom":true,"series":"Predicted"},{"x":"2021-12-08T00:00:00.000Z","shortText":"omicron","text":"omicron","attachAtBottom":true,"series":"Predicted"}],"shadings":[],"events":[{"pos":"2020-03-26T00:00:00.000Z","label":null,"labelLoc":"top","color":"rgb(200,200,200)","strokePattern":[1,0],"axis":"x"},{"pos":"2020-11-05T00:00:00.000Z","label":null,"labelLoc":"top","color":"rgb(200,200,200)","strokePattern":[1,0],"axis":"x"},{"pos":"2021-01-05T00:00:00.000Z","label":null,"labelLoc":"top","color":"rgb(200,200,200)","strokePattern":[1,0],"axis":"x"},{"pos":"2021-12-08T00:00:00.000Z","label":null,"labelLoc":"top","color":"rgb(200,200,200)","strokePattern":[1,0],"axis":"x"}],"format":"date","data":[["2020-01-01T00:00:00.000Z","2020-01-02T00:00:00.000Z","2020-01-03T00:00:00.000Z","2020-01-04T00:00:00.000Z","2020-01-05T00:00:00.000Z","2020-01-06T00:00:00.000Z","2020-01-07T00:00:00.000Z","2020-01-08T00:00:00.000Z","2020-01-09T00:00:00.000Z","2020-01-10T00:00:00.000Z","2020-01-11T00:00:00.000Z","2020-01-12T00:00:00.000Z","2020-01-13T00:00:00.000Z","2020-01-14T00:00:00.000Z","2020-01-15T00:00:00.000Z","2020-01-16T00:00:00.000Z","2020-01-17T00:00:00.000Z","2020-01-18T00:00:00.000Z","2020-01-19T00:00:00.000Z","2020-01-20T00:00:00.000Z","2020-01-21T00:00:00.000Z","2020-01-22T00:00:00.000Z","2020-01-23T00:00:00.000Z","2020-01-24T00:00:00.000Z","2020-01-25T00:00:00.000Z","2020-01-26T00:00:00.000Z","2020-01-27T00:00:00.000Z","2020-01-28T00:00:00.000Z","2020-01-29T00:00:00.000Z","2020-01-30T00:00:00.000Z","2020-01-31T00:00:00.000Z","2020-02-01T00:00:00.000Z","2020-02-02T00:00:00.000Z","2020-02-03T00:00:00.000Z","2020-02-04T00:00:00.000Z","2020-02-05T00:00:00.000Z","2020-02-06T00:00:00.000Z","2020-02-07T00:00:00.000Z","2020-02-08T00:00:00.000Z","2020-02-09T00:00:00.000Z","2020-02-10T00:00:00.000Z","2020-02-11T00:00:00.000Z","2020-02-12T00:00:00.000Z","2020-02-13T00:00:00.000Z","2020-02-14T00:00:00.000Z","2020-02-15T00:00:00.000Z","2020-02-16T00:00:00.000Z","2020-02-17T00:00:00.000Z","2020-02-18T00:00:00.000Z","2020-02-19T00:00:00.000Z","2020-02-20T00:00:00.000Z","2020-02-21T00:00:00.000Z","2020-02-22T00:00:00.000Z","2020-02-23T00:00:00.000Z","2020-02-24T00:00:00.000Z","2020-02-25T00:00:00.000Z","2020-02-26T00:00:00.000Z","2020-02-27T00:00:00.000Z","2020-02-28T00:00:00.000Z","2020-02-29T00:00:00.000Z","2020-03-01T00:00:00.000Z","2020-03-02T00:00:00.000Z","2020-03-03T00:00:00.000Z","2020-03-04T00:00:00.000Z","2020-03-05T00:00:00.000Z","2020-03-06T00:00:00.000Z","2020-03-07T00:00:00.000Z","2020-03-08T00:00:00.000Z","2020-03-09T00:00:00.000Z","2020-03-10T00:00:00.000Z","2020-03-11T00:00:00.000Z","2020-03-12T00:00:00.000Z","2020-03-13T00:00:00.000Z","2020-03-14T00:00:00.000Z","2020-03-15T00:00:00.000Z","2020-03-16T00:00:00.000Z","2020-03-17T00:00:00.000Z","2020-03-18T00:00:00.000Z","2020-03-19T00:00:00.000Z","2020-03-20T00:00:00.000Z","2020-03-21T00:00:00.000Z","2020-03-22T00:00:00.000Z","2020-03-23T00:00:00.000Z","2020-03-24T00:00:00.000Z","2020-03-25T00:00:00.000Z","2020-03-26T00:00:00.000Z","2020-03-27T00:00:00.000Z","2020-03-28T00:00:00.000Z","2020-03-29T00:00:00.000Z","2020-03-30T00:00:00.000Z","2020-03-31T00:00:00.000Z","2020-04-01T00:00:00.000Z","2020-04-02T00:00:00.000Z","2020-04-03T00:00:00.000Z","2020-04-04T00:00:00.000Z","2020-04-05T00:00:00.000Z","2020-04-06T00:00:00.000Z","2020-04-07T00:00:00.000Z","2020-04-08T00:00:00.000Z","2020-04-09T00:00:00.000Z","2020-04-10T00:00:00.000Z","2020-04-11T00:00:00.000Z","2020-04-12T00:00:00.000Z","2020-04-13T00:00:00.000Z","2020-04-14T00:00:00.000Z","2020-04-15T00:00:00.000Z","2020-04-16T00:00:00.000Z","2020-04-17T00:00:00.000Z","2020-04-18T00:00:00.000Z","2020-04-19T00:00:00.000Z","2020-04-20T00:00:00.000Z","2020-04-21T00:00:00.000Z","2020-04-22T00:00:00.000Z","2020-04-23T00:00:00.000Z","2020-04-24T00:00:00.000Z","2020-04-25T00:00:00.000Z","2020-04-26T00:00:00.000Z","2020-04-27T00:00:00.000Z","2020-04-28T00:00:00.000Z","2020-04-29T00:00:00.000Z","2020-04-30T00:00:00.000Z","2020-05-01T00:00:00.000Z","2020-05-02T00:00:00.000Z","2020-05-03T00:00:00.000Z","2020-05-04T00:00:00.000Z","2020-05-05T00:00:00.000Z","2020-05-06T00:00:00.000Z","2020-05-07T00:00:00.000Z","2020-05-08T00:00:00.000Z","2020-05-09T00:00:00.000Z","2020-05-10T00:00:00.000Z","2020-05-11T00:00:00.000Z","2020-05-12T00:00:00.000Z","2020-05-13T00:00:00.000Z","2020-05-14T00:00:00.000Z","2020-05-15T00:00:00.000Z","2020-05-16T00:00:00.000Z","2020-05-17T00:00:00.000Z","2020-05-18T00:00:00.000Z","2020-05-19T00:00:00.000Z","2020-05-20T00:00:00.000Z","2020-05-21T00:00:00.000Z","2020-05-22T00:00:00.000Z","2020-05-23T00:00:00.000Z","2020-05-24T00:00:00.000Z","2020-05-25T00:00:00.000Z","2020-05-26T00:00:00.000Z","2020-05-27T00:00:00.000Z","2020-05-28T00:00:00.000Z","2020-05-29T00:00:00.000Z","2020-05-30T00:00:00.000Z","2020-05-31T00:00:00.000Z","2020-06-01T00:00:00.000Z","2020-06-02T00:00:00.000Z","2020-06-03T00:00:00.000Z","2020-06-04T00:00:00.000Z","2020-06-05T00:00:00.000Z","2020-06-06T00:00:00.000Z","2020-06-07T00:00:00.000Z","2020-06-08T00:00:00.000Z","2020-06-09T00:00:00.000Z","2020-06-10T00:00:00.000Z","2020-06-11T00:00:00.000Z","2020-06-12T00:00:00.000Z","2020-06-13T00:00:00.000Z","2020-06-14T00:00:00.000Z","2020-06-15T00:00:00.000Z","2020-06-16T00:00:00.000Z","2020-06-17T00:00:00.000Z","2020-06-18T00:00:00.000Z","2020-06-19T00:00:00.000Z","2020-06-20T00:00:00.000Z","2020-06-21T00:00:00.000Z","2020-06-22T00:00:00.000Z","2020-06-23T00:00:00.000Z","2020-06-24T00:00:00.000Z","2020-06-25T00:00:00.000Z","2020-06-26T00:00:00.000Z","2020-06-27T00:00:00.000Z","2020-06-28T00:00:00.000Z","2020-06-29T00:00:00.000Z","2020-06-30T00:00:00.000Z","2020-07-01T00:00:00.000Z","2020-07-02T00:00:00.000Z","2020-07-03T00:00:00.000Z","2020-07-04T00:00:00.000Z","2020-07-05T00:00:00.000Z","2020-07-06T00:00:00.000Z","2020-07-07T00:00:00.000Z","2020-07-08T00:00:00.000Z","2020-07-09T00:00:00.000Z","2020-07-10T00:00:00.000Z","2020-07-11T00:00:00.000Z","2020-07-12T00:00:00.000Z","2020-07-13T00:00:00.000Z","2020-07-14T00:00:00.000Z","2020-07-15T00:00:00.000Z","2020-07-16T00:00:00.000Z","2020-07-17T00:00:00.000Z","2020-07-18T00:00:00.000Z","2020-07-19T00:00:00.000Z","2020-07-20T00:00:00.000Z","2020-07-21T00:00:00.000Z","2020-07-22T00:00:00.000Z","2020-07-23T00:00:00.000Z","2020-07-24T00:00:00.000Z","2020-07-25T00:00:00.000Z","2020-07-26T00:00:00.000Z","2020-07-27T00:00:00.000Z","2020-07-28T00:00:00.000Z","2020-07-29T00:00:00.000Z","2020-07-30T00:00:00.000Z","2020-07-31T00:00:00.000Z","2020-08-01T00:00:00.000Z","2020-08-02T00:00:00.000Z","2020-08-03T00:00:00.000Z","2020-08-04T00:00:00.000Z","2020-08-05T00:00:00.000Z","2020-08-06T00:00:00.000Z","2020-08-07T00:00:00.000Z","2020-08-08T00:00:00.000Z","2020-08-09T00:00:00.000Z","2020-08-10T00:00:00.000Z","2020-08-11T00:00:00.000Z","2020-08-12T00:00:00.000Z","2020-08-13T00:00:00.000Z","2020-08-14T00:00:00.000Z","2020-08-15T00:00:00.000Z","2020-08-16T00:00:00.000Z","2020-08-17T00:00:00.000Z","2020-08-18T00:00:00.000Z","2020-08-19T00:00:00.000Z","2020-08-20T00:00:00.000Z","2020-08-21T00:00:00.000Z","2020-08-22T00:00:00.000Z","2020-08-23T00:00:00.000Z","2020-08-24T00:00:00.000Z","2020-08-25T00:00:00.000Z","2020-08-26T00:00:00.000Z","2020-08-27T00:00:00.000Z","2020-08-28T00:00:00.000Z","2020-08-29T00:00:00.000Z","2020-08-30T00:00:00.000Z","2020-08-31T00:00:00.000Z","2020-09-01T00:00:00.000Z","2020-09-02T00:00:00.000Z","2020-09-03T00:00:00.000Z","2020-09-04T00:00:00.000Z","2020-09-05T00:00:00.000Z","2020-09-06T00:00:00.000Z","2020-09-07T00:00:00.000Z","2020-09-08T00:00:00.000Z","2020-09-09T00:00:00.000Z","2020-09-10T00:00:00.000Z","2020-09-11T00:00:00.000Z","2020-09-12T00:00:00.000Z","2020-09-13T00:00:00.000Z","2020-09-14T00:00:00.000Z","2020-09-15T00:00:00.000Z","2020-09-16T00:00:00.000Z","2020-09-17T00:00:00.000Z","2020-09-18T00:00:00.000Z","2020-09-19T00:00:00.000Z","2020-09-20T00:00:00.000Z","2020-09-21T00:00:00.000Z","2020-09-22T00:00:00.000Z","2020-09-23T00:00:00.000Z","2020-09-24T00:00:00.000Z","2020-09-25T00:00:00.000Z","2020-09-26T00:00:00.000Z","2020-09-27T00:00:00.000Z","2020-09-28T00:00:00.000Z","2020-09-29T00:00:00.000Z","2020-09-30T00:00:00.000Z","2020-10-01T00:00:00.000Z","2020-10-02T00:00:00.000Z","2020-10-03T00:00:00.000Z","2020-10-04T00:00:00.000Z","2020-10-05T00:00:00.000Z","2020-10-06T00:00:00.000Z","2020-10-07T00:00:00.000Z","2020-10-08T00:00:00.000Z","2020-10-09T00:00:00.000Z","2020-10-10T00:00:00.000Z","2020-10-11T00:00:00.000Z","2020-10-12T00:00:00.000Z","2020-10-13T00:00:00.000Z","2020-10-14T00:00:00.000Z","2020-10-15T00:00:00.000Z","2020-10-16T00:00:00.000Z","2020-10-17T00:00:00.000Z","2020-10-18T00:00:00.000Z","2020-10-19T00:00:00.000Z","2020-10-20T00:00:00.000Z","2020-10-21T00:00:00.000Z","2020-10-22T00:00:00.000Z","2020-10-23T00:00:00.000Z","2020-10-24T00:00:00.000Z","2020-10-25T00:00:00.000Z","2020-10-26T00:00:00.000Z","2020-10-27T00:00:00.000Z","2020-10-28T00:00:00.000Z","2020-10-29T00:00:00.000Z","2020-10-30T00:00:00.000Z","2020-10-31T00:00:00.000Z","2020-11-01T00:00:00.000Z","2020-11-02T00:00:00.000Z","2020-11-03T00:00:00.000Z","2020-11-04T00:00:00.000Z","2020-11-05T00:00:00.000Z","2020-11-06T00:00:00.000Z","2020-11-07T00:00:00.000Z","2020-11-08T00:00:00.000Z","2020-11-09T00:00:00.000Z","2020-11-10T00:00:00.000Z","2020-11-11T00:00:00.000Z","2020-11-12T00:00:00.000Z","2020-11-13T00:00:00.000Z","2020-11-14T00:00:00.000Z","2020-11-15T00:00:00.000Z","2020-11-16T00:00:00.000Z","2020-11-17T00:00:00.000Z","2020-11-18T00:00:00.000Z","2020-11-19T00:00:00.000Z","2020-11-20T00:00:00.000Z","2020-11-21T00:00:00.000Z","2020-11-22T00:00:00.000Z","2020-11-23T00:00:00.000Z","2020-11-24T00:00:00.000Z","2020-11-25T00:00:00.000Z","2020-11-26T00:00:00.000Z","2020-11-27T00:00:00.000Z","2020-11-28T00:00:00.000Z","2020-11-29T00:00:00.000Z","2020-11-30T00:00:00.000Z","2020-12-01T00:00:00.000Z","2020-12-02T00:00:00.000Z","2020-12-03T00:00:00.000Z","2020-12-04T00:00:00.000Z","2020-12-05T00:00:00.000Z","2020-12-06T00:00:00.000Z","2020-12-07T00:00:00.000Z","2020-12-08T00:00:00.000Z","2020-12-09T00:00:00.000Z","2020-12-10T00:00:00.000Z","2020-12-11T00:00:00.000Z","2020-12-12T00:00:00.000Z","2020-12-13T00:00:00.000Z","2020-12-14T00:00:00.000Z","2020-12-15T00:00:00.000Z","2020-12-16T00:00:00.000Z","2020-12-17T00:00:00.000Z","2020-12-18T00:00:00.000Z","2020-12-19T00:00:00.000Z","2020-12-20T00:00:00.000Z","2020-12-21T00:00:00.000Z","2020-12-22T00:00:00.000Z","2020-12-23T00:00:00.000Z","2020-12-24T00:00:00.000Z","2020-12-25T00:00:00.000Z","2020-12-26T00:00:00.000Z","2020-12-27T00:00:00.000Z","2020-12-28T00:00:00.000Z","2020-12-29T00:00:00.000Z","2020-12-30T00:00:00.000Z","2020-12-31T00:00:00.000Z","2021-01-01T00:00:00.000Z","2021-01-02T00:00:00.000Z","2021-01-03T00:00:00.000Z","2021-01-04T00:00:00.000Z","2021-01-05T00:00:00.000Z","2021-01-06T00:00:00.000Z","2021-01-07T00:00:00.000Z","2021-01-08T00:00:00.000Z","2021-01-09T00:00:00.000Z","2021-01-10T00:00:00.000Z","2021-01-11T00:00:00.000Z","2021-01-12T00:00:00.000Z","2021-01-13T00:00:00.000Z","2021-01-14T00:00:00.000Z","2021-01-15T00:00:00.000Z","2021-01-16T00:00:00.000Z","2021-01-17T00:00:00.000Z","2021-01-18T00:00:00.000Z","2021-01-19T00:00:00.000Z","2021-01-20T00:00:00.000Z","2021-01-21T00:00:00.000Z","2021-01-22T00:00:00.000Z","2021-01-23T00:00:00.000Z","2021-01-24T00:00:00.000Z","2021-01-25T00:00:00.000Z","2021-01-26T00:00:00.000Z","2021-01-27T00:00:00.000Z","2021-01-28T00:00:00.000Z","2021-01-29T00:00:00.000Z","2021-01-30T00:00:00.000Z","2021-01-31T00:00:00.000Z","2021-02-01T00:00:00.000Z","2021-02-02T00:00:00.000Z","2021-02-03T00:00:00.000Z","2021-02-04T00:00:00.000Z","2021-02-05T00:00:00.000Z","2021-02-06T00:00:00.000Z","2021-02-07T00:00:00.000Z","2021-02-08T00:00:00.000Z","2021-02-09T00:00:00.000Z","2021-02-10T00:00:00.000Z","2021-02-11T00:00:00.000Z","2021-02-12T00:00:00.000Z","2021-02-13T00:00:00.000Z","2021-02-14T00:00:00.000Z","2021-02-15T00:00:00.000Z","2021-02-16T00:00:00.000Z","2021-02-17T00:00:00.000Z","2021-02-18T00:00:00.000Z","2021-02-19T00:00:00.000Z","2021-02-20T00:00:00.000Z","2021-02-21T00:00:00.000Z","2021-02-22T00:00:00.000Z","2021-02-23T00:00:00.000Z","2021-02-24T00:00:00.000Z","2021-02-25T00:00:00.000Z","2021-02-26T00:00:00.000Z","2021-02-27T00:00:00.000Z","2021-02-28T00:00:00.000Z","2021-03-01T00:00:00.000Z","2021-03-02T00:00:00.000Z","2021-03-03T00:00:00.000Z","2021-03-04T00:00:00.000Z","2021-03-05T00:00:00.000Z","2021-03-06T00:00:00.000Z","2021-03-07T00:00:00.000Z","2021-03-08T00:00:00.000Z","2021-03-09T00:00:00.000Z","2021-03-10T00:00:00.000Z","2021-03-11T00:00:00.000Z","2021-03-12T00:00:00.000Z","2021-03-13T00:00:00.000Z","2021-03-14T00:00:00.000Z","2021-03-15T00:00:00.000Z","2021-03-16T00:00:00.000Z","2021-03-17T00:00:00.000Z","2021-03-18T00:00:00.000Z","2021-03-19T00:00:00.000Z","2021-03-20T00:00:00.000Z","2021-03-21T00:00:00.000Z","2021-03-22T00:00:00.000Z","2021-03-23T00:00:00.000Z","2021-03-24T00:00:00.000Z","2021-03-25T00:00:00.000Z","2021-03-26T00:00:00.000Z","2021-03-27T00:00:00.000Z","2021-03-28T00:00:00.000Z","2021-03-29T00:00:00.000Z","2021-03-30T00:00:00.000Z","2021-03-31T00:00:00.000Z","2021-04-01T00:00:00.000Z","2021-04-02T00:00:00.000Z","2021-04-03T00:00:00.000Z","2021-04-04T00:00:00.000Z","2021-04-05T00:00:00.000Z","2021-04-06T00:00:00.000Z","2021-04-07T00:00:00.000Z","2021-04-08T00:00:00.000Z","2021-04-09T00:00:00.000Z","2021-04-10T00:00:00.000Z","2021-04-11T00:00:00.000Z","2021-04-12T00:00:00.000Z","2021-04-13T00:00:00.000Z","2021-04-14T00:00:00.000Z","2021-04-15T00:00:00.000Z","2021-04-16T00:00:00.000Z","2021-04-17T00:00:00.000Z","2021-04-18T00:00:00.000Z","2021-04-19T00:00:00.000Z","2021-04-20T00:00:00.000Z","2021-04-21T00:00:00.000Z","2021-04-22T00:00:00.000Z","2021-04-23T00:00:00.000Z","2021-04-24T00:00:00.000Z","2021-04-25T00:00:00.000Z","2021-04-26T00:00:00.000Z","2021-04-27T00:00:00.000Z","2021-04-28T00:00:00.000Z","2021-04-29T00:00:00.000Z","2021-04-30T00:00:00.000Z","2021-05-01T00:00:00.000Z","2021-05-02T00:00:00.000Z","2021-05-03T00:00:00.000Z","2021-05-04T00:00:00.000Z","2021-05-05T00:00:00.000Z","2021-05-06T00:00:00.000Z","2021-05-07T00:00:00.000Z","2021-05-08T00:00:00.000Z","2021-05-09T00:00:00.000Z","2021-05-10T00:00:00.000Z","2021-05-11T00:00:00.000Z","2021-05-12T00:00:00.000Z","2021-05-13T00:00:00.000Z","2021-05-14T00:00:00.000Z","2021-05-15T00:00:00.000Z","2021-05-16T00:00:00.000Z","2021-05-17T00:00:00.000Z","2021-05-18T00:00:00.000Z","2021-05-19T00:00:00.000Z","2021-05-20T00:00:00.000Z","2021-05-21T00:00:00.000Z","2021-05-22T00:00:00.000Z","2021-05-23T00:00:00.000Z","2021-05-24T00:00:00.000Z","2021-05-25T00:00:00.000Z","2021-05-26T00:00:00.000Z","2021-05-27T00:00:00.000Z","2021-05-28T00:00:00.000Z","2021-05-29T00:00:00.000Z","2021-05-30T00:00:00.000Z","2021-05-31T00:00:00.000Z","2021-06-01T00:00:00.000Z","2021-06-02T00:00:00.000Z","2021-06-03T00:00:00.000Z","2021-06-04T00:00:00.000Z","2021-06-05T00:00:00.000Z","2021-06-06T00:00:00.000Z","2021-06-07T00:00:00.000Z","2021-06-08T00:00:00.000Z","2021-06-09T00:00:00.000Z","2021-06-10T00:00:00.000Z","2021-06-11T00:00:00.000Z","2021-06-12T00:00:00.000Z","2021-06-13T00:00:00.000Z","2021-06-14T00:00:00.000Z","2021-06-15T00:00:00.000Z","2021-06-16T00:00:00.000Z","2021-06-17T00:00:00.000Z","2021-06-18T00:00:00.000Z","2021-06-19T00:00:00.000Z","2021-06-20T00:00:00.000Z","2021-06-21T00:00:00.000Z","2021-06-22T00:00:00.000Z","2021-06-23T00:00:00.000Z","2021-06-24T00:00:00.000Z","2021-06-25T00:00:00.000Z","2021-06-26T00:00:00.000Z","2021-06-27T00:00:00.000Z","2021-06-28T00:00:00.000Z","2021-06-29T00:00:00.000Z","2021-06-30T00:00:00.000Z","2021-07-01T00:00:00.000Z","2021-07-02T00:00:00.000Z","2021-07-03T00:00:00.000Z","2021-07-04T00:00:00.000Z","2021-07-05T00:00:00.000Z","2021-07-06T00:00:00.000Z","2021-07-07T00:00:00.000Z","2021-07-08T00:00:00.000Z","2021-07-09T00:00:00.000Z","2021-07-10T00:00:00.000Z","2021-07-11T00:00:00.000Z","2021-07-12T00:00:00.000Z","2021-07-13T00:00:00.000Z","2021-07-14T00:00:00.000Z","2021-07-15T00:00:00.000Z","2021-07-16T00:00:00.000Z","2021-07-17T00:00:00.000Z","2021-07-18T00:00:00.000Z","2021-07-19T00:00:00.000Z","2021-07-20T00:00:00.000Z","2021-07-21T00:00:00.000Z","2021-07-22T00:00:00.000Z","2021-07-23T00:00:00.000Z","2021-07-24T00:00:00.000Z","2021-07-25T00:00:00.000Z","2021-07-26T00:00:00.000Z","2021-07-27T00:00:00.000Z","2021-07-28T00:00:00.000Z","2021-07-29T00:00:00.000Z","2021-07-30T00:00:00.000Z","2021-07-31T00:00:00.000Z","2021-08-01T00:00:00.000Z","2021-08-02T00:00:00.000Z","2021-08-03T00:00:00.000Z","2021-08-04T00:00:00.000Z","2021-08-05T00:00:00.000Z","2021-08-06T00:00:00.000Z","2021-08-07T00:00:00.000Z","2021-08-08T00:00:00.000Z","2021-08-09T00:00:00.000Z","2021-08-10T00:00:00.000Z","2021-08-11T00:00:00.000Z","2021-08-12T00:00:00.000Z","2021-08-13T00:00:00.000Z","2021-08-14T00:00:00.000Z","2021-08-15T00:00:00.000Z","2021-08-16T00:00:00.000Z","2021-08-17T00:00:00.000Z","2021-08-18T00:00:00.000Z","2021-08-19T00:00:00.000Z","2021-08-20T00:00:00.000Z","2021-08-21T00:00:00.000Z","2021-08-22T00:00:00.000Z","2021-08-23T00:00:00.000Z","2021-08-24T00:00:00.000Z","2021-08-25T00:00:00.000Z","2021-08-26T00:00:00.000Z","2021-08-27T00:00:00.000Z","2021-08-28T00:00:00.000Z","2021-08-29T00:00:00.000Z","2021-08-30T00:00:00.000Z","2021-08-31T00:00:00.000Z","2021-09-01T00:00:00.000Z","2021-09-02T00:00:00.000Z","2021-09-03T00:00:00.000Z","2021-09-04T00:00:00.000Z","2021-09-05T00:00:00.000Z","2021-09-06T00:00:00.000Z","2021-09-07T00:00:00.000Z","2021-09-08T00:00:00.000Z","2021-09-09T00:00:00.000Z","2021-09-10T00:00:00.000Z","2021-09-11T00:00:00.000Z","2021-09-12T00:00:00.000Z","2021-09-13T00:00:00.000Z","2021-09-14T00:00:00.000Z","2021-09-15T00:00:00.000Z","2021-09-16T00:00:00.000Z","2021-09-17T00:00:00.000Z","2021-09-18T00:00:00.000Z","2021-09-19T00:00:00.000Z","2021-09-20T00:00:00.000Z","2021-09-21T00:00:00.000Z","2021-09-22T00:00:00.000Z","2021-09-23T00:00:00.000Z","2021-09-24T00:00:00.000Z","2021-09-25T00:00:00.000Z","2021-09-26T00:00:00.000Z","2021-09-27T00:00:00.000Z","2021-09-28T00:00:00.000Z","2021-09-29T00:00:00.000Z","2021-09-30T00:00:00.000Z","2021-10-01T00:00:00.000Z","2021-10-02T00:00:00.000Z","2021-10-03T00:00:00.000Z","2021-10-04T00:00:00.000Z","2021-10-05T00:00:00.000Z","2021-10-06T00:00:00.000Z","2021-10-07T00:00:00.000Z","2021-10-08T00:00:00.000Z","2021-10-09T00:00:00.000Z","2021-10-10T00:00:00.000Z","2021-10-11T00:00:00.000Z","2021-10-12T00:00:00.000Z","2021-10-13T00:00:00.000Z","2021-10-14T00:00:00.000Z","2021-10-15T00:00:00.000Z","2021-10-16T00:00:00.000Z","2021-10-17T00:00:00.000Z","2021-10-18T00:00:00.000Z","2021-10-19T00:00:00.000Z","2021-10-20T00:00:00.000Z","2021-10-21T00:00:00.000Z","2021-10-22T00:00:00.000Z","2021-10-23T00:00:00.000Z","2021-10-24T00:00:00.000Z","2021-10-25T00:00:00.000Z","2021-10-26T00:00:00.000Z","2021-10-27T00:00:00.000Z","2021-10-28T00:00:00.000Z","2021-10-29T00:00:00.000Z","2021-10-30T00:00:00.000Z","2021-10-31T00:00:00.000Z","2021-11-01T00:00:00.000Z","2021-11-02T00:00:00.000Z","2021-11-03T00:00:00.000Z","2021-11-04T00:00:00.000Z","2021-11-05T00:00:00.000Z","2021-11-06T00:00:00.000Z","2021-11-07T00:00:00.000Z","2021-11-08T00:00:00.000Z","2021-11-09T00:00:00.000Z","2021-11-10T00:00:00.000Z","2021-11-11T00:00:00.000Z","2021-11-12T00:00:00.000Z","2021-11-13T00:00:00.000Z","2021-11-14T00:00:00.000Z","2021-11-15T00:00:00.000Z","2021-11-16T00:00:00.000Z","2021-11-17T00:00:00.000Z","2021-11-18T00:00:00.000Z","2021-11-19T00:00:00.000Z","2021-11-20T00:00:00.000Z","2021-11-21T00:00:00.000Z","2021-11-22T00:00:00.000Z","2021-11-23T00:00:00.000Z","2021-11-24T00:00:00.000Z","2021-11-25T00:00:00.000Z","2021-11-26T00:00:00.000Z","2021-11-27T00:00:00.000Z","2021-11-28T00:00:00.000Z","2021-11-29T00:00:00.000Z","2021-11-30T00:00:00.000Z","2021-12-01T00:00:00.000Z","2021-12-02T00:00:00.000Z","2021-12-03T00:00:00.000Z","2021-12-04T00:00:00.000Z","2021-12-05T00:00:00.000Z","2021-12-06T00:00:00.000Z","2021-12-07T00:00:00.000Z","2021-12-08T00:00:00.000Z","2021-12-09T00:00:00.000Z","2021-12-10T00:00:00.000Z","2021-12-11T00:00:00.000Z","2021-12-12T00:00:00.000Z","2021-12-13T00:00:00.000Z","2021-12-14T00:00:00.000Z","2021-12-15T00:00:00.000Z","2021-12-16T00:00:00.000Z","2021-12-17T00:00:00.000Z","2021-12-18T00:00:00.000Z","2021-12-19T00:00:00.000Z","2021-12-20T00:00:00.000Z","2021-12-21T00:00:00.000Z","2021-12-22T00:00:00.000Z","2021-12-23T00:00:00.000Z","2021-12-24T00:00:00.000Z","2021-12-25T00:00:00.000Z","2021-12-26T00:00:00.000Z","2021-12-27T00:00:00.000Z","2021-12-28T00:00:00.000Z","2021-12-29T00:00:00.000Z","2021-12-30T00:00:00.000Z","2021-12-31T00:00:00.000Z","2022-01-01T00:00:00.000Z","2022-01-02T00:00:00.000Z","2022-01-03T00:00:00.000Z","2022-01-04T00:00:00.000Z","2022-01-05T00:00:00.000Z","2022-01-06T00:00:00.000Z","2022-01-07T00:00:00.000Z","2022-01-08T00:00:00.000Z","2022-01-09T00:00:00.000Z","2022-01-10T00:00:00.000Z","2022-01-11T00:00:00.000Z","2022-01-12T00:00:00.000Z","2022-01-13T00:00:00.000Z","2022-01-14T00:00:00.000Z","2022-01-15T00:00:00.000Z","2022-01-16T00:00:00.000Z","2022-01-17T00:00:00.000Z","2022-01-18T00:00:00.000Z","2022-01-19T00:00:00.000Z","2022-01-20T00:00:00.000Z","2022-01-21T00:00:00.000Z","2022-01-22T00:00:00.000Z","2022-01-23T00:00:00.000Z","2022-01-24T00:00:00.000Z","2022-01-25T00:00:00.000Z","2022-01-26T00:00:00.000Z","2022-01-27T00:00:00.000Z","2022-01-28T00:00:00.000Z","2022-01-29T00:00:00.000Z","2022-01-30T00:00:00.000Z","2022-01-31T00:00:00.000Z","2022-02-01T00:00:00.000Z","2022-02-02T00:00:00.000Z","2022-02-03T00:00:00.000Z","2022-02-04T00:00:00.000Z","2022-02-05T00:00:00.000Z","2022-02-06T00:00:00.000Z","2022-02-07T00:00:00.000Z","2022-02-08T00:00:00.000Z","2022-02-09T00:00:00.000Z","2022-02-10T00:00:00.000Z","2022-02-11T00:00:00.000Z","2022-02-12T00:00:00.000Z","2022-02-13T00:00:00.000Z","2022-02-14T00:00:00.000Z","2022-02-15T00:00:00.000Z","2022-02-16T00:00:00.000Z","2022-02-17T00:00:00.000Z","2022-02-18T00:00:00.000Z","2022-02-19T00:00:00.000Z","2022-02-20T00:00:00.000Z","2022-02-21T00:00:00.000Z","2022-02-22T00:00:00.000Z","2022-02-23T00:00:00.000Z","2022-02-24T00:00:00.000Z","2022-02-25T00:00:00.000Z","2022-02-26T00:00:00.000Z","2022-02-27T00:00:00.000Z","2022-02-28T00:00:00.000Z","2022-03-01T00:00:00.000Z","2022-03-02T00:00:00.000Z","2022-03-03T00:00:00.000Z","2022-03-04T00:00:00.000Z","2022-03-05T00:00:00.000Z","2022-03-06T00:00:00.000Z","2022-03-07T00:00:00.000Z","2022-03-08T00:00:00.000Z","2022-03-09T00:00:00.000Z","2022-03-10T00:00:00.000Z","2022-03-11T00:00:00.000Z","2022-03-12T00:00:00.000Z","2022-03-13T00:00:00.000Z","2022-03-14T00:00:00.000Z","2022-03-15T00:00:00.000Z","2022-03-16T00:00:00.000Z","2022-03-17T00:00:00.000Z","2022-03-18T00:00:00.000Z","2022-03-19T00:00:00.000Z","2022-03-20T00:00:00.000Z","2022-03-21T00:00:00.000Z","2022-03-22T00:00:00.000Z","2022-03-23T00:00:00.000Z","2022-03-24T00:00:00.000Z","2022-03-25T00:00:00.000Z","2022-03-26T00:00:00.000Z","2022-03-27T00:00:00.000Z","2022-03-28T00:00:00.000Z","2022-03-29T00:00:00.000Z","2022-03-30T00:00:00.000Z","2022-03-31T00:00:00.000Z","2022-04-01T00:00:00.000Z","2022-04-02T00:00:00.000Z","2022-04-03T00:00:00.000Z","2022-04-04T00:00:00.000Z","2022-04-05T00:00:00.000Z","2022-04-06T00:00:00.000Z","2022-04-07T00:00:00.000Z","2022-04-08T00:00:00.000Z","2022-04-09T00:00:00.000Z","2022-04-10T00:00:00.000Z","2022-04-11T00:00:00.000Z","2022-04-12T00:00:00.000Z","2022-04-13T00:00:00.000Z","2022-04-14T00:00:00.000Z","2022-04-15T00:00:00.000Z","2022-04-16T00:00:00.000Z","2022-04-17T00:00:00.000Z","2022-04-18T00:00:00.000Z","2022-04-19T00:00:00.000Z","2022-04-20T00:00:00.000Z","2022-04-21T00:00:00.000Z","2022-04-22T00:00:00.000Z","2022-04-23T00:00:00.000Z","2022-04-24T00:00:00.000Z","2022-04-25T00:00:00.000Z","2022-04-26T00:00:00.000Z","2022-04-27T00:00:00.000Z","2022-04-28T00:00:00.000Z","2022-04-29T00:00:00.000Z","2022-04-30T00:00:00.000Z","2022-05-01T00:00:00.000Z","2022-05-02T00:00:00.000Z","2022-05-03T00:00:00.000Z","2022-05-04T00:00:00.000Z","2022-05-05T00:00:00.000Z","2022-05-06T00:00:00.000Z","2022-05-07T00:00:00.000Z","2022-05-08T00:00:00.000Z","2022-05-09T00:00:00.000Z","2022-05-10T00:00:00.000Z","2022-05-11T00:00:00.000Z","2022-05-12T00:00:00.000Z","2022-05-13T00:00:00.000Z","2022-05-14T00:00:00.000Z","2022-05-15T00:00:00.000Z","2022-05-16T00:00:00.000Z","2022-05-17T00:00:00.000Z","2022-05-18T00:00:00.000Z","2022-05-19T00:00:00.000Z","2022-05-20T00:00:00.000Z","2022-05-21T00:00:00.000Z","2022-05-22T00:00:00.000Z","2022-05-23T00:00:00.000Z","2022-05-24T00:00:00.000Z","2022-05-25T00:00:00.000Z","2022-05-26T00:00:00.000Z","2022-05-27T00:00:00.000Z","2022-05-28T00:00:00.000Z","2022-05-29T00:00:00.000Z","2022-05-30T00:00:00.000Z","2022-05-31T00:00:00.000Z","2022-06-01T00:00:00.000Z","2022-06-02T00:00:00.000Z","2022-06-03T00:00:00.000Z","2022-06-04T00:00:00.000Z","2022-06-05T00:00:00.000Z","2022-06-06T00:00:00.000Z","2022-06-07T00:00:00.000Z","2022-06-08T00:00:00.000Z","2022-06-09T00:00:00.000Z","2022-06-10T00:00:00.000Z","2022-06-11T00:00:00.000Z","2022-06-12T00:00:00.000Z","2022-06-13T00:00:00.000Z","2022-06-14T00:00:00.000Z","2022-06-15T00:00:00.000Z","2022-06-16T00:00:00.000Z","2022-06-17T00:00:00.000Z","2022-06-18T00:00:00.000Z","2022-06-19T00:00:00.000Z","2022-06-20T00:00:00.000Z","2022-06-21T00:00:00.000Z","2022-06-22T00:00:00.000Z","2022-06-23T00:00:00.000Z","2022-06-24T00:00:00.000Z","2022-06-25T00:00:00.000Z","2022-06-26T00:00:00.000Z","2022-06-27T00:00:00.000Z","2022-06-28T00:00:00.000Z","2022-06-29T00:00:00.000Z","2022-06-30T00:00:00.000Z","2022-07-01T00:00:00.000Z","2022-07-02T00:00:00.000Z","2022-07-03T00:00:00.000Z","2022-07-04T00:00:00.000Z","2022-07-05T00:00:00.000Z","2022-07-06T00:00:00.000Z","2022-07-07T00:00:00.000Z","2022-07-08T00:00:00.000Z","2022-07-09T00:00:00.000Z","2022-07-10T00:00:00.000Z","2022-07-11T00:00:00.000Z","2022-07-12T00:00:00.000Z","2022-07-13T00:00:00.000Z","2022-07-14T00:00:00.000Z","2022-07-15T00:00:00.000Z","2022-07-16T00:00:00.000Z","2022-07-17T00:00:00.000Z","2022-07-18T00:00:00.000Z","2022-07-19T00:00:00.000Z","2022-07-20T00:00:00.000Z","2022-07-21T00:00:00.000Z","2022-07-22T00:00:00.000Z","2022-07-23T00:00:00.000Z","2022-07-24T00:00:00.000Z","2022-07-25T00:00:00.000Z","2022-07-26T00:00:00.000Z","2022-07-27T00:00:00.000Z","2022-07-28T00:00:00.000Z","2022-07-29T00:00:00.000Z","2022-07-30T00:00:00.000Z","2022-07-31T00:00:00.000Z","2022-08-01T00:00:00.000Z","2022-08-02T00:00:00.000Z","2022-08-03T00:00:00.000Z","2022-08-04T00:00:00.000Z","2022-08-05T00:00:00.000Z","2022-08-06T00:00:00.000Z","2022-08-07T00:00:00.000Z","2022-08-08T00:00:00.000Z","2022-08-09T00:00:00.000Z","2022-08-10T00:00:00.000Z","2022-08-11T00:00:00.000Z","2022-08-12T00:00:00.000Z","2022-08-13T00:00:00.000Z","2022-08-14T00:00:00.000Z","2022-08-15T00:00:00.000Z","2022-08-16T00:00:00.000Z","2022-08-17T00:00:00.000Z","2022-08-18T00:00:00.000Z","2022-08-19T00:00:00.000Z","2022-08-20T00:00:00.000Z","2022-08-21T00:00:00.000Z","2022-08-22T00:00:00.000Z","2022-08-23T00:00:00.000Z","2022-08-24T00:00:00.000Z","2022-08-25T00:00:00.000Z","2022-08-26T00:00:00.000Z","2022-08-27T00:00:00.000Z","2022-08-28T00:00:00.000Z","2022-08-29T00:00:00.000Z","2022-08-30T00:00:00.000Z","2022-08-31T00:00:00.000Z","2022-09-01T00:00:00.000Z","2022-09-02T00:00:00.000Z","2022-09-03T00:00:00.000Z","2022-09-04T00:00:00.000Z","2022-09-05T00:00:00.000Z","2022-09-06T00:00:00.000Z","2022-09-07T00:00:00.000Z","2022-09-08T00:00:00.000Z","2022-09-09T00:00:00.000Z","2022-09-10T00:00:00.000Z","2022-09-11T00:00:00.000Z","2022-09-12T00:00:00.000Z","2022-09-13T00:00:00.000Z","2022-09-14T00:00:00.000Z","2022-09-15T00:00:00.000Z","2022-09-16T00:00:00.000Z","2022-09-17T00:00:00.000Z","2022-09-18T00:00:00.000Z","2022-09-19T00:00:00.000Z","2022-09-20T00:00:00.000Z","2022-09-21T00:00:00.000Z","2022-09-22T00:00:00.000Z","2022-09-23T00:00:00.000Z","2022-09-24T00:00:00.000Z","2022-09-25T00:00:00.000Z","2022-09-26T00:00:00.000Z","2022-09-27T00:00:00.000Z","2022-09-28T00:00:00.000Z","2022-09-29T00:00:00.000Z","2022-09-30T00:00:00.000Z","2022-10-01T00:00:00.000Z","2022-10-02T00:00:00.000Z","2022-10-03T00:00:00.000Z","2022-10-04T00:00:00.000Z","2022-10-05T00:00:00.000Z","2022-10-06T00:00:00.000Z","2022-10-07T00:00:00.000Z","2022-10-08T00:00:00.000Z","2022-10-09T00:00:00.000Z","2022-10-10T00:00:00.000Z","2022-10-11T00:00:00.000Z","2022-10-12T00:00:00.000Z","2022-10-13T00:00:00.000Z","2022-10-14T00:00:00.000Z","2022-10-15T00:00:00.000Z","2022-10-16T00:00:00.000Z","2022-10-17T00:00:00.000Z","2022-10-18T00:00:00.000Z","2022-10-19T00:00:00.000Z","2022-10-20T00:00:00.000Z","2022-10-21T00:00:00.000Z","2022-10-22T00:00:00.000Z","2022-10-23T00:00:00.000Z","2022-10-24T00:00:00.000Z","2022-10-25T00:00:00.000Z","2022-10-26T00:00:00.000Z","2022-10-27T00:00:00.000Z","2022-10-28T00:00:00.000Z","2022-10-29T00:00:00.000Z","2022-10-30T00:00:00.000Z","2022-10-31T00:00:00.000Z","2022-11-01T00:00:00.000Z","2022-11-02T00:00:00.000Z","2022-11-03T00:00:00.000Z","2022-11-04T00:00:00.000Z","2022-11-05T00:00:00.000Z","2022-11-06T00:00:00.000Z","2022-11-07T00:00:00.000Z","2022-11-08T00:00:00.000Z","2022-11-09T00:00:00.000Z","2022-11-10T00:00:00.000Z","2022-11-11T00:00:00.000Z","2022-11-12T00:00:00.000Z","2022-11-13T00:00:00.000Z","2022-11-14T00:00:00.000Z","2022-11-15T00:00:00.000Z","2022-11-16T00:00:00.000Z","2022-11-17T00:00:00.000Z","2022-11-18T00:00:00.000Z","2022-11-19T00:00:00.000Z","2022-11-20T00:00:00.000Z","2022-11-21T00:00:00.000Z","2022-11-22T00:00:00.000Z","2022-11-23T00:00:00.000Z","2022-11-24T00:00:00.000Z","2022-11-25T00:00:00.000Z","2022-11-26T00:00:00.000Z","2022-11-27T00:00:00.000Z","2022-11-28T00:00:00.000Z","2022-11-29T00:00:00.000Z","2022-11-30T00:00:00.000Z","2022-12-01T00:00:00.000Z","2022-12-02T00:00:00.000Z","2022-12-03T00:00:00.000Z","2022-12-04T00:00:00.000Z","2022-12-05T00:00:00.000Z","2022-12-06T00:00:00.000Z","2022-12-07T00:00:00.000Z","2022-12-08T00:00:00.000Z","2022-12-09T00:00:00.000Z","2022-12-10T00:00:00.000Z","2022-12-11T00:00:00.000Z","2022-12-12T00:00:00.000Z","2022-12-13T00:00:00.000Z","2022-12-14T00:00:00.000Z","2022-12-15T00:00:00.000Z","2022-12-16T00:00:00.000Z","2022-12-17T00:00:00.000Z","2022-12-18T00:00:00.000Z","2022-12-19T00:00:00.000Z","2022-12-20T00:00:00.000Z","2022-12-21T00:00:00.000Z","2022-12-22T00:00:00.000Z","2022-12-23T00:00:00.000Z","2022-12-24T00:00:00.000Z","2022-12-25T00:00:00.000Z","2022-12-26T00:00:00.000Z","2022-12-27T00:00:00.000Z","2022-12-28T00:00:00.000Z","2022-12-29T00:00:00.000Z","2022-12-30T00:00:00.000Z","2022-12-31T00:00:00.000Z","2023-01-01T00:00:00.000Z","2023-01-02T00:00:00.000Z","2023-01-03T00:00:00.000Z","2023-01-04T00:00:00.000Z","2023-01-05T00:00:00.000Z","2023-01-06T00:00:00.000Z","2023-01-07T00:00:00.000Z","2023-01-08T00:00:00.000Z","2023-01-09T00:00:00.000Z","2023-01-10T00:00:00.000Z","2023-01-11T00:00:00.000Z","2023-01-12T00:00:00.000Z","2023-01-13T00:00:00.000Z","2023-01-14T00:00:00.000Z","2023-01-15T00:00:00.000Z","2023-01-16T00:00:00.000Z","2023-01-17T00:00:00.000Z","2023-01-18T00:00:00.000Z","2023-01-19T00:00:00.000Z","2023-01-20T00:00:00.000Z","2023-01-21T00:00:00.000Z","2023-01-22T00:00:00.000Z","2023-01-23T00:00:00.000Z","2023-01-24T00:00:00.000Z","2023-01-25T00:00:00.000Z","2023-01-26T00:00:00.000Z","2023-01-27T00:00:00.000Z","2023-01-28T00:00:00.000Z","2023-01-29T00:00:00.000Z","2023-01-30T00:00:00.000Z","2023-01-31T00:00:00.000Z","2023-02-01T00:00:00.000Z","2023-02-02T00:00:00.000Z","2023-02-03T00:00:00.000Z","2023-02-04T00:00:00.000Z","2023-02-05T00:00:00.000Z","2023-02-06T00:00:00.000Z","2023-02-07T00:00:00.000Z","2023-02-08T00:00:00.000Z","2023-02-09T00:00:00.000Z","2023-02-10T00:00:00.000Z","2023-02-11T00:00:00.000Z","2023-02-12T00:00:00.000Z","2023-02-13T00:00:00.000Z","2023-02-14T00:00:00.000Z","2023-02-15T00:00:00.000Z","2023-02-16T00:00:00.000Z","2023-02-17T00:00:00.000Z","2023-02-18T00:00:00.000Z","2023-02-19T00:00:00.000Z","2023-02-20T00:00:00.000Z","2023-02-21T00:00:00.000Z","2023-02-22T00:00:00.000Z","2023-02-23T00:00:00.000Z","2023-02-24T00:00:00.000Z","2023-02-25T00:00:00.000Z","2023-02-26T00:00:00.000Z","2023-02-27T00:00:00.000Z","2023-02-28T00:00:00.000Z","2023-03-01T00:00:00.000Z","2023-03-02T00:00:00.000Z","2023-03-03T00:00:00.000Z","2023-03-04T00:00:00.000Z","2023-03-05T00:00:00.000Z","2023-03-06T00:00:00.000Z","2023-03-07T00:00:00.000Z","2023-03-08T00:00:00.000Z","2023-03-09T00:00:00.000Z","2023-03-10T00:00:00.000Z","2023-03-11T00:00:00.000Z","2023-03-12T00:00:00.000Z","2023-03-13T00:00:00.000Z","2023-03-14T00:00:00.000Z","2023-03-15T00:00:00.000Z","2023-03-16T00:00:00.000Z","2023-03-17T00:00:00.000Z","2023-03-18T00:00:00.000Z","2023-03-19T00:00:00.000Z","2023-03-20T00:00:00.000Z","2023-03-21T00:00:00.000Z","2023-03-22T00:00:00.000Z","2023-03-23T00:00:00.000Z","2023-03-24T00:00:00.000Z","2023-03-25T00:00:00.000Z","2023-03-26T00:00:00.000Z","2023-03-27T00:00:00.000Z","2023-03-28T00:00:00.000Z","2023-03-29T00:00:00.000Z","2023-03-30T00:00:00.000Z","2023-03-31T00:00:00.000Z","2023-04-01T00:00:00.000Z","2023-04-02T00:00:00.000Z","2023-04-03T00:00:00.000Z","2023-04-04T00:00:00.000Z","2023-04-05T00:00:00.000Z","2023-04-06T00:00:00.000Z","2023-04-07T00:00:00.000Z","2023-04-08T00:00:00.000Z","2023-04-09T00:00:00.000Z","2023-04-10T00:00:00.000Z","2023-04-11T00:00:00.000Z","2023-04-12T00:00:00.000Z","2023-04-13T00:00:00.000Z","2023-04-14T00:00:00.000Z","2023-04-15T00:00:00.000Z","2023-04-16T00:00:00.000Z"],[[113.9,113.9,113.9],[117.51,117.51,117.51],[117.63,117.63,117.63],[116.27,116.27,116.27],[113.75,113.75,113.75],[108.19,108.19,108.19],[103.16,103.16,103.16],[104,104,104],[99.34999999999999,99.34999999999999,99.34999999999999],[95.52,95.52,95.52],[93.42,93.42,93.42],[91.95999999999999,91.95999999999999,91.95999999999999],[91.37,91.37,91.37],[89.8,89.8,89.8],[89.33,89.33,89.33],[89.04000000000001,89.04000000000001,89.04000000000001],[89.45,89.45,89.45],[89.98,89.98,89.98],[90.31999999999999,90.31999999999999,90.31999999999999],[90.3,90.3,90.3],[90.98,90.98,90.98],[91.54000000000001,91.54000000000001,91.54000000000001],[91.45999999999999,91.45999999999999,91.45999999999999],[91.78,91.78,91.78],[92.27,92.27,92.27],[92.69,92.69,92.69],[92.52,92.52,92.52],[92.69,92.69,92.69],[92.58,92.58,92.58],[93.59,93.59,93.59],[95.81999999999999,95.81999999999999,95.81999999999999],[97.23999999999999,97.23999999999999,97.23999999999999],[98.23,98.23,98.23],[99.22,99.22,99.22],[99.31999999999999,99.31999999999999,99.31999999999999],[99.27,99.27,99.27],[98.97,98.97,98.97],[97.36,97.36,97.36],[96.76000000000001,96.76000000000001,96.76000000000001],[96.06,96.06,96.06],[95.55,95.55,95.55],[95.22,95.22,95.22],[94.59999999999999,94.59999999999999,94.59999999999999],[94.42,94.42,94.42],[94.69,94.69,94.69],[95.45999999999999,95.45999999999999,95.45999999999999],[97.95999999999999,97.95999999999999,97.95999999999999],[99.48999999999999,99.48999999999999,99.48999999999999],[101.31,101.31,101.31],[103.38,103.38,103.38],[104.94,104.94,104.94],[107.45,107.45,107.45],[108.68,108.68,108.68],[106.62,106.62,106.62],[104.58,104.58,104.58],[102.58,102.58,102.58],[100.64,100.64,100.64],[99.17,99.17,99.17],[97.41,97.41,97.41],[96.28,96.28,96.28],[96.83,96.83,96.83],[97.5,97.5,97.5],[97.98,97.98,97.98],[98.48,98.48,98.48],[98.55,98.55,98.55],[97.93000000000001,97.93000000000001,97.93000000000001],[96.88,96.88,96.88],[95.81,95.81,95.81],[94.93000000000001,94.93000000000001,94.93000000000001],[94.29000000000001,94.29000000000001,94.29000000000001],[93.26000000000001,93.26000000000001,93.26000000000001],[91.94,91.94,91.94],[90.73999999999999,90.73999999999999,90.73999999999999],[88.73999999999999,88.73999999999999,88.73999999999999],[85.84999999999999,85.84999999999999,85.84999999999999],[84.16,84.16,84.16],[81.81999999999999,81.81999999999999,81.81999999999999],[79.34,79.34,79.34],[76.81999999999999,76.81999999999999,76.81999999999999],[70.97,70.97,70.97],[64.44,64.44,64.44],[59.88,59.88,59.88],[55.88,55.88,55.88],[52.18,52.18,52.18],[48.48,48.48,48.48],[45.19,45.19,45.19],[43.09,43.09,43.09],[40.88,40.88,40.88],[39.71,39.71,39.71],[38.55,38.55,38.55],[38.69,38.69,38.69],[39.3,39.3,39.3],[39.32,39.32,39.32],[39.24,39.24,39.24],[39.65,39.65,39.65],[40.03,40.03,40.03],[40.45,40.45,40.45],[40.11,40.11,40.11],[39.86,39.86,39.86],[40.45,40.45,40.45],[40.1,40.1,40.1],[39.87,39.87,39.87],[38.65,38.65,38.65],[37.44,37.44,37.44],[37.68,37.68,37.68],[37.6,37.6,37.6],[36.92,36.92,36.92],[37.29,37.29,37.29],[37.35,37.35,37.35],[38.18,38.18,38.18],[39.22,39.22,39.22],[39.13,39.13,39.13],[39.17,39.17,39.17],[38.82,38.82,38.82],[39.67,39.67,39.67],[40.12,40.12,40.12],[40.58,40.58,40.58],[41.14,41.14,41.14],[41.79,41.79,41.79],[42.39,42.39,42.39],[44.4,44.4,44.4],[44.5,44.5,44.5],[44.78,44.78,44.78],[45.32,45.32,45.32],[45.89,45.89,45.89],[46.08,46.08,46.08],[46.37,46.37,46.37],[46.31,46.31,46.31],[46.03,46.03,46.03],[46.05,46.05,46.05],[45.92,45.92,45.92],[45.74,45.74,45.74],[45.79,45.79,45.79],[45.98,45.98,45.98],[45.65,45.65,45.65],[46.47,46.47,46.47],[47.01,47.01,47.01],[47.42,47.42,47.42],[48,48,48],[48.42,48.42,48.42],[49.26,49.26,49.26],[49.9,49.9,49.9],[50.6,50.6,50.6],[51.37,51.37,51.37],[51.39,51.39,51.39],[51.45,51.45,51.45],[52.04,52.04,52.04],[52.12,52.12,52.12],[52.95,52.95,52.95],[54.04,54.04,54.04],[54.52,54.52,54.52],[55.6,55.6,55.6],[56.89,56.89,56.89],[57.52,57.52,57.52],[58.2,58.2,58.2],[57.95,57.95,57.95],[57.39,57.39,57.39],[57.53,57.53,57.53],[57.34,57.34,57.34],[57.21,57.21,57.21],[56.72,56.72,56.72],[56.35,56.35,56.35],[56.33,56.33,56.33],[56.26,56.26,56.26],[56.26,56.26,56.26],[56.26,56.26,56.26],[56.68,56.68,56.68],[57.7,57.7,57.7],[58.11,58.11,58.11],[58.94,58.94,58.94],[59.51,59.51,59.51],[60.43,60.43,60.43],[60.79,60.79,60.79],[60.78,60.78,60.78],[60.7,60.7,60.7],[61.13,61.13,61.13],[61.54,61.54,61.54],[62.89,62.89,62.89],[63.53,63.53,63.53],[64.5,64.5,64.5],[65.20999999999999,65.20999999999999,65.20999999999999],[66.48,66.48,66.48],[68.05,68.05,68.05],[68.73,68.73,68.73],[69.17,69.17,69.17],[70.58,70.58,70.58],[71.43000000000001,71.43000000000001,71.43000000000001],[72.69,72.69,72.69],[73.15000000000001,73.15000000000001,73.15000000000001],[73.40000000000001,73.40000000000001,73.40000000000001],[74.29000000000001,74.29000000000001,74.29000000000001],[75.19,75.19,75.19],[76.13,76.13,76.13],[76.73999999999999,76.73999999999999,76.73999999999999],[77.23,77.23,77.23],[77.61,77.61,77.61],[78.70999999999999,78.70999999999999,78.70999999999999],[79.34,79.34,79.34],[80.09,80.09,80.09],[80.65000000000001,80.65000000000001,80.65000000000001],[81.17,81.17,81.17],[81.76000000000001,81.76000000000001,81.76000000000001],[82.53,82.53,82.53],[82.67,82.67,82.67],[83.23,83.23,83.23],[84.34,84.34,84.34],[85,85,85],[85.94,85.94,85.94],[86.84999999999999,86.84999999999999,86.84999999999999],[88.17,88.17,88.17],[89.64,89.64,89.64],[90.93000000000001,90.93000000000001,90.93000000000001],[92.73999999999999,92.73999999999999,92.73999999999999],[94.40000000000001,94.40000000000001,94.40000000000001],[95.54000000000001,95.54000000000001,95.54000000000001],[96.64,96.64,96.64],[97.05,97.05,97.05],[96.92,96.92,96.92],[97.45,97.45,97.45],[96.91,96.91,96.91],[96.73999999999999,96.73999999999999,96.73999999999999],[96.76000000000001,96.76000000000001,96.76000000000001],[96.95,96.95,96.95],[97.2,97.2,97.2],[97.59999999999999,97.59999999999999,97.59999999999999],[97.48999999999999,97.48999999999999,97.48999999999999],[97.54000000000001,97.54000000000001,97.54000000000001],[96.43000000000001,96.43000000000001,96.43000000000001],[95.95,95.95,95.95],[95.38,95.38,95.38],[94.81999999999999,94.81999999999999,94.81999999999999],[93.98,93.98,93.98],[93.87,93.87,93.87],[93.31999999999999,93.31999999999999,93.31999999999999],[93.98,93.98,93.98],[93.94,93.94,93.94],[93.81,93.81,93.81],[93.72,93.72,93.72],[94.48,94.48,94.48],[94.42,94.42,94.42],[95.45999999999999,95.45999999999999,95.45999999999999],[95.63,95.63,95.63],[96.06,96.06,96.06],[97.04000000000001,97.04000000000001,97.04000000000001],[97.14,97.14,97.14],[96.54000000000001,96.54000000000001,96.54000000000001],[95.83,95.83,95.83],[94.06999999999999,94.06999999999999,94.06999999999999],[93.16,93.16,93.16],[91.95,91.95,91.95],[89.45,89.45,89.45],[88.31,88.31,88.31],[86.77,86.77,86.77],[85.90000000000001,85.90000000000001,85.90000000000001],[85.23999999999999,85.23999999999999,85.23999999999999],[84.88,84.88,84.88],[84.55,84.55,84.55],[84.22,84.22,84.22],[84.03,84.03,84.03],[84.16,84.16,84.16],[83.79000000000001,83.79000000000001,83.79000000000001],[83.48999999999999,83.48999999999999,83.48999999999999],[83.23,83.23,83.23],[82.88,82.88,82.88],[82.8,82.8,82.8],[81.98,81.98,81.98],[81.53,81.53,81.53],[81.3,81.3,81.3],[81.61,81.61,81.61],[81.84999999999999,81.84999999999999,81.84999999999999],[82,82,82],[82.40000000000001,82.40000000000001,82.40000000000001],[82.79000000000001,82.79000000000001,82.79000000000001],[84.20999999999999,84.20999999999999,84.20999999999999],[85.48999999999999,85.48999999999999,85.48999999999999],[85.33,85.33,85.33],[85.13,85.13,85.13],[85.15000000000001,85.15000000000001,85.15000000000001],[84.53,84.53,84.53],[84.3,84.3,84.3],[82.58,82.58,82.58],[80.59999999999999,80.59999999999999,80.59999999999999],[79.72,79.72,79.72],[79.31999999999999,79.31999999999999,79.31999999999999],[78.97,78.97,78.97],[78.34,78.34,78.34],[78.23,78.23,78.23],[78.56999999999999,78.56999999999999,78.56999999999999],[78.59999999999999,78.59999999999999,78.59999999999999],[78.12,78.12,78.12],[77.15000000000001,77.15000000000001,77.15000000000001],[76.56,76.56,76.56],[76.36,76.36,76.36],[75.64,75.64,75.64],[74.73,74.73,74.73],[74.09999999999999,74.09999999999999,74.09999999999999],[74,74,74],[74.06,74.06,74.06],[74.27,74.27,74.27],[74.51000000000001,74.51000000000001,74.51000000000001],[74.52,74.52,74.52],[75.37,75.37,75.37],[76.56999999999999,76.56999999999999,76.56999999999999],[78.09,78.09,78.09],[78.84999999999999,78.84999999999999,78.84999999999999],[79.41,79.41,79.41],[80.26000000000001,80.26000000000001,80.26000000000001],[81.33,81.33,81.33],[82.04000000000001,82.04000000000001,82.04000000000001],[80.23999999999999,80.23999999999999,80.23999999999999],[77.65000000000001,77.65000000000001,77.65000000000001],[74.73,74.73,74.73],[72.55,72.55,72.55],[71,71,71],[69.06999999999999,69.06999999999999,69.06999999999999],[66.33,66.33,66.33],[66.31,66.31,66.31],[67.02,67.02,67.02],[67.04000000000001,67.04000000000001,67.04000000000001],[67.08,67.08,67.08],[66.5,66.5,66.5],[66.26000000000001,66.26000000000001,66.26000000000001],[66.86,66.86,66.86],[66.87,66.87,66.87],[66.75,66.75,66.75],[67.28,67.28,67.28],[67.70999999999999,67.70999999999999,67.70999999999999],[68.59,68.59,68.59],[69.91,69.91,69.91],[71.14,71.14,71.14],[73.2,73.2,73.2],[79.06,79.06,79.06],[81.09,81.09,81.09],[82.73,82.73,82.73],[85.62,85.62,85.62],[86.72,86.72,86.72],[87.58,87.58,87.58],[88.18000000000001,88.18000000000001,88.18000000000001],[84.27,84.27,84.27],[85.53,85.53,85.53],[85.95999999999999,85.95999999999999,85.95999999999999],[84.36,84.36,84.36],[84.04000000000001,84.04000000000001,84.04000000000001],[84.31999999999999,84.31999999999999,84.31999999999999],[84.17,84.17,84.17],[84.01000000000001,84.01000000000001,84.01000000000001],[83.86,83.86,83.86],[84.08,84.08,84.08],[84.8,84.8,84.8],[86.23,86.23,86.23],[86.3,86.3,86.3],[87.02,87.02,87.02],[88.03,88.03,88.03],[88.86,88.86,88.86],[89.01000000000001,89.01000000000001,89.01000000000001],[90.98,90.98,90.98],[92.92,92.92,92.92],[96.38,96.38,96.38],[95.90000000000001,95.90000000000001,95.90000000000001],[86,86,86],[79.28,79.28,79.28],[77,77,77],[73.22,73.22,73.22],[70.20999999999999,70.20999999999999,70.20999999999999],[66.91,66.91,66.91],[65.94,65.94,65.94],[67.73,67.73,67.73],[69.56,69.56,69.56],[69.36,69.36,69.36],[69.97,69.97,69.97],[68.67,68.67,68.67],[66.25,66.25,66.25],[65.19,65.19,65.19],[70.2,70.2,70.2],[70.48,70.48,70.48],[70.36,70.36,70.36],[69.47,69.47,69.47],[68.53,68.53,68.53],[67.77,67.77,67.77],[66.68000000000001,66.68000000000001,66.68000000000001],[65.95999999999999,65.95999999999999,65.95999999999999],[65.7,65.7,65.7],[64.89,64.89,64.89],[63.72,63.72,63.72],[63.26,63.26,63.26],[63.36,63.36,63.36],[63.39,63.39,63.39],[63.44,63.44,63.44],[63.46,63.46,63.46],[63.59,63.59,63.59],[64.78,64.78,64.78],[65.25,65.25,65.25],[66.22,66.22,66.22],[67.83,67.83,67.83],[69.48,69.48,69.48],[70.53,70.53,70.53],[72.06999999999999,72.06999999999999,72.06999999999999],[72.64,72.64,72.64],[73.3,73.3,73.3],[72.89,72.89,72.89],[71.81999999999999,71.81999999999999,71.81999999999999],[70.23999999999999,70.23999999999999,70.23999999999999],[69.65000000000001,69.65000000000001,69.65000000000001],[68.68000000000001,68.68000000000001,68.68000000000001],[67.59,67.59,67.59],[66.77,66.77,66.77],[66.81,66.81,66.81],[66.69,66.69,66.69],[66.86,66.86,66.86],[67.11,67.11,67.11],[67.18000000000001,67.18000000000001,67.18000000000001],[66.53,66.53,66.53],[66.3,66.3,66.3],[65.98,65.98,65.98],[65.64,65.64,65.64],[65.23,65.23,65.23],[64.63,64.63,64.63],[64.17,64.17,64.17],[64.22,64.22,64.22],[64.73999999999999,64.73999999999999,64.73999999999999],[64.65000000000001,64.65000000000001,64.65000000000001],[65.73999999999999,65.73999999999999,65.73999999999999],[68.04000000000001,68.04000000000001,68.04000000000001],[69.15000000000001,69.15000000000001,69.15000000000001],[70.45,70.45,70.45],[71.89,71.89,71.89],[72.47,72.47,72.47],[72.89,72.89,72.89],[72.44,72.44,72.44],[71.02,71.02,71.02],[70.81999999999999,70.81999999999999,70.81999999999999],[70.31,70.31,70.31],[69.64,69.64,69.64],[68.90000000000001,68.90000000000001,68.90000000000001],[68.68000000000001,68.68000000000001,68.68000000000001],[68.63,68.63,68.63],[68.34999999999999,68.34999999999999,68.34999999999999],[68.15000000000001,68.15000000000001,68.15000000000001],[67.79000000000001,67.79000000000001,67.79000000000001],[68.01000000000001,68.01000000000001,68.01000000000001],[68.20999999999999,68.20999999999999,68.20999999999999],[68.34,68.34,68.34],[67.94,67.94,67.94],[67.78,67.78,67.78],[67.45,67.45,67.45],[67.44,67.44,67.44],[67.14,67.14,67.14],[67.09999999999999,67.09999999999999,67.09999999999999],[67.02,67.02,67.02],[68.11,68.11,68.11],[69.01000000000001,69.01000000000001,69.01000000000001],[69.84,69.84,69.84],[70.37,70.37,70.37],[70.94,70.94,70.94],[71.28,71.28,71.28],[73.66,73.66,73.66],[75.42,75.42,75.42],[74.76000000000001,74.76000000000001,74.76000000000001],[74.09,74.09,74.09],[72.42,72.42,72.42],[72.38,72.38,72.38],[73.87,73.87,73.87],[72.42,72.42,72.42],[70.13,70.13,70.13],[70.19,70.19,70.19],[70.17,70.17,70.17],[71.45999999999999,71.45999999999999,71.45999999999999],[72.37,72.37,72.37],[71.76000000000001,71.76000000000001,71.76000000000001],[72.05,72.05,72.05],[72.88,72.88,72.88],[73.73,73.73,73.73],[75.11,75.11,75.11],[76.23,76.23,76.23],[75.45999999999999,75.45999999999999,75.45999999999999],[74.8,74.8,74.8],[74.44,74.44,74.44],[74.06999999999999,74.06999999999999,74.06999999999999],[74.18000000000001,74.18000000000001,74.18000000000001],[74.39,74.39,74.39],[74.33,74.33,74.33],[74.47,74.47,74.47],[75.33,75.33,75.33],[75.98999999999999,75.98999999999999,75.98999999999999],[76.98,76.98,76.98],[78.98999999999999,78.98999999999999,78.98999999999999],[80.3,80.3,80.3],[80.98999999999999,80.98999999999999,80.98999999999999],[81.62,81.62,81.62],[82.34,82.34,82.34],[82.61,82.61,82.61],[82.65000000000001,82.65000000000001,82.65000000000001],[80.67,80.67,80.67],[80.42,80.42,80.42],[80.66,80.66,80.66],[81.22,81.22,81.22],[81.45,81.45,81.45],[81.38,81.38,81.38],[80.95999999999999,80.95999999999999,80.95999999999999],[81.2,81.2,81.2],[80.55,80.55,80.55],[80.05,80.05,80.05],[79.17,79.17,79.17],[78.06999999999999,78.06999999999999,78.06999999999999],[78.28,78.28,78.28],[78.34,78.34,78.34],[78.64,78.64,78.64],[78.95,78.95,78.95],[79.06999999999999,79.06999999999999,79.06999999999999],[79.56999999999999,79.56999999999999,79.56999999999999],[80.31999999999999,80.31999999999999,80.31999999999999],[80.28,80.28,80.28],[81.04000000000001,81.04000000000001,81.04000000000001],[83.3,83.3,83.3],[84.73,84.73,84.73],[85.94,85.94,85.94],[87.34,87.34,87.34],[89.17,89.17,89.17],[90.06999999999999,90.06999999999999,90.06999999999999],[90.38,90.38,90.38],[89.12,89.12,89.12],[88.95999999999999,88.95999999999999,88.95999999999999],[88.56999999999999,88.56999999999999,88.56999999999999],[88.03,88.03,88.03],[86.29000000000001,86.29000000000001,86.29000000000001],[85.84999999999999,85.84999999999999,85.84999999999999],[85.54000000000001,85.54000000000001,85.54000000000001],[85.37,85.37,85.37],[84.93000000000001,84.93000000000001,84.93000000000001],[84.59999999999999,84.59999999999999,84.59999999999999],[84.45,84.45,84.45],[84.45999999999999,84.45999999999999,84.45999999999999],[84.05,84.05,84.05],[83.98,83.98,83.98],[83.91,83.91,83.91],[83.61,83.61,83.61],[83.70999999999999,83.70999999999999,83.70999999999999],[83.8,83.8,83.8],[84.06,84.06,84.06],[83.98999999999999,83.98999999999999,83.98999999999999],[84.22,84.22,84.22],[85.31,85.31,85.31],[86.06999999999999,86.06999999999999,86.06999999999999],[86.67,86.67,86.67],[87.05,87.05,87.05],[87.69,87.69,87.69],[89.91,89.91,89.91],[91.73,91.73,91.73],[92.11,92.11,92.11],[93.29000000000001,93.29000000000001,93.29000000000001],[94.34,94.34,94.34],[94.89,94.89,94.89],[95.34,95.34,95.34],[94.58,94.58,94.58],[93.91,93.91,93.91],[94.09999999999999,94.09999999999999,94.09999999999999],[93.98999999999999,93.98999999999999,93.98999999999999],[93.73,93.73,93.73],[93.53,93.53,93.53],[93.78,93.78,93.78],[94.06999999999999,94.06999999999999,94.06999999999999],[94.8,94.8,94.8],[95.08,95.08,95.08],[95.23,95.23,95.23],[95.34999999999999,95.34999999999999,95.34999999999999],[96.72,96.72,96.72],[97.05,97.05,97.05],[97.55,97.55,97.55],[97.64,97.64,97.64],[98.31,98.31,98.31],[99.15000000000001,99.15000000000001,99.15000000000001],[99.84999999999999,99.84999999999999,99.84999999999999],[100.39,100.39,100.39],[101.34,101.34,101.34],[102.33,102.33,102.33],[103.44,103.44,103.44],[105.29,105.29,105.29],[106.97,106.97,106.97],[108.3,108.3,108.3],[109.27,109.27,109.27],[110.44,110.44,110.44],[111.29,111.29,111.29],[112.03,112.03,112.03],[111.73,111.73,111.73],[111.4,111.4,111.4],[111.33,111.33,111.33],[111.29,111.29,111.29],[111.09,111.09,111.09],[111.51,111.51,111.51],[111.58,111.58,111.58],[111.36,111.36,111.36],[111.53,111.53,111.53],[111.14,111.14,111.14],[111.2,111.2,111.2],[111.45,111.45,111.45],[111.15,111.15,111.15],[111.63,111.63,111.63],[112.96,112.96,112.96],[112.56,112.56,112.56],[112.9,112.9,112.9],[113.28,113.28,113.28],[113.5,113.5,113.5],[114.38,114.38,114.38],[114.97,114.97,114.97],[115.93,115.93,115.93],[117.26,117.26,117.26],[118.48,118.48,118.48],[119.55,119.55,119.55],[120.55,120.55,120.55],[120.78,120.78,120.78],[120.06,120.06,120.06],[118.08,118.08,118.08],[117.07,117.07,117.07],[115.93,115.93,115.93],[114.37,114.37,114.37],[113.65,113.65,113.65],[112.35,112.35,112.35],[111.72,111.72,111.72],[111.43,111.43,111.43],[111.06,111.06,111.06],[110.53,110.53,110.53],[110.12,110.12,110.12],[108.57,108.57,108.57],[107.69,107.69,107.69],[107,107,107],[107.05,107.05,107.05],[107,107,107],[107.25,107.25,107.25],[108.27,108.27,108.27],[108.53,108.53,108.53],[108.6,108.6,108.6],[109.04,109.04,109.04],[110.06,110.06,110.06],[110.72,110.72,110.72],[111.04,111.04,111.04],[110.53,110.53,110.53],[110.93,110.93,110.93],[112.02,112.02,112.02],[113.58,113.58,113.58],[114.12,114.12,114.12],[114.39,114.39,114.39],[114.71,114.71,114.71],[114.62,114.62,114.62],[114.49,114.49,114.49],[114.46,114.46,114.46],[113.02,113.02,113.02],[111.94,111.94,111.94],[111.67,111.67,111.67],[111.1,111.1,111.1],[110.47,110.47,110.47],[110.14,110.14,110.14],[109.17,109.17,109.17],[108.68,108.68,108.68],[108.23,108.23,108.23],[108.12,108.12,108.12],[108.51,108.51,108.51],[108.44,108.44,108.44],[108.47,108.47,108.47],[109.32,109.32,109.32],[109.97,109.97,109.97],[110.4,110.4,110.4],[110.98,110.98,110.98],[111.56,111.56,111.56],[113.36,113.36,113.36],[114.98,114.98,114.98],[117.42,117.42,117.42],[119.46,119.46,119.46],[121.9,121.9,121.9],[123.3,123.3,123.3],[124.21,124.21,124.21],[123.52,123.52,123.52],[123.05,123.05,123.05],[120.9,120.9,120.9],[119.19,119.19,119.19],[116.56,116.56,116.56],[115.07,115.07,115.07],[114.04,114.04,114.04],[113.96,113.96,113.96],[113.36,113.36,113.36],[113.81,113.81,113.81],[113.99,113.99,113.99],[114.69,114.69,114.69],[114.77,114.77,114.77],[114.6,114.6,114.6],[114.21,114.21,114.21],[114.54,114.54,114.54],[113.39,113.39,113.39],[113.9,113.9,113.9],[114.31,114.31,114.31],[114.29,114.29,114.29],[114.61,114.61,114.61],[114.93,114.93,114.93],[115.16,115.16,115.16],[116.71,116.71,116.71],[118.4,118.4,118.4],[122.22,122.22,122.22],[124.86,124.86,124.86],[127.01,127.01,127.01],[129.22,129.22,129.22],[131.04,131.04,131.04],[131.28,131.28,131.28],[129.18,129.18,129.18],[125.31,125.31,125.31],[126.51,126.51,126.51],[125.12,125.12,125.12],[123.35,123.35,123.35],[120.84,120.84,120.84],[118.78,118.78,118.78],[118.25,118.25,118.25],[117.4,117.4,117.4],[113.14,113.14,113.14],[111.91,111.91,111.91],[111.51,111.51,111.51],[111.9,111.9,111.9],[113.29,113.29,113.29],[114.04,114.04,114.04],[114.78,114.78,114.78],[115.6,115.6,115.6],[116.21,116.21,116.21],[118.92,118.92,118.92],[121.96,121.96,121.96],[125.53,125.53,125.53],[131.06,131.06,131.06],[131.55,131.55,131.55],[120.58,120.58,120.58],[117.5,117.5,117.5],[115.29,115.29,115.29],[113.2,113.2,113.2],[110.74,110.74,110.74],[106.75,106.75,106.75],[105.66,105.66,105.66],[109.46,109.46,109.46],[111.59,111.59,111.59],[111.06,111.06,111.06],[110.23,110.23,110.23],[108.56,108.56,108.56],[105.65,105.65,105.65],[104.38,104.38,104.38],[109.08,109.08,109.08],[107.88,107.88,107.88],[106.54,106.54,106.54],[104.74,104.74,104.74],[102.9,102.9,102.9],[101.99,101.99,101.99],[101,101,101],[100.43,100.43,100.43],[100.37,100.37,100.37],[99.73,99.73,99.73],[99.48999999999999,99.48999999999999,99.48999999999999],[99.38,99.38,99.38],[99.45,99.45,99.45],[101.63,101.63,101.63],[104.17,104.17,104.17],[105.34,105.34,105.34],[107.16,107.16,107.16],[108.53,108.53,108.53],[110.07,110.07,110.07],[110.9,110.9,110.9],[111.17,111.17,111.17],[111.08,111.08,111.08],[111.41,111.41,111.41],[112.7,112.7,112.7],[113.23,113.23,113.23],[113.33,113.33,113.33],[113.02,113.02,113.02],[112.33,112.33,112.33],[112.02,112.02,112.02],[111.89,111.89,111.89],[110.22,110.22,110.22],[108.96,108.96,108.96],[108.12,108.12,108.12],[108.63,108.63,108.63],[108.88,108.88,108.88],[109.82,109.82,109.82],[111.17,111.17,111.17],[112.48,112.48,112.48],[113.25,113.25,113.25],[113.69,113.69,113.69],[114.17,114.17,114.17],[114,114,114],[114.11,114.11,114.11],[113.15,113.15,113.15],[111.41,111.41,111.41],[111.15,111.15,111.15],[110.87,110.87,110.87],[111.65,111.65,111.65],[112.93,112.93,112.93],[112.74,112.74,112.74],[113.27,113.27,113.27],[115.57,115.57,115.57],[116.86,116.86,116.86],[117.55,117.55,117.55],[116.72,116.72,116.72],[116.58,116.58,116.58],[116.5,116.5,116.5],[116.35,116.35,116.35],[115.25,115.25,115.25],[113.96,113.96,113.96],[113.56,113.56,113.56],[113.1,113.1,113.1],[112.38,112.38,112.38],[111.99,111.99,111.99],[111.76,111.76,111.76],[110.77,110.77,110.77],[110.41,110.41,110.41],[110.26,110.26,110.26],[110.71,110.71,110.71],[110.72,110.72,110.72],[110.9,110.9,110.9],[111,111,111],[111.09,111.09,111.09],[111.77,111.77,111.77],[112.19,112.19,112.19],[112.59,112.59,112.59],[114.09,114.09,114.09],[115.34,115.34,115.34],[116.21,116.21,116.21],[118.74,118.74,118.74],[120.07,120.07,120.07],[121.64,121.64,121.64],[123.88,123.88,123.88],[124.97,124.97,124.97],[126.33,126.33,126.33],[127.72,127.72,127.72],[129.58,129.58,129.58],[131.2,131.2,131.2],[132.1,132.1,132.1],[131.4,131.4,131.4],[130.61,130.61,130.61],[130.22,130.22,130.22],[129.53,129.53,129.53],[128.06,128.06,128.06],[127.34,127.34,127.34],[127.72,127.72,127.72],[129.51,129.51,129.51],[129.8,129.8,129.8],[128.4,128.4,128.4],[125.86,125.86,125.86],[124.21,124.21,124.21],[123.76,123.76,123.76],[122.33,122.33,122.33],[119.6,119.6,119.6],[118.27,118.27,118.27],[117.24,117.24,117.24],[117.54,117.54,117.54],[117.41,117.41,117.41],[117.05,117.05,117.05],[117.24,117.24,117.24],[118.26,118.26,118.26],[120.35,120.35,120.35],[123.2,123.2,123.2],[126.09,126.09,126.09],[127.02,127.02,127.02],[127.26,127.26,127.26],[126.94,126.94,126.94],[126.68,126.68,126.68],[125.38,125.38,125.38],[123.37,123.37,123.37],[121.63,121.63,121.63],[121.81,121.81,121.81],[121.78,121.78,121.78],[122.61,122.61,122.61],[123.35,123.35,123.35],[123.07,123.07,123.07],[123.02,123.02,123.02],[122.87,122.87,122.87],[121.65,121.65,121.65],[120.7,120.7,120.7],[119.3,119.3,119.3],[117.4,117.4,117.4],[117.04,117.04,117.04],[116.67,116.67,116.67],[116.57,116.57,116.57],[116.72,116.72,116.72],[117.15,117.15,117.15],[117.99,117.99,117.99],[119.2,119.2,119.2],[121.58,121.58,121.58],[123.26,123.26,123.26],[124.81,124.81,124.81],[127.58,127.58,127.58],[131.11,131.11,131.11],[135.42,135.42,135.42],[139.06,139.06,139.06],[138.94,138.94,138.94],[138.75,138.75,138.75],[138.67,138.67,138.67],[136.65,136.65,136.65],[134.23,134.23,134.23],[130.45,130.45,130.45],[126.91,126.91,126.91],[125.56,125.56,125.56],[125.01,125.01,125.01],[124.57,124.57,124.57],[125.28,125.28,125.28],[125.14,125.14,125.14],[125.21,125.21,125.21],[125.27,125.27,125.27],[125.2,125.2,125.2],[125.15,125.15,125.15],[124.95,124.95,124.95],[124.16,124.16,124.16],[123.39,123.39,123.39],[122.32,122.32,122.32],[121.76,121.76,121.76],[122,122,122],[121.76,121.76,121.76],[121.97,121.97,121.97],[122.63,122.63,122.63],[124.07,124.07,124.07],[125.53,125.53,125.53],[128.09,128.09,128.09],[128.89,128.89,128.89],[130.11,130.11,130.11],[130.85,130.85,130.85],[131.46,131.46,131.46],[131.97,131.97,131.97],[133.35,133.35,133.35],[132.87,132.87,132.87],[132.73,132.73,132.73],[132.11,132.11,132.11],[131.57,131.57,131.57],[131.61,131.61,131.61],[131.5,131.5,131.5],[130.69,130.69,130.69],[129.74,129.74,129.74],[129.94,129.94,129.94],[130.39,130.39,130.39],[130.63,130.63,130.63],[130.76,130.76,130.76],[129.97,129.97,129.97],[129.99,129.99,129.99],[130.16,130.16,130.16],[130.21,130.21,130.21],[130.38,130.38,130.38],[130.51,130.51,130.51],[131.14,131.14,131.14],[132.23,132.23,132.23],[132.89,132.89,132.89],[134.88,134.88,134.88],[137.29,137.29,137.29],[139.17,139.17,139.17],[140.7,140.7,140.7],[142.26,142.26,142.26],[143.07,143.07,143.07],[143.72,143.72,143.72],[143.01,143.01,143.01],[141.54,141.54,141.54],[140.65,140.65,140.65],[140.05,140.05,140.05],[139.42,139.42,139.42],[139.26,139.26,139.26],[139.22,139.22,139.22],[139.18,139.18,139.18],[139.1,139.1,139.1],[138.74,138.74,138.74],[138.58,138.58,138.58],[137.02,137.02,137.02],[136.78,136.78,136.78],[135.94,135.94,135.94],[135.37,135.37,135.37],[135.26,135.26,135.26],[134.75,134.75,134.75],[134.37,134.37,134.37],[135.13,135.13,135.13],[134.66,134.66,134.66],[135.13,135.13,135.13],[135.88,135.88,135.88],[137.68,137.68,137.68],[139.13,139.13,139.13],[140.31,140.31,140.31],[140.46,140.46,140.46],[141.15,141.15,141.15],[142.25,142.25,142.25],[142.24,142.24,142.24],[140.44,140.44,140.44],[139.03,139.03,139.03],[137.36,137.36,137.36],[136.14,136.14,136.14],[134.41,134.41,134.41],[131.91,131.91,131.91],[129.86,129.86,129.86],[128.64,128.64,128.64],[128.17,128.17,128.17],[127.71,127.71,127.71],[127.1,127.1,127.1],[126.97,126.97,126.97],[126.38,126.38,126.38],[126.67,126.67,126.67],[127.01,127.01,127.01],[127.05,127.05,127.05],[127.3,127.3,127.3],[124.11,124.11,124.11],[124.15,124.15,124.15],[124.44,124.44,124.44],[125.06,125.06,125.06],[125.8,125.8,125.8],[125.98,125.98,125.98],[126.22,126.22,126.22],[130.17,130.17,130.17],[130.8,130.8,130.8],[131.9,131.9,131.9],[132.49,132.49,132.49],[133.76,133.76,133.76],[135.4,135.4,135.4],[136.14,136.14,136.14],[136.75,136.75,136.75],[136.35,136.35,136.35],[135.14,135.14,135.14],[133.51,133.51,133.51],[131.07,131.07,131.07],[129.33,129.33,129.33],[128.15,128.15,128.15],[126.3,126.3,126.3],[125.83,125.83,125.83],[125.61,125.61,125.61],[125.62,125.62,125.62],[125.28,125.28,125.28],[124.85,124.85,124.85],[124.92,124.92,124.92],[125.16,125.16,125.16],[124.8,124.8,124.8],[124.55,124.55,124.55],[124.48,124.48,124.48],[124.63,124.63,124.63],[124.81,124.81,124.81],[124.48,124.48,124.48],[125.25,125.25,125.25],[126.74,126.74,126.74],[128.36,128.36,128.36],[129.73,129.73,129.73],[131.67,131.67,131.67],[132.5,132.5,132.5],[133.03,133.03,133.03],[134.39,134.39,134.39],[133.5,133.5,133.5],[132.21,132.21,132.21],[130.83,130.83,130.83],[128.9,128.9,128.9],[127.83,127.83,127.83],[127.24,127.24,127.24],[124.78,124.78,124.78],[124.51,124.51,124.51],[124.72,124.72,124.72],[125.89,125.89,125.89],[125.83,125.83,125.83],[125.59,125.59,125.59],[125.55,125.55,125.55],[125.47,125.47,125.47],[124.67,124.67,124.67],[123.45,123.45,123.45],[121.41,121.41,121.41],[121.54,121.54,121.54],[121.96,121.96,121.96],[122.17,122.17,122.17],[122.02,122.02,122.02],[122.07,122.07,122.07],[122.74,122.74,122.74],[125.05,125.05,125.05],[132.04,132.04,132.04],[135.42,135.42,135.42],[138.44,138.44,138.44],[142.66,142.66,142.66],[144.95,144.95,144.95],[147.98,147.98,147.98],[150.01,150.01,150.01],[145.59,145.59,145.59],[144.83,144.83,144.83],[144.17,144.17,144.17],[142.94,142.94,142.94],[142.87,142.87,142.87],[141.95,141.95,141.95],[140.31,140.31,140.31],[139.35,139.35,139.35],[138.07,138.07,138.07],[137.83,137.83,137.83],[137.63,137.63,137.63],[138.02,138.02,138.02],[138.08,138.08,138.08],[138.84,138.84,138.84],[140.07,140.07,140.07],[141.67,141.67,141.67],[141.36,141.36,141.36],[143.48,143.48,143.48],[147.14,147.14,147.14],[151.56,151.56,151.56],[156.93,156.93,156.93],[162.78,162.78,162.78],[162.23,162.23,162.23],[153.86,153.86,153.86],[148.45,148.45,148.45],[145.84,145.84,145.84],[143.93,143.93,143.93],[140.66,140.66,140.66],[136.69,136.69,136.69],[136.03,136.03,136.03],[141.22,141.22,141.22],[144.43,144.43,144.43],[144.36,144.36,144.36],[142.17,142.17,142.17],[138.92,138.92,138.92],[134.28,134.28,134.28],[132.53,132.53,132.53],[134.02,134.02,134.02],[133.55,133.55,133.55],[132.18,132.18,132.18],[130.46,130.46,130.46],[129.64,129.64,129.64],[130.07,130.07,130.07],[130.41,130.41,130.41],[130.68,130.68,130.68],[130.04,130.04,130.04],[128.95,128.95,128.95],[128.7,128.7,128.7],[128.09,128.09,128.09],[128.07,128.07,128.07],[128.03,128.03,128.03],[127.98,127.98,127.98],[128.35,128.35,128.35],[128.66,128.66,128.66],[130.07,130.07,130.07],[132.04,132.04,132.04],[134.81,134.81,134.81],[136.87,136.87,136.87],[138.54,138.54,138.54],[140.34,140.34,140.34],[144.25,144.25,144.25],[145.57,145.57,145.57],[146.16,146.16,146.16],[145.14,145.14,145.14],[144.9,144.9,144.9],[144.5,144.5,144.5],[143.38,143.38,143.38],[140.43,140.43,140.43],[138.63,138.63,138.63],[137.69,137.69,137.69],[137.44,137.44,137.44],[137.73,137.73,137.73],[138.61,138.61,138.61],[140.02,140.02,140.02],[142.19,142.19,142.19],[143.21,143.21,143.21],[143.48,143.48,143.48],[144.27,144.27,144.27],[144.08,144.08,144.08],[143.01,143.01,143.01],[140.61,140.61,140.61],[137.36,137.36,137.36],[135.56,135.56,135.56],[134.54,134.54,134.54],[134.38,134.38,134.38],[133.78,133.78,133.78],[133.99,133.99,133.99],[135.63,135.63,135.63],[139.47,139.47,139.47],[142.03,142.03,142.03],[143.91,143.91,143.91],[144.04,144.04,144.04],[144.85,144.85,144.85],[145.53,145.53,145.53],[144.86,144.86,144.86],[141.84,141.84,141.84],[140.4,140.4,140.4],[138.96,138.96,138.96],[138.2,138.2,138.2],[137.59,137.59,137.59],[137.02,137.02,137.02],[137.18,137.18,137.18],[137.08,137.08,137.08],[137.31,137.31,137.31],[137.71,137.71,137.71],[138.26,138.26,138.26],[138.39,138.39,138.39],[138.15,138.15,138.15],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null]],[[102.1786526737397,108.2851945921786,113.9753832506117],[100.982950678645,107.2217560996547,113.3887320676305],[99.99003202320827,106.1025251672148,112.2680000162648],[98.8846166124013,105.0298540826478,111.3614093706928],[97.87322777052837,103.9760584056194,109.8407815791199],[96.92457620441903,102.8986669499415,109.1838703523567],[95.92175022256724,101.9209496475469,107.8817265147003],[95.04049040610725,101.0711799196337,107.1454014185405],[93.76155623129083,100.2570736073311,106.1762478152257],[93.53328421216744,99.45322881376893,105.6112283282822],[92.79949696970041,98.75542720012129,104.927382495625],[92.43302729768043,98.13020721823835,104.0072336720329],[91.09548415754028,97.52871994800256,103.7110500407919],[91.38077069697955,97.06499444348032,102.7154377211266],[90.28166250795357,96.75879732064968,102.9304549051189],[90.44425757312986,96.51058186782902,102.8276550590027],[90.19240601718265,96.2866024852389,102.4096690336436],[89.94143803013976,96.17264732441834,102.6098045935683],[89.97234435525054,96.12712100576974,102.5890505873173],[90.04344075288134,96.09354825619326,101.9755971882854],[90.20127692565671,96.17659414253008,102.5130358573901],[89.81373263405241,96.38851325057462,102.246285820236],[90.87239975955841,96.62457643563722,102.9912208921676],[90.91920919282624,96.84580313056784,102.9783790820958],[91.29297347008031,97.13204572995492,103.2413812545315],[91.52307994733783,97.43848121048305,103.3664485795213],[91.69055674784937,97.70664341133431,103.826692250666],[91.91336665181078,98.0380632948296,104.5974220201895],[92.37924531082432,98.44416042125125,104.6277752792693],[93.01071947285455,98.8219911898519,105.0612201860627],[92.81386665754901,99.13443781694129,105.0163961073045],[93.19697462535191,99.46248215212429,105.2359334785286],[93.74552524395384,99.76494673785508,105.6878518200082],[93.81328114278681,99.98790300993508,106.0351874102816],[94.46366260441329,100.2357893241066,106.8216076966581],[94.36517384750944,100.5246163805987,106.2939883494838],[94.82025161910224,100.7579256223182,106.7423580831859],[94.88945623946563,100.9043432242425,107.050187752096],[94.75497136378517,101.0489735137134,107.2437074724826],[94.32133135551119,100.7832930054274,106.9944584570278],[94.17076165537696,100.430387660721,106.5171921066857],[94.70340560957851,100.0974974251674,106.0061048967841],[93.52230291506582,99.80389560089418,105.5234319647258],[93.45711291319515,99.45917712029079,105.2215120655067],[92.92620007489018,99.03643305572572,104.9578313347552],[92.61179591060409,98.62034760868633,104.7283004912805],[91.86950394099733,98.17828951216006,104.4369157235957],[90.92804307054001,97.66523352485268,103.6338329618289],[90.44610435763514,97.18399234527995,103.1141894514566],[90.95156440647148,96.75225443211046,102.4582091822296],[90.43444398531953,96.28193195645072,102.59901820724],[89.72207710604506,95.74539339967885,101.6060654598993],[88.75941067744766,95.22158104262104,101.5987481906341],[88.47532534845405,94.67664215315283,101.0100294830549],[87.72065135812588,94.06469473677319,100.0659796931215],[87.26217284834823,93.48141205073074,99.54774989814611],[86.9880841968094,92.94090817938591,99.23716418749237],[86.08203529111061,92.35619297816856,98.25845157071461],[85.64952296918192,91.69848685416878,97.39357151032608],[85.3150356666057,91.04135921869018,97.07875650617606],[83.96393368756173,90.35087652938871,96.2871034565635],[83.54134782693693,89.58216684888578,95.84400776750788],[82.24125295309494,88.82629048004411,94.93586648948431],[81.66268363690961,88.09688784001304,94.20322460233636],[81.45836270786565,87.31163952135026,93.8655777109377],[80.099520004624,86.44454795498594,92.6054998184438],[79.64371643997188,85.56797144072691,91.62734655247708],[78.47653049217153,84.65215716937726,91.03422518782791],[77.33363558130264,83.65746997697492,89.84790651100107],[76.15142621988143,82.67441555415265,88.80376905773464],[75.48933750944911,81.71992188824153,88.14690651240892],[74.44033156282602,80.71968412425049,86.920111418473],[73.60707350958936,79.65330455181532,85.72749809530396],[72.45458168342849,78.59412841868495,84.8733252487053],[71.26887524110126,77.51808548496518,83.47937627812153],[70.239801318937,76.39152596716286,82.67609192306881],[68.2757495854095,74.82354099507832,81.10337411513297],[67.04088001189518,73.32050052348328,79.21154654377104],[65.6945073612136,71.81479035057529,78.3982004840968],[64.56564225737105,70.28998259587884,76.7576446938201],[62.78819510191988,68.81563473292469,74.917664798605],[61.35288536498865,67.36971689046321,73.22542815544898],[60.06109500583509,65.92142449022531,71.83949262238792],[58.73608074408903,64.55110936501337,70.65957751043953],[57.43090917379179,63.27300894881705,69.41549966419745],[38.45651986462009,44.82736550436535,50.76415977485666],[54.46127711373929,60.78262136630322,66.8375538617083],[53.51266804010267,59.61042907761952,65.94378532262719],[52.23345324332001,58.48187445735588,64.79308647243973],[51.57067829789622,57.36439783676943,63.50762243817599],[49.81123753883855,56.32474640348421,62.38392450162142],[49.62315585678246,55.37009703732345,61.65381877497728],[48.13233208889157,54.43776523554923,60.51614785640353],[47.60723704814649,53.50634525515217,59.68529386935209],[46.44323186192221,52.62292295796734,58.136722662876],[45.92751855225741,51.76113258651609,58.15165084071258],[44.55947490185034,50.88814855200357,57.21419981998423],[44.19533954897651,50.05941923580532,56.24819917550651],[43.2328161223768,49.27811890306305,55.68805609169981],[42.57587315688286,48.48676419897183,54.76826435286764],[41.51512931489604,47.6651897653045,53.65414330706158],[40.98711239577511,46.85386675277699,52.45629452669209],[39.78052787101567,46.02965070911923,51.71181348183858],[39.20729255734798,45.16472054218313,51.1785650403476],[37.98883416434388,44.3085565748888,50.41784693929329],[37.62552688584845,43.46558648546843,49.69880944528978],[36.422500456494,42.58857839726146,48.98931547212298],[34.99090027848459,41.66332856965024,47.88681379239784],[34.43900896363998,40.72797299706917,46.78104125819183],[33.55528800330998,39.76632753936958,46.39510028749839],[32.87654134436777,38.75869136568412,44.66873251818541],[31.59804195521839,37.75100471942611,43.25483530362035],[30.65791889462103,36.75064393025792,42.64885778255358],[29.41763789668007,35.72156659854968,41.55168173168344],[30.05385707353669,36.15897678248922,42.48488048504094],[30.4914546951374,36.5886424432464,42.63376387349857],[30.99519293758274,36.99783272360644,43.15104820829306],[30.98125733507481,37.36795926930603,43.57249628847967],[31.81291397246246,37.74361010340988,44.02244642520618],[31.9341706916534,38.13561367937956,44.6596770706156],[32.24514472136924,38.50818159939693,44.44167251583956],[32.58736828128783,38.85076129719977,45.1397458032238],[33.45322316827907,39.20214532302777,45.14041959076081],[33.77426693542832,39.55038049030093,45.39905918043457],[33.78917832347325,39.87673571478079,45.94329412234399],[34.12552870680263,40.23111931271603,46.92224073663007],[34.43000691724345,40.62586117959319,46.56950755155621],[35.05660265862093,41.0218887756475,47.0782900938208],[35.57197393346363,41.40724537252483,47.44513458283361],[36.00817824833594,41.82317482500702,48.31391023824332],[35.8782384690652,42.25508205008769,48.15312767786769],[36.35103466235641,42.68058730567718,48.59701115843222],[37.26382885309076,43.15141365855091,49.00022054005092],[37.70519623227554,43.67797486163019,49.82802827443769],[37.89541436305114,44.21467074464228,50.52875095552341],[38.6434993051619,44.74515348879243,50.6595275991678],[39.36178553671436,45.31046451965635,51.1759544648972],[40.2191952656149,45.8911151083127,52.33303860609203],[40.35890420180179,46.45928621523346,52.4167686877871],[40.65669488697353,47.06723401536696,53.12440483398056],[41.50292674431682,47.72271883662641,53.51104188796504],[41.96056927453663,48.3734418305003,54.85338445375303],[42.73102311875243,48.99906704805118,54.9305307256767],[43.37276947244781,49.64140387894311,55.95506198455764],[44.48989854855596,50.27758697827162,56.18346685908067],[44.42085158481846,50.87638715597372,56.63826550529717],[45.37284634553421,51.49308757214575,57.7996779185096],[45.95657647976636,52.13569467409408,58.32510464491479],[46.58149921127556,52.74844690382569,58.83363074874818],[46.91649192359486,53.31051491114825,59.73106641467746],[48.14556114114188,53.86814542984516,59.98184338765395],[48.15804137838507,54.39772403246081,60.5779486270097],[49.10248592333519,54.86949200862769,60.88466212284753],[49.60882139920844,55.34541614886525,61.89933339387784],[50.09393503406672,55.83722256737351,62.29463450173039],[50.35252425384083,56.28890129264821,62.43733606145934],[50.74505490522122,56.68200239135673,62.99154368405487],[51.2120562584577,57.06966546631794,63.24237452544806],[51.67982846057266,57.43178029456337,63.21733588892268],[51.41989827620621,57.73928910947557,63.93225466501781],[52.17052188845172,58.061771281526,64.53058670168384],[52.14303335892603,58.41504705176042,64.5295378768575],[52.52085590911196,58.74266830671329,64.87806807530779],[53.2597163032428,59.02781058999585,65.28009184693305],[52.78504602075315,59.32921468163418,65.53939934268867],[53.5230752136461,59.62735668663054,65.43990050760313],[53.83345964720413,59.89276374265065,66.60239745957787],[54.17432197404906,60.19999003434908,66.06787792146113],[54.50277858637459,60.56598354304208,66.53648224342747],[55.09588765050854,60.93063703810121,66.76327839422611],[54.91938557965977,61.27535524338505,67.29647062656446],[55.47185736308633,61.66099093358025,67.88007620653671],[56.00857000896956,62.06510795521991,67.95721656790667],[56.77540996169808,62.45439276677603,68.70205025300504],[56.81106382381778,62.90510105363906,68.30327676778677],[57.509282117681,63.43226166708275,69.38270064517438],[57.95055422329126,63.96935511757746,70.05989859539943],[58.44847396874444,64.49361470572182,70.69018177646916],[58.93121838966015,65.06600612588952,71.15062536896676],[59.39256972519206,65.65962152331707,71.78900179725427],[60.21787817989279,66.23621331640359,72.83377642565539],[60.72990434720295,66.87312575681308,72.798490969513],[61.62920603623037,67.58333816764373,73.68119758420058],[62.20106701655592,68.29426100501212,74.52749219105685],[62.87526809660419,68.97974947678581,75.14106433981506],[63.77340454115924,69.7020944249369,75.65626785402677],[64.32340463939899,70.43150549362542,76.46616039601433],[64.75890867267501,71.12671689884021,77.42820907050051],[66.02209471647923,71.86834666819927,78.09764080804889],[66.32719040760365,72.66254034274861,78.82144133302513],[67.72290020100159,73.44029038591997,79.88664160807333],[68.18242175108088,74.17469314468518,80.55807270942417],[68.37317670323438,74.93196267111692,81.00591794897622],[69.38393452952414,75.68198402504083,81.96058530732999],[69.64422327301872,76.38292509074776,82.28722174677158],[70.8922441239373,77.12087791064654,82.86701082975569],[72.22517101760555,77.91149554118749,83.83004681769236],[72.95843967677146,78.67689882574743,84.91958583995567],[73.29877322007577,79.39084965425147,85.67177838205036],[73.776717518813,80.12453233523851,85.85494008518221],[74.71403680175607,80.84824275471814,86.98254289565753],[75.32500564061561,81.51994371105141,87.46920793473157],[76.09740454130933,82.23118583701925,88.49228409197283],[76.97124986092329,82.99961552048887,88.88750902372432],[77.6083924867709,83.74492358637458,89.8301875529059],[78.24511966672819,84.44055978720134,90.7200637115551],[79.49765548853601,85.16143836634323,91.47083683181722],[79.79293276141068,85.87680464911006,92.01298340491637],[80.91705599567554,86.5427800634498,92.58024009221974],[81.36143124020865,87.25461208334427,93.1917673501022],[82.01014367563435,88.03010454225776,94.12985976409129],[82.29161679501746,88.78466007163503,94.23158539484135],[83.20622650947931,89.48958684463605,95.99294537276262],[84.22808367544192,90.22177724880616,96.66508179073594],[84.84662162711197,90.94779754243169,97.16923685959219],[85.49086886419728,91.62046385325893,97.62448598571136],[86.19992496103914,92.33745718767283,98.50020530846531],[86.95512915255661,93.11570619431026,99.86932564087593],[87.70870830451713,93.8655468705127,100.2242882004223],[88.57571591842996,94.55563815403217,100.5302647808851],[89.51373775847283,95.26462320302679,101.9681242991661],[89.88594200034171,95.95644452562858,101.6515175204641],[90.03641149777637,96.58094646051387,102.3829464183576],[91.01673383109201,97.23884420375347,103.8968931787693],[92.05220703073246,97.947041924012,104.4928781674083],[92.37152856682366,98.61188721861639,104.8255108313791],[92.30354140759489,98.47633924534102,104.6027091058059],[92.11418880636435,98.34568138825188,104.4195437745751],[92.12109822466113,98.18350838452324,104.4249587549469],[91.7182418784208,97.94053185937396,103.9084316853383],[91.81505568580964,97.72021861941667,103.7419618341554],[91.63075981316229,97.53993705291388,103.637879102562],[91.23956216940709,97.30769227223921,103.6808443311066],[90.87959992849532,96.99404230790239,102.7935890481524],[90.65332402636369,96.6819318819489,102.694736941644],[90.13978448378283,96.33726228702872,102.7215393270104],[89.63383806505021,95.9132849084382,101.8682403057401],[89.56572242056569,95.51394423927894,101.2772772946868],[89.12635508730136,95.15824465204885,100.6446684950661],[88.36953607892293,94.75728583513927,100.5985592268356],[87.82274218560187,94.28380021426877,100.2986861693723],[87.46734951398848,93.82126467388282,99.56395675880944],[87.06086158354827,93.33759875292546,99.83534932708028],[86.6088908960453,92.78810785244411,98.62317827741725],[86.09112475396805,92.27654464461267,98.48457569134167],[85.87377376328062,91.82271241530105,97.85768896945604],[85.06381252947864,91.33981905415274,97.1618346866657],[84.53527873045958,90.80165555859206,96.93014475088506],[84.21363222424151,90.29100670469636,96.15086254909565],[83.55834335063498,89.77649928212948,96.14380929106369],[83.27226755634541,89.21411703703428,95.21842240367762],[82.54429901529912,88.70600249479595,94.88380538960004],[82.07762527004064,88.2713185465177,94.66779969141301],[81.80333232130494,87.82394204265754,94.09407462368529],[81.23867773833474,87.33730357136666,93.56903392397649],[81.26651381382911,86.89211621568789,92.78438414143687],[80.22872252712217,86.45639174828275,92.70880578870444],[79.61272174139312,85.98554388386574,92.17846104705369],[79.33099060289642,85.57894563982578,91.8729492293089],[79.22720891752263,85.25406275823444,91.14334358932823],[78.97598639896647,84.92449889623703,91.18479351681046],[78.58510170425478,84.56250701963033,91.01598205696348],[77.87537767616277,84.24604488916275,90.14724637547791],[77.90362106070761,83.9419661191212,89.83424975212108],[77.13137550178328,83.60497553510659,89.65054441764782],[77.07684193809297,83.33116877141993,89.86017934007089],[77.05478507117066,83.13621696673088,88.90404251257796],[76.5390953488145,82.93350206871408,88.86791260289141],[76.30414238655615,82.6942984473388,88.59928460307226],[76.52386146968614,82.49415269495856,88.65883658411822],[76.28193900026676,82.2992404281036,88.19587057850154],[76.23155541679577,82.06364916752194,88.09499426529388],[76.04105899119568,81.88144773193287,87.89238117815634],[75.94914009778999,81.76735006964279,88.13338449108855],[75.74594442838391,81.63544766231757,87.43440707966737],[75.77250293092419,81.45704926128691,87.11825625535765],[75.02881164641077,81.30636825453661,87.732951743447],[74.84939694482495,81.15002647918094,87.07887813967409],[74.88017219137612,80.94290673805109,86.61927587880206],[74.43751042943462,80.77795609648398,86.90409764845904],[74.8527240001839,80.67008792942694,87.12773408212351],[74.28280403721196,80.53523321923956,86.7580886296544],[74.5018649162821,80.34582025492516,86.44537403046466],[73.99048292600911,80.17575226253865,86.1837071455567],[73.64218646854127,79.99304215932418,85.72771407219001],[73.78031280487241,79.75422024020047,86.21480734923166],[73.13069731238141,79.55185885977809,85.68279640768898],[73.29953399448088,79.40170243972746,85.51852402226046],[73.21168539241101,79.22202993768995,85.48716419732753],[72.63400038477995,78.98676953394907,84.82670031062463],[72.95518702286542,78.76976444811424,85.11042365054507],[72.3008897377095,78.54053953494221,84.42669718534093],[71.98623155732827,78.25726801809338,84.23600810134639],[71.53737281489499,78.01202432993871,84.33169662805052],[71.45591366100707,77.82115158053716,83.84367425884358],[71.47997441548905,77.60494717833642,83.71257585871415],[71.44815577561735,77.33842663546528,83.46305617929036],[71.1600973572,77.09489345078444,83.35131624585308],[70.97000786315228,76.84485471111934,83.10869446275453],[69.92526676302735,76.54756480263025,82.66509385256825],[70.34451149647857,76.29402455038434,82.2540246509742],[70.01255703966751,76.16336567835384,82.35614596777421],[70.08010429973456,76.01452630830714,82.19643368929675],[69.57337942066529,75.8229880049041,81.97231651256907],[69.39131876890642,75.66118169935739,82.34160130901165],[69.42588456505794,75.50014457428099,81.91250569605708],[69.21826277186918,75.29967542088623,81.33953543468326],[68.88636770655867,75.14986022557684,81.598225744009],[68.90793132292809,75.06713982731883,81.01218240827879],[73.80579133670554,80.14141064991659,85.91234224317004],[68.77621849532039,74.84695699372377,80.90421904498608],[68.16752608881063,74.75723231009306,80.61595288029088],[68.61364771566599,74.67654692906018,80.69303941360077],[68.47563072058549,74.56529635278005,80.77261208599562],[68.5222149833688,74.5128452418766,80.58740728679319],[68.51137717521416,74.53564811240477,80.87961135225609],[68.2758521157792,74.55734848842809,80.76614927175075],[68.12830185133892,74.55418640158243,80.17041049195484],[68.85643734812703,74.59734897140298,80.29370146266932],[68.88773813928464,74.65860660730317,80.77646529880937],[68.39737336507628,74.69862628379256,81.36461885603127],[68.2120633758185,74.80559183919613,80.61696558389148],[68.67224191174873,74.99536542095512,80.91904771337522],[69.19458331612718,75.19177404887603,81.5351343354552],[69.50976116252625,75.37050478927216,81.95544199853859],[69.66595336465497,75.60099639639137,81.69050519250275],[70.11346529215213,75.85406322011011,82.33066824663655],[70.31071572414093,76.08929254504299,82.18171493520803],[70.28565768187946,76.39222485152887,82.40946975195422],[70.47363068788512,76.77658249679261,83.4260762708432],[71.09855741117741,77.16477573791956,83.2995712869597],[71.68200705774603,77.53032264372071,83.29278727249536],[71.80511541728166,77.93932314327759,84.07033818657364],[72.1098314641339,78.36011536560152,84.57128767374861],[72.54305862757289,78.74980409345565,84.65563470860613],[73.68498282109095,79.19004917630475,84.91068238718573],[74.03458016555075,79.69140948868588,85.98284849391976],[74.39930829042667,80.17411494915851,86.5608060247678],[74.10121455570174,80.60905481046434,86.99257127691934],[74.67545773741763,80.98734783849106,87.2614954579941],[75.08436441009013,81.34566227446926,87.38260586789349],[75.67348512966552,81.63944893340683,87.38413395753659],[75.66982248675424,81.94745946214715,87.98341264015701],[76.32256713971093,82.27852378143584,88.54718411629841],[76.33467874280832,82.55300051936477,88.7208794083881],[76.39178058242315,82.74185278111209,88.69779031930275],[77.0959499765122,82.90682836945726,89.81500697257519],[76.93503415347722,83.01530194849627,89.44449550123576],[76.86875719446719,83.02474731982687,89.36019028418474],[76.43985934787653,83.01446379651634,89.28398373606707],[76.8705306460043,82.99561143801577,89.60330219412408],[76.99109588873162,82.89297669196588,88.97694671048599],[76.32548669571078,82.68166184293835,88.84394508506598],[76.1837086121692,82.42652581656363,88.59790089761262],[75.85641430606613,82.10013410220446,88.35183449322514],[75.99917555380799,81.66573222211683,87.87752237526047],[75.34174152844598,81.20662608137107,87.50154315239125],[74.60533991917528,80.73939356348157,86.95964787403234],[73.7662058889598,80.19588899507177,86.41340840110313],[73.59146800062408,79.55747690768193,85.53801584206784],[72.75334926634197,78.89367293914771,85.01504303418109],[71.92045726700567,78.18315160465643,84.09943857397744],[71.22794029150344,77.39518310866444,83.30239392684183],[70.7719142753996,76.61664311050684,82.51661158107065],[69.37169948869578,75.8683903473142,81.66379649451791],[68.56525323351276,75.08751442826716,81.50470814685002],[67.98197163295805,74.25913352300222,80.09562851784575],[67.4261076264072,73.45426998608509,79.68261061030975],[66.48271473996765,72.65396515344598,78.73772872042603],[65.3714261609058,71.82924240158304,77.84756446586422],[62.56240879794532,68.48109815598913,74.55157973652811],[64.38747693846753,70.38375021711974,76.71773101816984],[63.77219361061303,69.71998834034927,75.77014833395718],[63.22131293504,69.05787516395561,75.03616550574627],[62.29942643293162,68.46434634615368,74.62882272292227],[61.54060325934896,67.91726651769595,73.96574011652038],[61.45352433459593,67.38411139763193,73.52032765378745],[61.29930431538688,66.94424790363635,72.80690453579135],[60.26000915940444,66.6121683692712,72.93853876635328],[60.25810207218595,66.32042851865606,72.04997177154422],[59.76366105322614,66.04686516013855,71.89135298980599],[59.65613811794143,65.85123184373037,71.54235313806636],[59.8968645027497,65.70580833494141,72.06924825692144],[59.60886798155544,65.57268302697041,71.42980755882554],[59.38966207663558,65.52412410487896,71.90308836317494],[59.45704340512282,65.56893189985685,71.8081116722706],[59.26363442215697,65.63588985187461,72.00267867913813],[59.48244099339347,65.69871425383339,71.91525332495671],[59.72239819396668,65.81206854995605,71.96685174789118],[60.03080413283945,65.94539524017765,72.13467169361883],[60.11567426634166,66.05881265549652,72.06791661674465],[60.23719045339862,66.22124807745998,71.99197690956657],[60.12623760523965,66.44006445705601,72.21826651020149],[60.34636595577491,66.64484044775935,72.93866049832461],[60.68190485377645,66.8099453329133,73.19146267327717],[61.08334640175012,66.98982160786043,72.9267668800762],[60.94173095430173,67.15592816153378,73.5572559119816],[61.14300135557324,67.27114217659651,73.7606224826699],[61.13231715169508,67.40554954043537,73.34137956654818],[61.10963647731159,67.56924837936103,74.08002994355736],[61.06605358529555,67.69637008240836,73.79188110244525],[61.55102701553997,67.76520291190032,74.45903898932187],[61.90094356748477,67.83267975922365,74.0761618004846],[62.37773019895943,67.87438434753798,73.98568411505748],[61.99181376090982,67.85742593481812,73.5543190973095],[61.76642753717252,67.85387129702495,73.96948929595979],[61.83863041220034,67.87672620046138,74.07833431681593],[62.06624737451371,67.86421518624948,73.99034623541634],[61.60609776299781,67.79748765683154,73.80751166524588],[61.837381097289,67.73435958431678,74.02060731971046],[61.22076746659599,67.65244507799405,73.67920082190622],[61.21253453264366,67.52057803019923,72.87391954312442],[61.28738930004678,67.40996953923091,73.65153148799594],[61.32184759401267,67.33345860102378,73.38240766861105],[61.63423007843286,67.69812030515409,73.39719583062558],[62.12573377828194,68.01740150203311,74.19247537313024],[62.20016393290343,68.34700134449419,74.43489252893687],[62.66671249758033,68.66305936638474,74.78179903830028],[62.95402171858372,68.93189236734413,74.86334711763557],[62.71852512657826,69.22325050084692,75.23549226330734],[63.43704977309268,69.54869788642274,75.7348684368549],[64.47627210770418,69.84376262235872,76.25619431081867],[64.08310677533862,70.08567558543572,76.319432898391],[64.09127220147833,70.32964304953252,76.09279604883568],[64.79335440541625,70.54926981597984,76.7094628794199],[64.37742827996891,70.70834258960072,76.92244124279269],[64.98912253941783,70.87727428106174,77.06024216435037],[64.69560350707572,71.06707766210999,77.73127865317191],[65.15979541861368,71.2111167234072,77.36824099374934],[65.17348716084491,71.28612240015468,77.41900936416587],[64.91350449125412,71.34945211453011,76.92876538222806],[65.48358297874479,71.37519139166965,77.57550199122454],[65.4462178894874,71.32790244888827,76.96422531333938],[65.39183978323697,71.28216525168838,77.39006025957831],[65.27859853418619,71.25204493891972,77.19882699129806],[65.38751443639769,71.17234005792501,77.38701224975649],[65.11970118200023,71.02276835152189,77.17921974882933],[64.48539704332632,70.86610686799851,76.89404783661453],[64.60103784126247,70.6798691497478,76.81692672893213],[64.20942340691788,70.43192245240424,76.62492940043585],[64.0306872924583,70.20303806036058,76.19742033907798],[63.6266191600071,70.01177663335558,76.05183745484335],[63.69933669233749,69.79517139844269,75.72822886937345],[63.48119036476887,69.53603794912432,75.56134612998673],[63.43058725477391,69.30196629276763,74.99824970563827],[62.93621545850607,69.07256350645349,74.65933090122232],[62.61942075307944,68.81694863349007,74.96609217815895],[62.64191887275312,68.6193405867043,74.64605860904989],[61.70759990608121,68.49940864311553,74.47510273467992],[62.4174445967639,68.39245582888211,74.71078329073212],[61.54591326657594,68.27993459786946,74.43617591087816],[61.94718848761195,68.22938747747308,74.40995123747652],[62.04917164292286,68.21736439300967,74.47613655391164],[62.01436462122012,68.20891436763139,74.27338659419239],[62.66796280851758,68.28633715191768,74.71885734195237],[62.54565209761042,68.46512888092643,74.27956075578074],[62.55838641847227,68.67379626110456,74.68340836110559],[62.88538349517167,68.88770599098407,75.30649119174799],[63.2143641269992,69.1700958075054,75.13391357740936],[63.2876369299487,69.49077901934058,75.43982825740702],[63.95726457342301,69.807733287164,75.51782350949985],[63.80851172259946,70.19910126843223,76.62866770476349],[64.90499059222863,70.67479936616395,77.20984128346113],[64.91103858601674,71.15601133317078,77.02543065235682],[65.96898908987319,71.61239925354114,77.93284015433832],[66.35160473399245,72.10419104356885,78.30097281222891],[66.4083997218718,72.59665606014698,78.7219861646829],[67.03809601667413,73.04375277573821,78.85486505081913],[67.41449760190433,73.52331889897799,79.71494203374526],[67.79151148612385,74.04426356763287,79.74942091428957],[68.31898470912788,74.52564238014186,80.97409689080659],[68.44980460793465,74.93711584999693,81.0694612440451],[69.51386755311657,75.34198584456456,81.43498546469816],[69.72726109627283,75.7073043513906,81.94061852231771],[69.75872678654409,75.98943504269876,82.46188293423363],[69.8776018754173,76.27228429236555,82.37759508836481],[70.35423250382301,76.5699282859217,82.71948169295918],[70.43758815020809,76.80512465223146,83.31832611250803],[71.6756823452971,76.95288083957553,82.84463328123319],[70.42419339825292,77.08431263032978,83.07044485178876],[71.10696135443402,77.17227305525211,83.52021705565801],[70.76832717374488,77.17873152112425,83.03216220259407],[71.52716503878017,77.19596850846617,83.21668297192838],[71.48427679694838,77.24458145362658,83.261361130127],[71.08338463887527,77.25139934840868,83.31999172747621],[71.09908021847936,77.19615080473081,83.52456686127749],[71.5736552455118,77.15615811830764,83.10071116830991],[71.60460727564396,77.1075232296199,82.97381345616624],[71.1309308384521,77.01438387690064,83.33734425965454],[70.8170315280079,76.97288449442411,83.07379271275441],[71.01752888749299,77.00546633056689,82.74674869902742],[71.20974998527754,77.03749449477739,83.13473466845645],[71.02239867448861,77.04742601909889,83.37516452054119],[71.04220396214723,77.11247902666101,83.37758327874717],[70.87662793961778,77.20552681958331,83.60345273895054],[71.1664786771741,77.28638290847542,83.5544493478055],[71.26559863315254,77.44923273283449,83.95812714106344],[71.26308230810906,77.71174946314133,83.60007239876515],[71.82851342800404,77.99219100940475,84.32060799604932],[71.89351512448692,78.26265499881447,84.0095357967847],[72.27475415459503,78.59584045426519,84.32437939144847],[72.87353623292286,78.95775261482871,84.88124267817176],[73.3304102353554,79.30109630750991,85.39627500899988],[73.36463426175982,79.71596116559174,85.8739544262217],[74.41949590083027,80.21460796232562,86.45882822359368],[74.43373752169863,80.70824234389885,86.58674654558088],[75.42108007892625,81.16361916604671,87.26689268630167],[75.72178278629897,81.65086610652521,87.75103959033333],[76.34634372919561,82.13194674693837,88.36951887221861],[76.60713095778431,82.55608936296304,89.32785446084051],[76.69417931480105,83.01363419933872,89.35429526209097],[77.57914672570961,83.51638275130381,89.38305998356145],[77.74537262216812,83.97392724730413,90.17623556195862],[78.15716903355327,84.35347303508588,90.02158830986829],[78.3618014409806,84.72858576480805,91.28346323609124],[79.30532430593003,85.06327073638036,90.59235530094062],[79.19851105428573,85.30929495427252,91.16587839888177],[79.58324227006901,85.56305758703857,91.9285224128069],[80.02009944314187,85.84136992538281,91.67724045013233],[79.72004475125863,86.05721806111612,92.24737861620281],[80.1052958773861,86.18269332503434,92.39563635594737],[80.6935979942985,86.29856809040903,92.72662862536463],[80.31562856160681,86.37391357015831,92.55284603795764],[80.17319153527551,86.36525609023487,92.54465022991285],[80.11572193477659,86.3764316055879,92.42027650511493],[79.50452419285807,86.42977776384322,92.33954024777648],[80.64903000841221,86.44137544900919,92.20126636012341],[80.22496674647613,86.38697868669574,92.2426525855775],[79.97664005768496,86.3525921651312,92.46468278112842],[80.02826504002581,86.30964337410448,92.10575493927333],[80.44653498824326,86.21604916982805,92.42679023886384],[80.06695336780112,86.17914502576315,92.69746990618725],[80.06596257456641,86.22239064083551,91.98050658913021],[79.60514850955234,86.26011375613642,92.42433027564819],[80.11830833961388,86.26681888555454,92.20864358256138],[79.8709720555625,86.32862436534572,92.38364136637712],[80.12068962599362,86.41419589621749,92.92016927707373],[80.41795386303801,86.47784111461286,92.04863113087771],[80.49505799728952,86.62562540242106,93.19379106149309],[80.85085093288471,86.87769416293567,93.21176802254747],[80.77385928428848,87.14265563670341,93.56458715007747],[81.60004438922475,87.39021794708674,93.6918915661967],[82.26720814976687,87.70368288385747,93.98773193608557],[82.32092803857897,88.04664769827927,94.33803266593483],[82.35191211243112,88.36816194341995,94.6330291972715],[82.73267965162341,88.77204732941179,94.7607906281519],[83.25736436386032,89.27483739068222,95.52642001171955],[84.04666443363459,89.77978369524401,96.08904215246972],[84.70804502125381,90.25279010394095,96.69762008914044],[84.36913205929793,90.77591789381468,96.90024053094557],[84.92035993601193,91.30979765012543,97.27944332015366],[85.70767360500665,91.80077927017493,98.25291814947994],[85.84719227595217,92.35337784884027,98.30086134982277],[86.42036786479559,92.98374602056799,98.47823860032889],[87.0708667172663,93.59321446045946,99.53639222218456],[88.25473590749604,94.1474322314499,99.92706116985684],[88.80783079634611,94.73079244132077,100.868308903661],[89.28422182457996,95.30446601169896,101.5543270147458],[89.72826874686686,95.81546134445112,102.3793589645185],[89.96919242988328,96.37211940342203,102.3612957705341],[90.99411473619526,96.9930502819298,102.6958951844348],[91.65314974130952,97.58014938147998,103.6286401490292],[91.83055490603266,98.10089622097431,104.4868447917343],[92.84830263672181,98.64366482501924,104.929565986406],[93.23195385815453,99.17373739806133,104.9623637235978],[93.43764259062165,99.63712839830471,105.4337512509527],[94.09303680950761,100.1462574618006,106.1189554258159],[94.72272194417774,100.7219909345789,107.3090096467322],[95.04502828717945,101.2661439517633,107.5391506961519],[95.55064434102908,101.7469846590798,107.7755199373032],[96.48049345733683,102.2554899092812,108.1504879283181],[96.81145811662471,102.7545936342073,108.6283388390777],[97.17969740874227,103.1921097145847,109.0424597468981],[97.70654420791837,103.6824302055413,109.642350783166],[97.76896350526503,104.2464325278792,110.7307386009957],[98.30897516248945,104.7835416189792,110.7438812507269],[98.79745094197357,105.2605217431139,111.4000506181886],[99.9187662821839,105.7687306785255,111.835566627625],[100.2337669465394,106.269033030003,112.1287132608007],[100.7871435055801,106.7067496355264,112.6025049959581],[101.4269132636988,107.1965432361233,113.1158957556999],[102.0754431566834,107.7578625367445,113.6830496570276],[102.19031331329,108.28659540899,114.5816837486243],[102.5900134418658,108.7471709549051,114.9828968723341],[102.7446386166069,109.2308263014102,114.8046026355671],[103.3586425366811,109.6961904149641,115.7333928769565],[104.252008215742,110.08625725999,116.2112764730682],[103.8190471995373,110.5164481894595,116.1775691483113],[105.1040164123729,111.0055748008446,117.0547755199418],[105.1754192968497,111.4470585078237,117.4492170185342],[106.108384474992,111.804312437227,117.4465550767912],[105.7737472884026,112.1699856420423,118.5720910980893],[105.9683381324981,112.502178498476,118.1893176085957],[106.9542111970888,112.7433980403118,118.9536874449113],[106.536151593346,113.0117539205702,119.5261126534298],[107.0873552308403,113.3273964005159,119.1862460831664],[107.5840590345439,113.5832591302768,119.5321038144587],[107.4088380726126,113.7436791647461,119.8282014698204],[108.0330699025549,113.904579180802,120.4725611485979],[108.1408924711321,114.0252780898854,119.960825184387],[108.1021834499518,114.0493958585825,120.2845881274821],[108.1160449337913,114.0243844804751,119.7499192752258],[107.6949238424654,114.0479431097234,120.1433619856499],[108.4487025630134,114.0136355196708,120.2155949104052],[108.1295830309586,113.8876948649383,119.9645707376486],[107.6548414007686,113.7696995500809,120.4920736821226],[107.8977481266129,113.6206050709122,119.9116227701516],[107.1163668786403,113.3854882873005,119.3970506550639],[107.0456072868077,113.1899892923059,119.3156848360211],[106.9828073581203,113.0587225644672,119.2330882174946],[106.6305189849538,112.8855561372364,119.0002852524935],[106.7096578682993,112.6376620038631,118.0701700150498],[106.0309319365654,112.4168654480979,118.4090387917299],[105.9136770665434,112.1845317093009,118.4071918049132],[105.7393098047637,111.8857195399255,118.4769262944799],[105.7562182191336,111.6478646997205,118.5219779983287],[105.5028033693558,111.4959580736013,117.4964036168133],[105.3478196355229,111.3224970618672,117.6646280359122],[105.5615873088175,111.0938744343681,117.6138878135878],[104.7288099387219,110.9124257611947,117.1148997518227],[104.5870257690588,110.7381950044019,116.6684778298416],[104.6566620376019,110.5145206888526,116.540128370257],[103.9644282572093,110.3689833687691,115.9674896529503],[104.2704603645166,110.325371897547,116.5143726698177],[104.5296668661954,110.2733269071676,116.2331596884943],[104.1730770582508,110.1770865223532,116.3394802242729],[104.0889230508576,110.1382487165909,116.1977643726207],[104.1268978889741,110.1144309505348,115.9729160663688],[104.3121175097867,110.0463022548213,116.1432446500957],[104.5033717955312,110.0608060314256,116.1492860292942],[103.6142486314904,110.179923787197,116.2251194926554],[103.9421384086365,110.2900178492873,116.3963820044506],[104.2598419963929,110.3529388092216,116.6212991482757],[104.4778143612439,110.4695052905576,116.8381044215237],[104.5387447331859,110.5950576398607,116.893989775756],[104.5283564377541,110.6679333657881,116.5643637288597],[104.5677811629026,110.8149600988009,116.4463828455659],[104.9511245919481,111.0570089612285,116.5929679615758],[105.3451825074458,111.2780260472042,117.177134577506],[105.3466188598378,111.4384773812805,117.6318961541861],[105.6682302181139,111.63956397753,117.7747026599655],[105.3006476634714,111.8356182449026,117.8831816384191],[106.2896142529352,111.9640139162838,118.4139700802854],[106.4344232643979,112.1529071812096,118.3863021268271],[106.2879705310749,112.4235563605938,118.5559234907064],[106.3246396933501,112.6590176758779,118.7659309564089],[106.7245161974291,112.819924674884,119.0449832905432],[107.1905563841888,113.0093461556079,118.9166342968242],[106.9804747392444,113.1820672424558,119.1337997383545],[107.1780335450607,113.2758871344338,119.3390262112104],[107.2771866257066,113.4215855122893,119.4617889781102],[107.4144908133037,113.6419877603376,119.8166634597464],[107.6307064290441,113.8203065814576,119.8349927166146],[107.9893360645793,113.9182292819147,120.2863353479122],[107.6650028823288,114.0414400471443,120.307463750949],[107.6081152708535,114.1457439932253,119.8192943175794],[108.2645811247522,114.1697596608859,120.6649536569381],[107.7974395411039,114.2471106674105,120.3669982538187],[108.5859524772998,114.4022406850256,120.2775621014279],[108.5194837760532,114.5184092790631,120.9386183092289],[108.888070018883,114.5580994003628,120.7219730261856],[108.4809095591891,114.6292200102966,120.911769800099],[108.38167979665,114.6880923086694,121.1199221284326],[108.3798433464111,114.6735588192052,120.9112779674864],[108.3147331149131,114.7214241146354,121.1598634906498],[108.5922190628622,114.857044614556,120.80465059254],[108.9617163120037,114.963004129195,121.4377220054767],[108.8258644243447,115.001866602691,120.8867214955047],[109.17704943857,115.08308281489,121.6992761885967],[108.4714321985807,115.1628603301904,121.3315133811135],[109.0117070188304,115.1797077073634,121.4869403283703],[108.7537981248038,115.2711390574703,121.419737780163],[109.1020458045928,115.4630489819687,121.4757543369537],[109.5506794716997,115.6370731606501,121.3428691079163],[109.8948614201716,115.7556863054087,121.7140347363988],[109.554069288515,115.9298072897291,121.7532618908991],[109.4423043659021,115.6296720716163,121.8472061721822],[108.9930132465499,115.2796976608732,121.4019546465671],[108.7910735054059,115.0181160196717,120.8693687314155],[108.8860605825091,114.8699517159786,121.2876309903361],[108.1419653715023,114.7170719443433,120.8623579441121],[108.0630762642443,114.5229368226697,119.9948827231075],[107.8205074465165,114.3971925687867,119.8912123065717],[108.4228213157662,114.2963257673149,120.2485697919682],[107.7422824174194,114.1600713970325,120.2748081328591],[108.2056961500204,114.1237994044994,120.3756141836002],[108.4442652424636,114.2116303712646,120.4077611968278],[108.1188601256328,114.3070574726031,120.4248883402],[108.4900737693328,114.3733533222927,120.2821328759225],[108.2513142757182,114.5168578378723,120.7544803336665],[108.9866940455676,114.6933897678133,121.2000933256872],[108.8693961971495,114.8420144205865,120.898586139228],[109.0051748801753,115.0932668130872,121.2120235385067],[108.9873473978402,115.4682281834822,121.7214365742873],[109.953631800355,115.8497597251832,122.193924998375],[109.9343454144479,116.1986140542382,122.6059235661044],[110.7935828527596,116.6154732097887,122.9048746727652],[110.4414217393332,117.0531791211938,123.0099721864375],[111.8457128210876,117.4479275601315,123.747008640106],[111.2724954585573,117.9233976123315,123.7363525652657],[112.4091306804002,118.4958602111675,124.719747797984],[113.3170307729636,119.0460943061101,124.9353218762732],[113.2336626153792,119.5312710614455,125.5477690008335],[114.2722220480307,120.0458054781597,126.3672841341613],[114.5243565459608,120.5394626126887,126.4389439893061],[114.9703171654534,120.9460259168214,126.8567677240534],[115.5241895969693,121.3833707167302,127.2661708229459],[112.6849220889448,118.6300132292555,124.42936324372],[116.4639226662546,122.2708067424451,128.2361456203726],[116.0724567322286,122.558424974067,128.6405953066141],[116.6481681842226,122.8191804733273,128.9437074749839],[116.409372230338,123.0038874800964,129.1254208635811],[116.7415000143714,123.0485724750653,129.2914357511987],[116.5553007699374,123.0704271381231,129.2746206867341],[116.995174121715,123.3037662498966,129.200353516433],[117.5078636605683,123.4177590551376,129.7490360966679],[117.0272100130448,123.3734331942677,129.3934088834657],[117.5016777221792,123.2656624357273,129.1751715926201],[116.8726248030357,123.0516133723202,129.4409925224058],[116.5769253630857,122.6742294599531,128.8295394022506],[115.9818198538772,122.2562354520024,128.2596837354709],[115.9248258609606,121.8207553622425,128.0951381280527],[115.5377294623176,121.2636650980658,127.4247572465529],[114.3676520583796,120.5549267005409,126.7411750071293],[113.434557295603,119.7973288866355,126.20630903177],[112.4365652084332,118.957184555238,124.6032472787498],[111.9052047711154,117.9865704317186,124.3089443604736],[110.6598420752042,117.0154501320637,123.0987853588088],[110.2342409144247,116.0746147720148,122.7462900948202],[109.0427535851869,115.0681379661351,121.1559790012209],[107.6637835459766,113.9727787736624,120.3692131827453],[106.8456863319026,112.8960636931195,118.9963561567739],[105.4784565220304,111.8092724987235,117.9308621682595],[104.789697047771,110.668493468732,116.3885318016147],[103.6772668504198,109.6049466596913,115.7725216478041],[102.6301736865126,108.650348947756,114.6744101738243],[101.5615690664092,107.7095914702648,113.8255956008539],[100.6963802944205,106.7583472487832,112.9358444027524],[99.98517482125683,105.9006436761877,111.827299860433],[99.78039532918116,105.1042955982412,111.4315368018794],[98.10557805888834,104.3209414271094,110.4877756107655],[97.91084015347377,103.6747346129698,110.2567080061507],[96.9885573254509,103.1902999669601,109.4390454694998],[96.89729743471497,102.7657954032832,108.3213733862106],[96.25049354405218,102.3688773189686,108.5838834302814],[95.93916052975824,102.0939042490036,108.0007219985982],[95.92655365908288,101.899942094339,107.9561713294939],[95.7057574185437,101.729887219399,107.754473196637],[95.85484618195512,101.6976108121194,108.1184171351306],[95.80131287123788,101.8185676591566,107.9393863155568],[95.68537140044634,101.9832782775261,108.2610044024464],[96.65476568584199,102.2881608294114,108.487927976227],[96.47056004221909,102.6839058595938,108.2555028789493],[97.28175832064234,103.1235783339464,109.0822603686286],[97.46182227908953,103.5448051436145,109.5428088369131],[98.03764505667554,104.0564235330165,110.3699000616204],[98.33064372209255,104.6706275037235,110.509788036235],[99.22272664533145,105.2758408843331,111.2887868054681],[99.85899925226261,105.8305144466165,111.9579219131826],[99.97081826095845,106.4205571417009,111.7810365706806],[100.8896640997692,106.9996185362857,113.2856740595451],[101.5090444437808,107.5069268056447,113.3456112430853],[101.6060710058596,108.0538767741562,114.2444002068299],[102.5983483244835,108.6560519226211,114.7526705444012],[103.0975358201687,109.2059781750716,115.7540619828532],[103.7563168340894,109.6668080679816,115.4959987062436],[104.4476445728148,110.1296147093484,116.0220676069614],[104.3748218956996,110.5534990889469,116.899821775266],[104.5681082089765,110.8832854257613,117.1667132469459],[104.794246863462,111.2359735432485,117.662712655645],[105.3415669209857,111.6325861694467,117.9198058204845],[105.9487189078669,111.9707792819236,118.4508814111227],[106.436514553164,112.2184158347437,118.6565598647508],[106.4153126383421,112.470751431093,117.9080048204801],[106.5025598033941,112.6904211187379,118.7598347241816],[106.9155154600234,112.8250707904743,118.8430845069732],[106.9757264036029,112.9937745160698,119.109756200723],[107.3510030927171,113.2188269402076,119.0961031055487],[107.6671800587354,113.3983459263426,119.7113068372323],[107.3269894459672,113.4998838472189,120.0424497052426],[107.9351900578423,113.6176612424786,119.929256103824],[107.7488823672226,113.7125934129212,120.2984127015954],[107.6526432527301,113.73001789231,119.9590499717726],[107.4810529638092,113.7862321225075,119.5305717160493],[108.042818125209,113.900377482585,120.091251256355],[108.2573183904393,113.9671679183164,119.797132240873],[107.9502606799313,113.9506559775936,120.1528510272409],[107.8464640762072,113.9416119034815,120.1256683767181],[107.8184516674364,113.8976650421966,119.6932488747013],[108.2226477183187,114.3993406968165,120.7267665046449],[108.6804038975706,114.9209436689229,120.7965053037245],[109.7205450724955,115.4802873458439,121.2318815322517],[110.2504983434933,115.9690072902514,122.0300546540043],[109.9993768375557,116.3483924908353,122.3455012706829],[110.4799908712227,116.7107288092422,122.8538635352009],[110.8428802675029,117.0128261819471,123.5676107057299],[111.3088364721492,117.1954961927259,122.9915335655269],[111.3097189083105,117.3792599313855,123.3944523761129],[111.4023130962875,117.5860518803524,123.8716405440644],[111.5661472190273,117.7076132718488,123.6517550252858],[111.6642168164448,117.708884416967,123.9350307653261],[111.3498129898937,117.6915135280978,123.6229929075468],[111.5093191972334,117.6170370051033,123.3208606222067],[111.3710394286839,117.4308578468541,123.2378842191323],[111.2038348036707,117.2651438297075,123.8546769209293],[111.6535299085218,117.1498079654991,123.2769351490035],[110.6369237663983,116.9796491058401,123.5685077950157],[110.3482747429594,116.725186137406,123.0834966803084],[110.3380936942907,116.4982375321336,122.0790989068534],[110.6480225001519,116.2646877568184,122.2971275399202],[110.0290949398966,115.9729296817676,122.4987023831396],[109.8692242133091,115.7639480212767,122.0191512223113],[109.0680441140105,115.6716039309925,121.4751513120627],[108.9798149134146,115.5885830354253,122.0155483251867],[108.9886550050339,115.4847633840801,121.540992301199],[109.0760216040573,115.4749875914816,121.4764767530664],[109.5209105607123,115.5215646208883,121.9940968101373],[109.3163009025829,115.5673494792397,121.3709511409211],[109.8164346672231,115.7532052036125,122.0787775315191],[109.629402537688,116.107800237006,122.787696951912],[110.1070878794934,116.5125827518277,122.7436099016832],[110.9022391788234,116.9279059991753,123.1842024496005],[111.5276654540887,117.46321574363,123.5276972227665],[111.7496257558406,118.0695034457273,123.8176813201448],[112.1570775403594,118.6772269197931,124.5299701028561],[113.2150750047632,119.4213367619764,125.4557606957378],[113.7968594262523,119.8544393743032,125.9848611595252],[114.0019925574456,120.3070535217456,126.2604229078698],[114.2725897437927,120.7286554305532,126.8250429799114],[115.0359044143777,121.221888711277,127.4295414923194],[115.7011357347081,121.7281358582294,128.2963672475574],[116.3216316711167,122.170079154301,128.5301748392571],[116.6851414042172,122.6784577930125,128.9748171829379],[117.0359989225056,123.2671850892437,129.0545096937905],[117.3781410687036,123.7999445914559,129.8432111025079],[118.3071290406936,124.2256717100134,130.4704863666926],[118.1085045143554,124.6489003947999,130.6482405939033],[118.8359570128899,125.0136342947765,130.8942411298304],[119.1447556154087,125.2466023209091,131.6067781585893],[119.4339216703809,125.485117914804,131.7302249905448],[119.7872774275412,125.7503380367913,131.9066456228927],[119.6639148803614,125.9135216444136,131.6968317005907],[120.0668686106508,125.9325704327575,132.0143281325764],[119.4847462892889,125.9225346740195,132.3014697344434],[119.6684860814083,125.8375844031795,131.5413468533154],[119.2258194156926,125.6147854167836,132.0149778516333],[118.8007062851642,125.4029161206132,131.2441981716112],[118.8240235265682,125.2337568905122,131.0974971713105],[118.7744190879118,124.9879353617023,130.8389452403285],[118.7048813567065,124.6324883728375,130.6632051555307],[118.1996895778171,124.2915275729024,130.8312199449313],[117.7929475487177,123.9263496674878,130.1522017132378],[117.236422214292,123.4798092858602,129.8060948128837],[116.9657106930854,123.1062052893105,129.290831719663],[116.6862555705639,122.8407450208921,128.937722298319],[116.2856284566528,122.5651499492979,128.5052526887277],[116.213516000007,122.2464370824231,128.2349502420186],[115.9608693471265,122.0079624356691,127.6748031716235],[115.3677146084342,121.8079029045011,127.728999937669],[115.2229879774564,121.5844673537765,127.7478317876616],[115.063338031405,121.4870966622217,127.252499816602],[114.7752579642235,121.5443441557525,127.5796394135425],[115.6197810155201,121.6294741290169,127.4813942724318],[115.5397920368735,121.7006809444922,127.2332111821257],[116.3480413997537,121.8727628773876,127.654340136175],[115.985539290194,122.0939891642729,128.1872446984814],[116.3096888267651,122.2924569114923,128.2612245357435],[116.4290487666434,122.6086667683288,129.0786599612154],[116.3371157131129,123.061900688672,128.8827057285896],[117.6498691118143,123.5158589193346,129.4697315475811],[117.8277623001732,123.9203269225419,130.3897379947516],[118.3739698544133,124.3833462128176,130.5434803911288],[118.8553106921058,124.8467265626009,130.7919775527959],[119.3277641843957,125.2331325224879,131.1465871471079],[119.6048932073242,125.6800175277926,131.6329269028883],[119.9194153163322,126.2043461300513,132.3744786755385],[120.6243776872753,126.6680945068203,133.1484363986019],[121.1133171532024,127.0211717682831,132.650383685026],[121.2882472617146,127.3739338639989,133.7974421083078],[121.5414411982977,127.6709638072182,133.8543419550361],[121.8416477939004,127.8388298562445,133.6029178717002],[121.8600316279096,128.0211073626588,133.7013415871683],[122.3571175763105,128.2412358348545,134.2876792726883],[122.0334364092413,128.3676855897684,134.2465793818235],[122.791479594246,128.3579528712318,134.5556687038574],[122.2393221242607,128.3312571247007,134.5932049281889],[121.7892427475303,128.2404538927716,133.9897341544188],[122.1060927877845,128.0203564915448,134.2354107864971],[121.463743816632,127.8237667261676,133.6473547605193],[121.4597739557569,127.6824185571621,133.279461703799],[121.1940597830836,127.4717938856236,133.9083171645748],[120.9552290076729,127.1562054931633,133.0746422785013],[120.5108786325436,126.861721751586,133.5167044351923],[120.0024795903754,126.5462846319031,132.3036992907907],[119.7095760022549,126.1486933471259,131.8567971675932],[119.7964759858737,125.8257654965934,131.8691984864269],[119.618893086494,125.6115085406131,132.32082128948],[119.797297617283,125.3817417121297,131.7061582747466],[119.0017985889278,125.1004353976602,131.2642551474952],[118.6729318919176,124.8930391725374,131.0112516377368],[119.1237741038238,124.7149836503175,130.7255157770271],[118.0822828287106,124.4056095690785,130.0708501269092],[117.8736125637055,124.2145966128925,130.0949156320527],[117.52250052315,124.1709327029741,130.4493345065197],[118.1678340311737,124.1444107618159,130.1499401702249],[117.6293757712885,124.0930159289209,130.0099580564222],[118.4328753842189,124.1360902668129,129.9473617448269],[118.1342527938368,124.222477469695,130.303108943549],[118.3103534655551,124.2809809712062,130.6318154981837],[118.2410285302736,124.4585952413618,130.4264888894616],[118.9021876296714,124.7782715204397,130.6445937693565],[118.4469100355663,125.1042146342153,131.0170751488739],[119.6885396833424,125.3892909567545,131.5082884427002],[119.5585210851469,125.7482588815585,131.7459354948951],[119.9409601851234,126.1261038374434,132.3792743173163],[120.3614155175624,126.4484982338782,132.6776344505771],[120.6617256457251,126.8599841502602,132.7504133245836],[121.1320494730062,127.3818748312502,133.3005766728896],[121.8806294212141,127.8775598763917,134.162788305466],[122.1358173081515,128.2998039424458,133.964851325397],[122.8254133888071,128.7639120105492,135.036464245658],[122.7289085552798,129.216126072144,135.4191870884989],[123.0018577764375,129.583963728624,135.4914479391759],[123.6093049117408,130.0142374194057,136.2217943118577],[124.4362988988851,130.5309877188529,137.4636310222948],[124.5518593389517,131.0007060306906,137.184242295098],[125.291522635355,131.3794480360193,137.3074656313289],[125.1178037515414,131.7858739807288,138.4134208346422],[126.143499252524,132.1696643542642,138.1800564667902],[126.3541757115234,132.4617119773306,138.6107226113905],[126.4821433937024,132.8119700639327,139.0351995835286],[127.52310361078,133.247426583665,139.7043252374797],[127.5685045568809,133.6372697862183,139.8203228411612],[127.7665950958178,133.9398564999993,140.0628318680115],[127.7713518392638,134.2756807151714,140.5124030248227],[128.418035503869,134.5958728192873,140.6770691865346],[128.4091166867924,134.832318930897,140.6523031666464],[129.1734559520202,135.1354185024718,141.0719720512061],[129.3902073642882,135.5321850737966,141.5694008215468],[129.6541704839066,135.8915612736936,141.7441437984855],[129.5857228630855,136.1709728587773,142.2835169146097],[130.6002435536273,136.4896671503693,142.6166241891273],[130.8138205927047,136.7972579777666,142.9403164146836],[130.7417391487532,137.0238469843882,143.222127216288],[131.2699926495614,137.3177589579357,143.4802996210099],[132.0677074410619,137.7038257185031,144.4343707838685],[132.224354854901,138.0486593949992,144.1784534931006],[132.6450068612513,138.3075435283713,144.3942370696664],[132.6652758087893,138.5974552398509,144.6928054125844],[133.3203210594993,138.8659049341165,145.1002437118949],[133.0998484615262,139.0410631240599,145.2171723075038],[133.1305417024745,139.2694654371746,145.2146745411733],[133.3405385932513,139.5744601510499,145.7605664284008],[133.4857612121223,139.8215315711396,146.2459535989238],[134.5549479387251,139.96513583511,146.1208430494077],[134.0263161349447,140.1217196150539,146.7704586797895],[133.9911556655109,140.238687758907,146.445805211881],[134.1891467041453,140.2444830469378,146.5426771428683],[133.7490970013858,140.2862055834371,146.1344920627795],[134.6142970964375,140.3881674101435,146.5380705226391],[134.3344136179888,140.4172095113236,146.3775583260002],[134.3479193301436,140.3294272310239,146.5126479388014],[133.9385282322716,140.2431329852066,146.2621704913063],[134.0707700207473,140.1079029254926,146.2473592453844],[133.6374011782153,139.8545652108743,145.9993441068498],[133.3910943914572,139.6326945943622,145.3009801765313],[133.4339867585216,139.4692407055618,146.0405890352178],[132.6159751985375,139.2338114385953,146.0562773016686],[132.1922533986952,138.885267115533,144.9095938280197],[132.4860043469185,138.5446127723053,144.2873382739758],[132.4821968432844,138.1641157427583,144.2433566922649],[131.7323552412845,137.6772004481162,143.7984778921306],[130.8603626207502,137.2358219401925,142.995245337259],[130.8587335850514,136.8691769324421,142.9553046836045],[130.1611524828281,136.4489674508937,142.6971948184412],[129.7502660656719,135.9358818533441,142.4772731698613],[129.6294317878475,135.4524384220225,142.1409895824787],[128.7728110048928,134.9521986031555,141.0154477742477],[128.1304126100401,134.3695954322801,139.8832117039942],[127.885414500125,133.8572149328524,140.1837090357506],[127.3326394968697,133.4446200030971,139.7964568000581],[126.9863445294257,133.0036251128573,138.6979066279669],[126.5544137924227,132.4946951511668,138.7275118111962],[125.7574873998855,132.0397710527479,138.2371638689683],[125.4712392070585,131.5916087920951,137.4236270422541],[125.1041433287474,131.0835705844654,137.3815926191324],[124.8456780944096,130.6668420384114,136.8151778992909],[124.5551818778233,130.3693953173162,136.1754735564358],[123.9027863105885,130.0612996217701,136.3389080081453],[123.0034532639296,129.7010607575059,136.0018282493728],[123.0192578780103,129.4084496970566,135.4197114702805],[123.6455733743244,129.1339861140281,135.4938714620575],[123.0992989970537,128.8087089173542,134.8330168301091],[122.7542437404618,128.5813433823043,134.569712662316],[122.4500766795535,128.4774153772284,134.3650704519888],[122.0851045294963,128.3646068890702,134.1768223750576],[122.2155462463867,128.1990429393624,134.5708554603887],[121.6887231184766,128.0981269851791,133.7366710204276],[122.2246004242001,128.0101700871849,134.4245951111726],[121.7314277298129,127.864138984796,134.021630112603],[122.1966186074531,127.8067684693082,133.838851910207],[121.6401803189353,127.8618189623121,134.1289203227147],[121.5915231304219,127.8954663924755,133.950066066493],[122.0445785767056,127.8625228284968,134.2329497461527],[121.6770790589949,127.8792622353776,134.1243243362474],[121.3984310041108,127.8931760801709,133.7469766196361],[122.2025418103533,127.8326772399048,134.5507530595287],[121.1668592333279,127.8441336600301,133.6163856618828],[122.0111123424723,127.9512434071663,134.0982752288494],[121.9311620340703,128.0204314915696,133.9420697275981],[121.5718146879801,128.0069757360414,134.6294726875847],[121.9644585935851,128.0277938388361,134.1165434923319],[122.199421562322,128.0312963541786,134.5003691085214],[121.9019265726178,127.9470179439459,134.0334721619011],[122.099166903586,127.9225450153395,133.8339034986641],[122.2728837694038,127.9829827389705,134.1309428406745],[121.6774740627775,127.9963357070328,133.8290935106423],[121.7844238042897,127.9195188987122,134.1173898184021],[121.2486944936671,127.8710894027746,133.495804851418],[121.857862596966,127.801184072393,133.7978471026615],[121.5522085251105,127.6410697348698,133.8244506133211],[121.3027243247174,127.5399610037928,133.6032321472404],[121.4619854754228,127.524580189112,133.6586091803468],[121.5171541004852,127.4645274726415,133.6995325728067],[121.3149385640719,127.3181872956851,133.6804832865258],[120.7902534313331,127.2054194622369,133.7151486076855],[120.6357374268479,127.0776001980744,133.3478707334357],[120.6685576301434,126.8671135389868,132.6300378171524],[120.2927858257483,126.7240843875867,132.661793636448],[120.6687856550754,126.6760584861818,132.7437203723001],[120.820614036936,126.5933905424128,132.9077199998324],[120.5459361204028,126.4350748280481,132.6521869292128],[120.3650007458867,126.3214238606406,132.3251351044138],[119.7320526921764,126.2042395133235,132.1974535450237],[119.5194987432169,126.0162697336265,131.5670175862404],[119.6196818814094,125.9078776081359,132.4411388663922],[119.5068395932336,125.906857957708,132.2741367048497],[119.9863549836478,125.8838550641611,131.9316699599763],[119.6081264281958,125.798123655501,131.2315255704454],[119.5676478796209,125.7701954614926,131.7997002557697],[119.546819767814,125.7521745694394,131.739586525097],[120.0385601434462,125.6771475481511,131.4203848128122],[119.6608061409727,125.6957706640064,131.5532592637619],[120.1851759895993,125.8361997149098,131.8137462501134],[120.4019343660229,125.9695090630369,132.3183685447222],[119.9913758392689,126.0553506180203,132.3145938061443],[120.3192927583236,126.2145727883846,132.3741518768731],[120.3416909962146,126.3996026824999,132.5818001159228],[120.6530976937653,126.5437716145187,132.7917019854843],[120.6692490842386,126.7977832252201,132.8031253694026],[121.1842123129526,127.1897215426402,132.869337073963],[121.9960838092818,127.5904400165732,134.1321278420863],[121.8045369041435,127.9590923458796,134.1513004682507],[122.2139627385052,128.4156841870832,134.6552001575406],[122.8044899443532,128.911530316396,135.5581617513309],[123.401666534088,129.3784924569756,135.5585350050386],[123.4601423225561,129.9653349228825,135.6056287883102],[124.7017478664986,130.6978278080525,136.7466076828899],[125.0864477346555,131.4441335284958,137.5119297719962],[126.0688040964832,132.1602476163548,138.2958663329568],[127.1313252445618,132.96253161192,138.9013602994621],[127.6439608984975,133.7983032700189,139.6402732523176],[128.6563894054334,134.5950534702652,140.8050954830219],[129.1816222573758,135.4967635251286,141.3652212450269],[130.2687222651383,136.524183419281,142.3445276221426],[131.347873174852,137.5402996965106,143.5923469152505],[132.4905808420911,138.4957718790029,144.3806296330994],[133.2376363727437,139.5015317504421,145.2125016744953],[134.284996697863,140.4995889691951,146.3883926466551],[135.0870160098837,141.4123041237019,147.5268281778213],[136.3360446237601,142.3787370179406,148.508422249663],[136.8570931531038,143.4151591522674,149.7591563011937],[138.2864352732109,144.3806497961964,150.6184815618887],[139.083390985332,145.222560510274,151.235496254418],[140.0046603810881,146.0491971999828,151.8374267592531],[140.4417057130175,146.8008400236604,152.785032302695],[141.0138341472904,147.3990529887528,153.217144360755],[141.8853778712726,147.9830245553507,154.084499746591],[142.4464346021827,148.570256553387,154.5850583912967],[143.3309551607304,149.0222118937985,154.6282991452614],[142.858439789272,149.2897128107865,155.36219906784],[143.3863809377595,149.4855948774153,155.4259612786103],[143.3238407764786,149.5558158630957,155.838857600695],[143.0508488703591,149.4286643319882,155.3034415849499],[143.5689250058223,149.2509455822607,155.6650072770733],[143.0387152819472,149.0486936741463,154.7426346307911],[142.583026129936,148.6927144935743,155.0967328590281],[142.5831353268234,148.1437620558055,154.5422881784294],[141.2563778718238,147.5250131564587,153.6247098133635],[140.8348445359612,146.7931219178598,153.2048982594494],[139.714350910363,145.8871958591416,152.2271586099316],[138.9951042945912,144.9647108711792,151.0161180523391],[137.7799007676848,144.0621485269941,150.0028047990736],[136.9781731794357,143.0603580323965,149.040947671947],[135.7888094574456,141.9294579465093,147.5210012705606],[134.5598656816726,140.8011045943779,146.7660916967117],[133.2265865405439,139.639492576803,145.5681097849665],[132.110317171966,138.3901264909288,144.7961412285702],[131.4165142978154,137.2155211223186,143.4155351470778],[129.7934854966534,136.1558476438482,142.2901105396468],[129.2282081529952,135.094224227876,140.8605919429202],[127.7656493946897,134.0014772075234,140.0330220599764],[127.3163588588216,133.0083589752967,138.7738514481003],[126.0067014836265,132.0766687530844,138.0452739126245],[125.1786575146448,131.1480091903388,137.0768636544299],[123.8614658934778,130.3794718562548,136.3496865372131],[124.2511901983245,129.8044988521345,136.347095979786],[123.1835855332454,129.2983104031234,134.9251965957528],[122.7431022250892,128.8227307990415,134.6533548893921],[122.1198160752244,128.4985533606152,133.900195328993],[122.350966497006,128.2769666294826,133.8380622455554],[122.1624598434468,128.0884641498015,134.0213343481861],[122.1043780541723,128.0786626268011,133.977281338268],[122.4202998309778,128.269501748097,134.1598380042499],[122.0818526596825,128.5249039001152,134.3897242020762],[122.1985589631308,128.7957299402872,134.8391636154374],[122.9562319580137,129.1923244523848,135.6162458377671],[123.5609369781454,129.6562477693187,135.5810769937417],[124.2446472299784,130.1093063559152,136.0457268608918],[125.0439812109482,130.6894386759858,136.5340840612009],[125.7249093478177,131.4121573074212,137.5527551785583],[126.375033791298,132.1363161003783,138.6240596280248],[126.8574913091818,132.8090452432374,138.9396425645877],[127.2826894257861,133.5383039843813,139.8679896424144],[128.2063413628684,134.2647275216032,140.7412799649243],[129.10486310328,134.9105734895675,141.1240624122471],[129.6040560132627,135.6154624800087,142.2578146714434],[130.3766369740625,136.3978460421371,142.2434396887012],[131.2577863184978,137.1206668302255,143.543109419139],[131.9009141007263,137.7360657447422,143.834111421483],[131.9385715014741,138.3577472467433,144.1369928548808],[132.9170285662802,138.932763397091,144.8526554115823],[133.35654013273,139.390220277063,145.514041568024],[133.8669140463953,139.8767423844581,146.1928684648289],[134.5873211989402,140.4178643441757,146.3460698108039],[134.5926035923482,140.8835129525449,146.8946207701027],[135.4406265127298,141.2324480690225,147.4667976577579],[135.0474219485476,141.5844358097347,147.3382127090025],[135.9137743688685,141.8919986094714,147.6637958454793],[136.3386477777322,142.0889431391083,148.0808841567807],[136.0068906188472,142.3256410851003,148.2967233763655],[137.1180961881641,142.6304654656278,148.6376723135755],[136.9676990914363,142.8752405540097,148.9740322646902],[137.4325137441879,143.019583627535,149.0969640015225],[137.3458625874869,143.1830697485753,150.0137318728059],[137.4581307605303,143.3171431939944,149.2845890097405],[137.4446192870695,143.3536685709267,149.4161690736256],[137.1319119496476,143.4402305830538,149.5383203669753],[137.3532438067026,143.6018129704265,149.8453135440258],[137.5084837804097,143.7064043705853,149.8971490569413],[137.6833274598164,143.709413905367,149.7479416188278],[137.7887536047274,143.7259807268445,149.7253879095873],[137.4704914795672,143.7031759818347,149.3571176977338],[137.3396551527331,143.5686787115984,149.4096326322011],[137.7613282858679,143.4661657670536,149.4974560295393],[137.3034932837627,143.4172720796439,149.074144601435],[136.6874497939051,143.287357548798,149.395123077688],[136.8176724791259,143.0299676749693,149.363166437433],[136.5753274612403,142.759225849887,148.9962174837726],[136.2083502759417,142.4222321584931,148.4168190846937],[136.1045564176991,141.9477411021729,147.9923518049632],[135.7186688719377,141.4814926566926,147.3462546884284],[134.8551461393343,141.0482827594486,146.8380837068017],[134.5476204508796,140.5177025565332,146.6957032722851],[133.3312306322878,139.8484429201151,146.3008540764673],[133.0498626315739,139.1605612511212,145.3199779328704],[132.0943381910053,138.4078674673672,143.9321388358523],[131.3616647993634,137.5263982065285,144.1855261385598],[130.5283011268126,136.6694936412476,142.8561606562448],[130.089741301738,135.8697981794299,141.923023911955],[129.3717294718508,135.0048125015168,140.5771828171499],[127.4966559841871,134.0409073698088,139.9207603595415],[126.9517302087986,133.1053592392027,139.5229815042036],[126.0612834954817,132.1586497868571,137.9281505199972],[125.3384687631989,131.142697354048,137.0391146425011],[124.3365667487014,130.215676131174,136.1743656280022],[123.4720483602551,129.4139800496004,135.6006726900559],[122.1450194987128,128.6176565088762,134.2146792006089],[121.8442450661262,127.7942329043986,133.6978714825639],[121.2162706738314,127.0706566856704,133.3294276432331],[119.759224202075,126.4056731033147,132.6408830395382],[119.7934100336695,125.7380036405897,131.5894192528771],[118.7673104217733,125.2211177476561,131.6894057813655],[119.0341934012825,124.8853853191152,131.3732388088189],[118.7060966023471,124.6036270724485,130.5989373508848],[117.974041880119,124.3349923855035,130.8260967226803],[117.9068257461227,124.1970399511506,130.3955287330996],[117.8252311442776,124.1384213960209,130.1530450383084],[117.7818985007319,124.087219987935,130.5405422834201],[117.6668198619888,124.1858682947407,130.5926070800721],[118.1469532750645,124.4536576447454,130.7211662555493],[118.6888313042293,124.7525441166327,131.450450713438],[118.8398273111242,125.0311834765126,131.2980343161242],[118.3391226476346,125.3972221388069,132.1469934338613],[119.2598485704359,125.7903182786268,132.1973876723415],[119.4045792235958,126.1306332968484,132.9159545306854],[119.3292651846096,126.5538486780101,133.0837566834758],[120.6472879150384,127.0739474234867,134.057391916325],[121.0883075680176,127.5491542485988,134.9952566702866],[120.7574785993316,127.9259726333893,134.2144709397668],[120.8193654882494,128.3115011864473,135.7251774614551],[122.0545452771804,128.6465818541857,135.5975935147493]]],"plugins":{"Unzoom":"{}"}},"evals":["attrs.interactionModel","plugins.Unzoom"],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Using Prophet we are able to decompose the model and look at each component separately.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finally, using cross-validation we can measure forecast error against historical data in a method akin to a rolling forecast origin used earlier. With Prophet I have chosen to select an initial period of 400 days (i.e.&nbsp;up to early February 2021) and made predictions every 90 days for a forecast horizon of 28 days. Based on the current time series, this corresponded to 9 forecasts.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df.cv <span class="ot">&lt;-</span> <span class="fu">cross_validation</span>(m, <span class="at">initial =</span> <span class="dv">400</span>, <span class="at">period =</span> <span class="dv">90</span>, <span class="at">horizon =</span> <span class="dv">28</span>, <span class="at">units =</span> <span class="st">'days'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once computed, we can visualise a range of statistics of prediction performance. In the plot below, the dots show the absolute percentage error and the blue line the mean absolute percentage error over the forecast horizon. Forecast error here remains up to 10% for the first 12 days but then steadily increases to a maximum of around 15% for predictions 28 days out.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  horizon       mse      rmse       mae       mape      mdape      smape
+1  3 days  41.00205  6.403284  5.424640 0.05005081 0.04513999 0.05071951
+2  4 days  54.55002  7.385799  6.271378 0.05666009 0.04609069 0.05749919
+3  5 days  67.05754  8.188867  7.034154 0.06205384 0.05589260 0.06309027
+4  6 days  83.74800  9.151393  7.977976 0.06876534 0.06562857 0.07001672
+5  7 days 113.42346 10.650045  9.379767 0.07910440 0.07579380 0.08061358
+6  8 days 148.41528 12.182581 10.719817 0.08878131 0.08017642 0.09073356
+   coverage
+1 0.4355556
+2 0.3644444
+3 0.2933333
+4 0.2133333
+5 0.1422222
+6 0.1111111</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="projects_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
